@@ -1,4 +1,15 @@
 {
   "title": "Apps",
-  "root": true
+  "root": true,
+  "pages": [
+    "api",
+    "app",
+    "desktop",
+    "docs",
+    "email",
+    "mobile",
+    "storybook",
+    "studio",
+    "web"
+  ]
 }

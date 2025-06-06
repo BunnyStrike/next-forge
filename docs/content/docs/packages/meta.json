@@ -2,6 +2,7 @@
   "title": "Packages",
   "root": true,
   "pages": [
+    "admin",
     "ai",
     "analytics",
     "authentication",
@@ -23,6 +24,7 @@
     "storage",
     "testing",
     "toolbar",
+    "uploads",
     "webhooks"
   ]
 }

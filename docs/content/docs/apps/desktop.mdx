@@ -1,0 +1,671 @@
+---
+title: Desktop
+description: Cross-platform desktop application built with Electron and Next.js.
+---
+
+![/images/desktop.png](/images/desktop.png)
+
+<Tip>The `desktop` application uses Electron with Next.js, providing a native desktop experience while sharing code with your web application.</Tip>
+
+The desktop app in next-forge is a cross-platform Electron application that wraps your Next.js web application, providing native desktop functionality while maintaining consistency with your web experience.
+
+## Overview
+
+The `desktop` application is built on [Electron](https://electronjs.org), allowing you to create native desktop applications for Windows, macOS, and Linux using web technologies. It leverages your existing Next.js application while adding desktop-specific features.
+
+## Features
+
+- **Cross-Platform**: Single codebase for Windows, macOS, and Linux
+- **Native Integration**: OS-specific features like notifications, file system access
+- **Shared Codebase**: Reuses your web application with minimal modifications
+- **Auto-Updates**: Built-in auto-update functionality
+- **Deep Linking**: Custom protocol support for deep linking
+- **Menu Bar**: Native menu and context menu support
+- **Window Management**: Multiple windows, dialog boxes, and window state persistence
+- **Security**: Secure by default with context isolation
+
+## Development
+
+### Prerequisites
+
+- Node.js 18+
+- pnpm
+- Platform-specific build tools:
+  - **Windows**: Windows Build Tools or Visual Studio
+  - **macOS**: Xcode Command Line Tools
+  - **Linux**: Python, make, and GCC
+
+### Getting Started
+
+1. **Install dependencies:**
+   ```bash
+   pnpm install
+   ```
+
+2. **Start development:**
+   ```bash
+   cd apps/desktop
+   pnpm dev
+   ```
+
+   This will:
+   - Start the Next.js development server
+   - Launch Electron in development mode
+   - Enable hot reloading
+
+### Project Structure
+
+```
+apps/desktop/
+├── electron/              # Electron main process files
+│   ├── main.ts            # Main process entry point
+│   ├── preload.ts         # Preload script for security
+│   ├── menu.ts            # Application menu
+│   └── updater.ts         # Auto-update logic
+├── src/                   # Application source
+│   └── app/               # Next.js app (desktop variant)
+├── public/                # Static assets
+├── build/                 # Build output
+├── package.json
+├── electron-builder.yml   # Build configuration
+├── next.config.js         # Next.js config
+└── tsconfig.json
+```
+
+## Architecture
+
+### Main Process
+
+The main process manages application lifecycle and creates renderer processes:
+
+```typescript title="electron/main.ts"
+import { app, BrowserWindow, shell, protocol } from 'electron';
+import { join } from 'path';
+import { setupMenu } from './menu';
+import { setupUpdater } from './updater';
+
+let mainWindow: BrowserWindow | null = null;
+
+const isDev = process.env.NODE_ENV === 'development';
+const port = process.env.PORT || 3000;
+
+function createWindow() {
+  mainWindow = new BrowserWindow({
+    width: 1200,
+    height: 800,
+    minWidth: 800,
+    minHeight: 600,
+    webPreferences: {
+      nodeIntegration: false,
+      contextIsolation: true,
+      enableRemoteModule: false,
+      preload: join(__dirname, 'preload.js'),
+    },
+    titleBarStyle: 'hiddenInset',
+    show: false,
+  });
+
+  // Load the application
+  const url = isDev 
+    ? `http://localhost:${port}`
+    : `file://${join(__dirname, '../dist/index.html')}`;
+  
+  mainWindow.loadURL(url);
+
+  // Show window when ready
+  mainWindow.once('ready-to-show', () => {
+    mainWindow?.show();
+  });
+
+  // Handle external links
+  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    shell.openExternal(url);
+    return { action: 'deny' };
+  });
+}
+
+app.whenReady().then(() => {
+  createWindow();
+  setupMenu();
+  setupUpdater();
+
+  app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createWindow();
+    }
+  });
+});
+
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
+});
+```
+
+### Preload Script
+
+The preload script provides secure communication between main and renderer processes:
+
+```typescript title="electron/preload.ts"
+import { contextBridge, ipcRenderer } from 'electron';
+
+// Expose protected methods that allow the renderer process to use
+// the ipcRenderer without exposing the entire object
+contextBridge.exposeInMainWorld('electronAPI', {
+  // App info
+  getVersion: () => ipcRenderer.invoke('app:getVersion'),
+  
+  // File operations
+  showOpenDialog: (options: any) => ipcRenderer.invoke('dialog:openFile', options),
+  showSaveDialog: (options: any) => ipcRenderer.invoke('dialog:saveFile', options),
+  
+  // Notifications
+  showNotification: (title: string, body: string) => 
+    ipcRenderer.invoke('notification:show', { title, body }),
+  
+  // Deep linking
+  onDeepLink: (callback: (url: string) => void) => 
+    ipcRenderer.on('deep-link', (_, url) => callback(url)),
+  
+  // Window controls
+  minimize: () => ipcRenderer.invoke('window:minimize'),
+  maximize: () => ipcRenderer.invoke('window:maximize'),
+  close: () => ipcRenderer.invoke('window:close'),
+  
+  // Auto-updater
+  checkForUpdates: () => ipcRenderer.invoke('updater:check'),
+  onUpdateAvailable: (callback: () => void) => 
+    ipcRenderer.on('update-available', callback),
+  onUpdateDownloaded: (callback: () => void) => 
+    ipcRenderer.on('update-downloaded', callback),
+  installUpdate: () => ipcRenderer.invoke('updater:install'),
+});
+
+// TypeScript definitions for the exposed API
+declare global {
+  interface Window {
+    electronAPI: {
+      getVersion: () => Promise<string>;
+      showOpenDialog: (options: any) => Promise<any>;
+      showSaveDialog: (options: any) => Promise<any>;
+      showNotification: (title: string, body: string) => Promise<void>;
+      onDeepLink: (callback: (url: string) => void) => void;
+      minimize: () => Promise<void>;
+      maximize: () => Promise<void>;
+      close: () => Promise<void>;
+      checkForUpdates: () => Promise<void>;
+      onUpdateAvailable: (callback: () => void) => void;
+      onUpdateDownloaded: (callback: () => void) => void;
+      installUpdate: () => Promise<void>;
+    };
+  }
+}
+```
+
+## Desktop-Specific Features
+
+### Native File Operations
+
+```tsx title="components/FileManager.tsx"
+'use client';
+
+import { useState } from 'react';
+import { Button } from '@repo/design-system';
+
+export function FileManager() {
+  const [selectedFile, setSelectedFile] = useState<string | null>(null);
+
+  const openFile = async () => {
+    if (typeof window !== 'undefined' && window.electronAPI) {
+      const result = await window.electronAPI.showOpenDialog({
+        properties: ['openFile'],
+        filters: [
+          { name: 'Images', extensions: ['jpg', 'png', 'gif'] },
+          { name: 'Documents', extensions: ['pdf', 'txt', 'doc', 'docx'] },
+          { name: 'All Files', extensions: ['*'] }
+        ]
+      });
+
+      if (!result.canceled && result.filePaths.length > 0) {
+        setSelectedFile(result.filePaths[0]);
+      }
+    }
+  };
+
+  const saveFile = async () => {
+    if (typeof window !== 'undefined' && window.electronAPI) {
+      const result = await window.electronAPI.showSaveDialog({
+        defaultPath: 'untitled.txt',
+        filters: [
+          { name: 'Text Files', extensions: ['txt'] },
+          { name: 'All Files', extensions: ['*'] }
+        ]
+      });
+
+      if (!result.canceled && result.filePath) {
+        // Save file logic here
+        console.log('Save to:', result.filePath);
+      }
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="flex gap-2">
+        <Button onClick={openFile}>Open File</Button>
+        <Button onClick={saveFile}>Save File</Button>
+      </div>
+      
+      {selectedFile && (
+        <div className="p-4 bg-gray-100 rounded">
+          <strong>Selected File:</strong> {selectedFile}
+        </div>
+      )}
+    </div>
+  );
+}
+```
+
+### Native Notifications
+
+```tsx title="components/NotificationManager.tsx"
+'use client';
+
+import { Button } from '@repo/design-system';
+
+export function NotificationManager() {
+  const showNotification = async () => {
+    if (typeof window !== 'undefined' && window.electronAPI) {
+      await window.electronAPI.showNotification(
+        'Hello from Desktop!',
+        'This is a native desktop notification.'
+      );
+    }
+  };
+
+  return (
+    <Button onClick={showNotification}>
+      Show Native Notification
+    </Button>
+  );
+}
+```
+
+### Window Controls
+
+```tsx title="components/WindowControls.tsx"
+'use client';
+
+import { Minimize, Maximize, X } from 'lucide-react';
+import { Button } from '@repo/design-system';
+
+export function WindowControls() {
+  const handleMinimize = () => {
+    if (typeof window !== 'undefined' && window.electronAPI) {
+      window.electronAPI.minimize();
+    }
+  };
+
+  const handleMaximize = () => {
+    if (typeof window !== 'undefined' && window.electronAPI) {
+      window.electronAPI.maximize();
+    }
+  };
+
+  const handleClose = () => {
+    if (typeof window !== 'undefined' && window.electronAPI) {
+      window.electronAPI.close();
+    }
+  };
+
+  return (
+    <div className="flex gap-1">
+      <Button size="sm" variant="ghost" onClick={handleMinimize}>
+        <Minimize className="h-4 w-4" />
+      </Button>
+      <Button size="sm" variant="ghost" onClick={handleMaximize}>
+        <Maximize className="h-4 w-4" />
+      </Button>
+      <Button size="sm" variant="ghost" onClick={handleClose}>
+        <X className="h-4 w-4" />
+      </Button>
+    </div>
+  );
+}
+```
+
+## Application Menu
+
+```typescript title="electron/menu.ts"
+import { app, Menu, shell, BrowserWindow } from 'electron';
+
+export function setupMenu() {
+  const template: Electron.MenuItemConstructorOptions[] = [
+    {
+      label: 'File',
+      submenu: [
+        {
+          label: 'New',
+          accelerator: 'CmdOrCtrl+N',
+          click: () => {
+            // Handle new file
+          }
+        },
+        {
+          label: 'Open',
+          accelerator: 'CmdOrCtrl+O',
+          click: () => {
+            // Handle open file
+          }
+        },
+        { type: 'separator' },
+        {
+          label: 'Quit',
+          accelerator: process.platform === 'darwin' ? 'Cmd+Q' : 'Ctrl+Q',
+          click: () => {
+            app.quit();
+          }
+        }
+      ]
+    },
+    {
+      label: 'Edit',
+      submenu: [
+        { role: 'undo' },
+        { role: 'redo' },
+        { type: 'separator' },
+        { role: 'cut' },
+        { role: 'copy' },
+        { role: 'paste' }
+      ]
+    },
+    {
+      label: 'View',
+      submenu: [
+        { role: 'reload' },
+        { role: 'forceReload' },
+        { role: 'toggleDevTools' },
+        { type: 'separator' },
+        { role: 'resetZoom' },
+        { role: 'zoomIn' },
+        { role: 'zoomOut' },
+        { type: 'separator' },
+        { role: 'togglefullscreen' }
+      ]
+    },
+    {
+      label: 'Window',
+      submenu: [
+        { role: 'minimize' },
+        { role: 'close' }
+      ]
+    },
+    {
+      role: 'help',
+      submenu: [
+        {
+          label: 'About',
+          click: () => {
+            shell.openExternal('https://your-website.com');
+          }
+        }
+      ]
+    }
+  ];
+
+  const menu = Menu.buildFromTemplate(template);
+  Menu.setApplicationMenu(menu);
+}
+```
+
+## Auto-Updates
+
+```typescript title="electron/updater.ts"
+import { autoUpdater } from 'electron-updater';
+import { app, dialog } from 'electron';
+
+export function setupUpdater() {
+  autoUpdater.checkForUpdatesAndNotify();
+
+  autoUpdater.on('update-available', () => {
+    dialog.showMessageBox({
+      type: 'info',
+      title: 'Update Available',
+      message: 'A new version is available. It will be downloaded in the background.',
+      buttons: ['OK']
+    });
+  });
+
+  autoUpdater.on('update-downloaded', () => {
+    dialog.showMessageBox({
+      type: 'info',
+      title: 'Update Ready',
+      message: 'Update downloaded. The application will restart to apply the update.',
+      buttons: ['Restart Now', 'Later']
+    }).then((result) => {
+      if (result.response === 0) {
+        autoUpdater.quitAndInstall();
+      }
+    });
+  });
+}
+```
+
+## Building and Packaging
+
+### Development Build
+
+```bash
+# Run in development mode
+pnpm dev
+```
+
+### Production Build
+
+```bash
+# Build the application
+pnpm build
+
+# Package for current platform
+pnpm package
+
+# Package for all platforms
+pnpm package:all
+```
+
+### Configuration
+
+```yaml title="electron-builder.yml"
+appId: com.yourcompany.nextforge
+productName: Next Forge Desktop
+copyright: Copyright © 2024 Your Company
+
+directories:
+  output: dist
+  buildResources: build
+
+files:
+  - "!**/.vscode/*"
+  - "!src/*"
+  - "!electron/*"
+  - "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}"
+  - "!**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}"
+  - "!**/node_modules/*.d.ts"
+  - "!**/node_modules/.bin"
+  - "!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}"
+  - "!.editorconfig"
+  - "!**/._*"
+  - "!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,.gitignore,.gitattributes}"
+  - "!**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output}"
+  - "!**/{appveyor.yml,.travis.yml,circle.yml}"
+  - "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}"
+
+mac:
+  category: public.app-category.productivity
+  icon: build/icon.icns
+  hardenedRuntime: true
+  entitlements: build/entitlements.mac.plist
+  entitlementsInherit: build/entitlements.mac.plist
+
+win:
+  target:
+    - target: nsis
+      arch: [x64]
+  icon: build/icon.ico
+
+linux:
+  target:
+    - target: AppImage
+      arch: [x64]
+  icon: build/icon.png
+  category: Office
+
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+
+publish:
+  provider: github
+  owner: your-username
+  repo: your-repo
+```
+
+## Platform-Specific Features
+
+### macOS Integration
+
+```typescript
+// Touch Bar support
+import { TouchBar } from 'electron';
+
+const touchBar = new TouchBar({
+  items: [
+    new TouchBar.TouchBarButton({
+      label: 'Save',
+      backgroundColor: '#007AFF',
+      click: () => {
+        // Handle save
+      }
+    })
+  ]
+});
+
+mainWindow.setTouchBar(touchBar);
+```
+
+### Windows Integration
+
+```typescript
+// Windows taskbar progress
+mainWindow.setProgressBar(0.5); // 50% progress
+
+// Windows notifications
+import { Notification } from 'electron';
+
+new Notification({
+  title: 'Task Complete',
+  body: 'Your task has been completed successfully.'
+}).show();
+```
+
+### Linux Integration
+
+```typescript
+// System tray integration
+import { app, Tray, Menu } from 'electron';
+import path from 'path';
+
+let tray: Tray;
+
+app.whenReady().then(() => {
+  tray = new Tray(path.join(__dirname, 'assets/tray-icon.png'));
+  
+  const contextMenu = Menu.buildFromTemplate([
+    { label: 'Show App', click: () => mainWindow?.show() },
+    { label: 'Quit', click: () => app.quit() }
+  ]);
+  
+  tray.setContextMenu(contextMenu);
+});
+```
+
+## Security Best Practices
+
+1. **Context Isolation**: Always enable context isolation
+2. **Node Integration**: Disable node integration in renderer
+3. **Preload Scripts**: Use preload scripts for secure communication
+4. **Content Security Policy**: Implement CSP headers
+5. **Secure Defaults**: Use Electron's secure defaults
+
+```typescript
+// Secure window configuration
+new BrowserWindow({
+  webPreferences: {
+    nodeIntegration: false,           // Disable node in renderer
+    contextIsolation: true,           // Enable context isolation
+    enableRemoteModule: false,        // Disable remote module
+    preload: path.join(__dirname, 'preload.js'),
+    sandbox: true,                    // Enable sandbox mode
+  }
+});
+```
+
+## Testing
+
+### Unit Testing
+
+```bash
+# Run tests
+pnpm test
+
+# Run with coverage
+pnpm test:coverage
+```
+
+### E2E Testing
+
+```typescript title="tests/app.test.ts"
+import { test, expect } from '@playwright/test';
+import { ElectronApplication, _electron as electron } from 'playwright';
+
+let electronApp: ElectronApplication;
+
+test.beforeAll(async () => {
+  electronApp = await electron.launch({ args: ['.'] });
+});
+
+test.afterAll(async () => {
+  await electronApp.close();
+});
+
+test('window opens', async () => {
+  const window = await electronApp.firstWindow();
+  expect(await window.title()).toBe('Next Forge Desktop');
+});
+```
+
+## Distribution
+
+### Code Signing
+
+```bash
+# macOS
+export CSC_LINK="path/to/certificate.p12"
+export CSC_KEY_PASSWORD="certificate-password"
+
+# Windows
+export CSC_LINK="path/to/certificate.p12"
+export CSC_KEY_PASSWORD="certificate-password"
+```
+
+### Auto-Updates
+
+The desktop app supports automatic updates through electron-updater:
+
+1. Build and publish releases to GitHub
+2. Configure auto-updater in your app
+3. Users receive notifications for new versions
+4. Updates download and install automatically
+
+The desktop app provides a powerful foundation for creating native desktop applications while leveraging your existing web codebase and maintaining consistency across platforms. 
