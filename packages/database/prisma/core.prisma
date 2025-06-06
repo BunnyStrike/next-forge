@@ -1,0 +1,330 @@
+model User {
+  id                     String                  @id @default(uuid())
+  email                  String                  @unique
+  // password           String
+  name                   String?
+  image                  String?
+  createdAt              DateTime                @default(now())
+  updatedAt              DateTime                @updatedAt
+  tenantId               String?
+  tenant                 Tenant?                 @relation(fields: [tenantId], references: [id])
+  // products               Product[]
+  tenants                Tenant[]                @relation("UserTenants")
+  roles                  UserRole[]
+  customers              Customer[]
+  // challenges             Challenge[]
+  // challengeTemplates     ChallengeTemplate[]
+  // sharedChallenges       ChallengeSharing[]      @relation("sharedWith")
+  // sharedByChallenges     ChallengeSharing[]      @relation("sharedBy")
+  // apiKeys                ApiKey[]
+  profile                Profile?
+  // quizzes                Quiz[]                  @relation("CreatedBy")
+  // quizzesUpdated         Quiz[]                  @relation("UpdatedBy")
+  AnalyticsEvent         AnalyticsEvent[]
+  TenantUserRole         TenantUserRole[]
+  ActivityLog            ActivityLog[]
+  // StoreProduct           StoreProduct[]
+  // StoreCartItem          StoreCartItem[]
+  // StoreWishlistItem      StoreWishlistItem[]
+  // StoreOrder             StoreOrder[]
+  // StoreNotification      StoreNotification[]
+  // StoreNotificationPrefs StoreNotificationPrefs?
+  // StoreReferral          StoreReferral[]
+  // UserStoreAchievement   UserStoreAchievement[]
+  // UserStoreChallenge     UserStoreChallenge[]
+
+  // Work Management System relations
+  // projects Project[]
+
+  // New work management relations
+  // clients     Client[]
+  // contractors Contractor[]
+  // workJobs    WorkJob[]
+
+  // Notification system relations
+  notifications           Notification[]
+  notificationPreferences NotificationPreferences?
+  notificationDeliveries  NotificationDelivery[]
+
+  @@index([tenantId])
+}
+
+model Profile {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  name      String?
+  avatarUrl String?
+  phone     String?
+  bio       String?
+  address   String?
+  email     String?
+  points    Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model Tenant {
+  id             String           @id @default(uuid())
+  name           String
+  slug           String           @unique
+  description    String?
+  imageUrl       String?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @default(now())
+  config         Json
+  isActive       Boolean          @default(true)
+  theme          Json
+  // products       Product[]
+  users          User[]           @relation("UserTenants")
+  domains        Domain[]
+  // contents       Content[]
+  User           User[]
+  Analytics      Analytics[]
+  // apps           App[]
+  AnalyticsEvent AnalyticsEvent[]
+  TenantUserRole TenantUserRole[]
+
+  // Notification system relations
+    // notifications           Notification[]
+    // notificationTemplates   NotificationTemplate[]
+    // notificationPreferences NotificationPreferences[]
+    // notificationDeliveries  NotificationDelivery[]
+
+  // Template system relations
+  // tenantApps TenantApp[]
+}
+
+model Domain {
+  id             String           @id @default(uuid())
+  tenantId       String
+  domain         String           @unique
+  isPrimary      Boolean          @default(false)
+  createdAt      DateTime         @default(now())
+  tenant         Tenant           @relation(fields: [tenantId], references: [id])
+  // app            App?             @relation(fields: [appId], references: [id])
+  appId          String?
+  Analytics      Analytics[]
+  AnalyticsEvent AnalyticsEvent[]
+
+  @@index([tenantId])
+  @@index([appId])
+}
+
+model Category {
+  id                  String               @id @default(uuid())
+  name                String               @unique
+  description         String?
+  createdAt           DateTime             @default(now())
+  tagAssignments      TagAssignment[]
+  categoryAssignments CategoryAssignment[]
+  // Quiz                Quiz[]
+  // UserSkillLevel      UserSkillLevel[]
+}
+
+model Tag {
+  id             String          @id @default(uuid())
+  name           String          @unique
+  description    String?
+  createdAt      DateTime        @default(now())
+  tagAssignments TagAssignment[]
+  // quizzes        Quiz[]
+}
+
+model Customer {
+  id        String   @id @default(uuid())
+  userId    String?
+  email     String   @unique
+  name      String?
+  phone     String?
+  address   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  user      User?    @relation(fields: [userId], references: [id])
+}
+
+model Feature {
+  id        String           @id @default(uuid())
+  name      String           @unique
+  enabled   Boolean          @default(true)
+  createdAt DateTime         @default(now())
+  // products  ProductFeature[]
+}
+
+model TagAssignment {
+  id         String    @id @default(uuid())
+  tagId      String
+  productId  String?
+  categoryId String?
+  projectId  String?
+  createdAt  DateTime  @default(now())
+  tag        Tag       @relation(fields: [tagId], references: [id])
+  // product    Product?  @relation(fields: [productId], references: [id])
+  category   Category? @relation(fields: [categoryId], references: [id])
+}
+
+model CategoryAssignment {
+  id         String   @id @default(uuid())
+  categoryId String
+  productId  String
+  createdAt  DateTime @default(now())
+  category   Category @relation(fields: [categoryId], references: [id])
+  // product    Product  @relation(fields: [productId], references: [id])
+}
+
+model UserRole {
+  id     String @id @default(uuid())
+  userId String
+  role   String
+  user   User   @relation(fields: [userId], references: [id])
+}
+
+model Sale {
+  id        String   @id @default(uuid())
+  productId String
+  amount    Decimal
+  quantity  Int?
+  currency  String?
+  metadata  Json?
+  date      DateTime @default(now())
+  notes     String?
+  createdAt DateTime @default(now())
+  // product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model Media {
+  id                    String           @id @default(cuid())
+  name                  String
+  url                   String
+  type                  String
+  size                  Int
+  createdAt             DateTime         @default(now())
+  updatedAt             DateTime         @updatedAt
+  altText               String?
+  folderId              String?
+  height                Int?
+  tags                  String[]
+  width                 Int?
+  storageProvider       String?
+  storageKey            String?
+  // choices               Choice[]
+  // questions             Question[]
+  productId             String?
+  productVariantId      String?
+  // productsGallery       Product?         @relation("productGallery", fields: [productId], references: [id])
+  // productVariantGallery ProductVariant?  @relation("productVariantGallery", fields: [productVariantId], references: [id])
+  // Product               Product[]
+  // ProductVariant        ProductVariant[]
+
+  @@map("media")
+}
+
+model MediaFolder {
+  id        String   @id @default(cuid())
+  name      String
+  parentId  String?
+  createdAt DateTime @default(now())
+
+  @@map("media_folders")
+}
+
+model Language {
+  id                 String               @id @default(cuid())
+  code               String               @unique
+  name               String
+  nativeName         String
+  rtl                Boolean              @default(false)
+  isDefault          Boolean              @default(false)
+  active             Boolean              @default(true)
+  direction          String               @default("ltr")
+  fallbackLanguageId String?
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+  // ContentTranslation ContentTranslation[]
+
+  // Self-relations are not being used due to compatibility issues with relationMode=prisma
+  // fallbackLanguage relation implementation removed until we can use a supported configuration
+  @@index([fallbackLanguageId])
+  @@map("languages")
+}
+
+model Analytics {
+  id              String     @id @default(uuid())
+  tenantId        String
+  tenant          Tenant     @relation(fields: [tenantId], references: [id])
+  domainId        String
+  domain          Domain     @relation(fields: [domainId], references: [id])
+  views           Int        @default(0)
+  pageViews       Int        @default(0)
+  uniqueViews     Int        @default(0)
+  uniquePageViews Int        @default(0)
+  bounces         Int        @default(0)
+  avgDuration     Int        @default(0)
+  bounceRate      Int        @default(0)
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  // Challenge       Challenge? @relation(fields: [challengeId], references: [id])
+  challengeId     String?
+
+  @@index([tenantId])
+  @@index([domainId])
+}
+
+enum AnalyticsEventType {
+  PAGE_VIEW
+  CLICK
+  SCROLL
+  HOVER
+  SUBMIT
+  DOWNLOAD
+  UPLOAD
+  DELETE
+  EDIT
+  CREATE
+  VIEW
+  CART_ADD
+  CART_REMOVE
+  CHECKOUT_START
+  CHECKOUT_COMPLETE
+  CHECKOUT_CANCEL
+  CHECKOUT_ERROR
+  CHECKOUT_SUCCESS
+}
+
+model AnalyticsEvent {
+  id           String             @id @default(uuid())
+  name         String
+  productId    String?
+  // product      Product?           @relation(fields: [productId], references: [id])
+  tenantId     String
+  tenant       Tenant             @relation(fields: [tenantId], references: [id])
+  domainId     String
+  domain       Domain             @relation(fields: [domainId], references: [id])
+  eventType    AnalyticsEventType
+  eventData    Json
+  userId       String?
+  user         User?              @relation(fields: [userId], references: [id])
+  pageSlug     String?
+  pageTitle    String?
+  pageUrl      String?
+  pageReferrer String?
+  pageDevice   String?
+  pageBrowser  String?
+  pageOs       String?
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+}
+
+// --- Multi-tenant user roles join table ---
+model TenantUserRole {
+  id        String   @id @default(uuid())
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    String
+  tenant    Tenant   @relation(fields: [tenantId], references: [id])
+  tenantId  String
+  role      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, tenantId])
+}

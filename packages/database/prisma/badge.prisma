@@ -1,0 +1,15 @@
+model Badge {
+  id               String      @id @default(cuid())
+  name             String
+  requirementType  String
+  requirementValue Int
+  userBadges       UserBadge[]
+}
+
+model UserBadge {
+  id       String   @id @default(cuid())
+  userId   String
+  badgeId  String
+  earnedAt DateTime @default(now())
+  badge    Badge    @relation(fields: [badgeId], references: [id])
+}

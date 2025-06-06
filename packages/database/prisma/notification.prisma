@@ -1,0 +1,195 @@
+// Enhanced notification system schema for admin and multitenant support
+model Notification {
+  id       String  @id @default(cuid())
+  userId   String
+  tenantId String? // For multitenant support
+
+  // Core notification data
+  type     String // e.g., "challenge_budget_alert", "revenue_milestone", "system_update"
+  category String // e.g., "challenge", "revenue", "system", "social", "deadline"
+  title    String
+  message  String
+
+  // Priority and status
+  priority String  @default("medium") // "low", "medium", "high", "urgent"
+  read     Boolean @default(false)
+  archived Boolean @default(false)
+
+  // Links and actions
+  link    String? // Direct link to related resource
+  actions Json? // Array of action objects with labels and actions
+
+  // Metadata for rich notifications
+  metadata Json? // Flexible metadata for context (challengeId, amount, etc.)
+
+  // Grouping and expiry
+  groupId   String? // For grouping related notifications
+  expiresAt DateTime?
+
+  // Tracking
+  clickedAt  DateTime?
+  archivedAt DateTime?
+
+  // Relationships
+  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // tenant Tenant? @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  // Timestamps
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime               @updatedAt
+  NotificationDelivery NotificationDelivery[]
+
+  @@index([userId, read])
+  @@index([userId, category])
+  @@index([userId, priority])
+  @@index([tenantId])
+  @@index([groupId])
+  @@index([expiresAt])
+}
+
+// Notification templates for consistent messaging
+model NotificationTemplate {
+  id       String  @id @default(cuid())
+  tenantId String? // For multitenant customization
+
+  // Template identification
+  type        String // Matches notification type
+  category    String
+  name        String
+  description String?
+
+  // Template content
+  titleTemplate   String // Can include variables like {{challengeName}}
+  messageTemplate String // Can include variables like {{amount}}
+
+  // Configuration
+  priority        String  @default("medium")
+  enabled         Boolean @default(true)
+  throttleMinutes Int? // Prevent spam notifications
+
+  // Conditions for triggering
+  conditions Json? // Conditions that must be met to trigger
+
+  // Relationships
+  // tenant Tenant? @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([type, tenantId])
+  @@index([tenantId])
+  @@index([category])
+  @@index([enabled])
+}
+
+// User notification preferences
+model NotificationPreferences {
+  id       String  @id @default(cuid())
+  userId   String  @unique
+  tenantId String?
+
+  // Global settings
+  enabled Boolean @default(true)
+
+  // Channel preferences
+  inApp Boolean @default(true)
+  email Boolean @default(true)
+  push  Boolean @default(false)
+  sms   Boolean @default(false)
+
+  // Category preferences (JSON with category -> settings mapping)
+  categories Json? // e.g., {"challenge": {"enabled": true, "email": false}, "revenue": {"enabled": true}}
+
+  // Priority preferences
+  lowPriority    Boolean @default(true)
+  mediumPriority Boolean @default(true)
+  highPriority   Boolean @default(true)
+  urgentPriority Boolean @default(true)
+
+  // Timing preferences
+  quietHoursStart String? // e.g., "22:00"
+  quietHoursEnd   String? // e.g., "08:00"
+  timezone        String? // User's timezone
+
+  // Frequency limits
+  maxPerHour Int? @default(10)
+  maxPerDay  Int? @default(50)
+
+  // Relationships
+  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // tenant Tenant? @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([tenantId])
+}
+
+// Notification delivery tracking for analytics
+model NotificationDelivery {
+  id             String  @id @default(cuid())
+  notificationId String
+  userId         String
+  tenantId       String?
+
+  // Delivery details
+  channel String // "in_app", "email", "push", "sms"
+  status  String // "pending", "sent", "delivered", "failed", "clicked", "read"
+
+  // Tracking
+  sentAt      DateTime?
+  deliveredAt DateTime?
+  clickedAt   DateTime?
+  readAt      DateTime?
+
+  // Error handling
+  errorMessage String?
+  retryCount   Int     @default(0)
+
+  // Metadata
+  metadata Json? // Channel-specific metadata (email ID, push token, etc.)
+
+  // Relationships
+  notification Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // tenant       Tenant?      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([notificationId])
+  @@index([userId])
+  @@index([tenantId])
+  @@index([status])
+  @@index([channel])
+}
+
+// Legacy models (keeping for backward compatibility)
+model NotificationType {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model NotificationRecipient {
+  id             String   @id @default(cuid())
+  notificationId String
+  userId         String
+  read           Boolean  @default(false)
+  createdAt      DateTime @default(now())
+}
+
+model ActivityLog {
+  id        String   @id @default(cuid())
+  userId    String
+  contentId String
+  action    String
+  details   Json?
+  user      User?    @relation(fields: [userId], references: [id])
+  // content   Content? @relation(fields: [contentId], references: [id])
+  createdAt DateTime @default(now())
+}

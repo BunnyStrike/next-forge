@@ -55,6 +55,21 @@ This is a monorepo containing multiple applications and shared packages built wi
   - Integration with auth and design system packages
   - Responsive design for all screen sizes
 
+### Uploads (`packages/uploads`)
+- **Purpose**: Comprehensive file upload system
+- **Features**:
+  - Drag & drop interface with visual feedback
+  - Real-time upload progress tracking
+  - Image optimization, resizing, and thumbnail generation
+  - Cloud storage integration (S3, Cloudinary, Vercel Blob)
+  - File validation (type, size, quantity)
+  - Rich file previews with metadata display
+  - TypeScript support with full type safety
+  - Customizable UI components
+  - Support for images, documents, media, and archives
+  - Progress indicators and error handling
+  - Batch upload capabilities
+
 ## Database Schema
 
 The project uses Prisma with the following main entities:
