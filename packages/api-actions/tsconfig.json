@@ -1,0 +1,14 @@
+{
+  "extends": "@repo/typescript-config/base.json",
+  "compilerOptions": {
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": false,
+    "noEmit": true,
+    "lib": ["ES2020"],
+    "target": "ES2020",
+    "module": "ESNext"
+  },
+  "include": ["."],
+  "exclude": ["dist/**", "build/**", "node_modules/**"]
+} 

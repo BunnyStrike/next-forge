@@ -1,0 +1,58 @@
+{
+  "name": "desktop",
+  "version": "1.0.0",
+  "private": true,
+  "main": "electron/main.js",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:next\" \"npm run dev:electron\"",
+    "dev:next": "next dev -p 3001",
+    "dev:electron": "wait-on http://localhost:3001 && electron .",
+    "build": "next build",
+    "build:electron": "npm run build && electron-builder",
+    "start": "next start",
+    "electron": "electron .",
+    "clean": "git clean -xdf .cache .turbo dist node_modules",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+  },
+  "dependencies": {
+    "@repo/api-actions": "workspace:*",
+    "@repo/design-system": "workspace:*",
+    "@repo/next-config": "workspace:*",
+    "next": "15.3.3",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "tailwindcss": "^4.1.8"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "@types/node": "^22.15.30",
+    "@types/react": "^19.1.6",
+    "@types/react-dom": "^19.1.6",
+    "concurrently": "^9.1.2",
+    "electron": "^36.4.0",
+    "electron-builder": "^26.0.12",
+    "typescript": "^5.8.3",
+    "wait-on": "^8.0.3"
+  },
+  "build": {
+    "appId": "com.nextforge.desktop",
+    "productName": "Desktop App",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "electron/**/*",
+      ".next/**/*",
+      "node_modules/**/*"
+    ],
+    "mac": {
+      "category": "public.app-category.productivity"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": "AppImage"
+    }
+  }
+} 

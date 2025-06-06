@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Expo",
+  "extends": "./base.json",
+  "compilerOptions": {
+    "allowJs": true,
+    "jsx": "react-jsx",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "noEmit": true,
+    "allowSyntheticDefaultImports": true,
+    "paths": {
+      "@/*": ["./*"],
+      "@repo/*": ["../../packages/*"]
+    }
+  },
+  "exclude": ["node_modules"]
+} 

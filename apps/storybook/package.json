@@ -15,14 +15,14 @@
     "cmdk": "^1.1.1",
     "date-fns": "^4.1.0",
     "input-otp": "^1.4.2",
-    "lucide-react": "^0.511.0",
-    "next": "15.3.2",
+    "lucide-react": "^0.513.0",
+    "next": "15.3.3",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "react-hook-form": "^7.56.4",
+    "react-hook-form": "^7.57.0",
     "recharts": "^2.15.3",
-    "sonner": "^2.0.3",
-    "zod": "^3.25.28"
+    "sonner": "^2.0.5",
+    "zod": "^3.25.55"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^3.2.6",
@@ -35,13 +35,13 @@
     "@storybook/nextjs": "^8.6.14",
     "@storybook/react": "^8.6.14",
     "@storybook/test": "^8.6.14",
-    "@types/node": "^22",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
+    "@types/node": "^22.15.30",
+    "@types/react": "^19.1.6",
+    "@types/react-dom": "^19.1.6",
     "chromatic": "^12.0.0",
-    "postcss": "^8",
+    "postcss": "^8.5.4",
     "storybook": "^8.6.14",
-    "tailwindcss": "^4.1.7",
-    "typescript": "^5"
+    "tailwindcss": "^4.1.8",
+    "typescript": "^5.8.3"
   }
 }
