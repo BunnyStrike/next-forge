@@ -13,25 +13,27 @@ All default pages and components use these colors. You can also use them in your
 
 ```tsx title="component.tsx"
 export const MyComponent = () => (
-  <div className="bg-background text-foreground border rounded-4xl shadow">
+  <div className='bg-background text-foreground border rounded-4xl shadow'>
     <p>I'm using CSS Variables!</p>
   </div>
-);
+)
 ```
 
 You can also access colors in JavaScript through the `tailwind` utility exported from `@repo/tailwind-config`, like so:
 
 ```tsx title="component.tsx"
-import { tailwind } from '@repo/tailwind-config';
+import { tailwind } from '@repo/tailwind-config'
 
 export const MyComponent = () => (
-  <div style={{
-    background: tailwind.theme.colors.background,
-    color: tailwind.theme.colors.muted.foreground,
-  }}>
+  <div
+    style={{
+      background: tailwind.theme.colors.background,
+      color: tailwind.theme.colors.muted.foreground,
+    }}
+  >
     <p>I'm using styles directly from the Tailwind config!</p>
   </div>
-);
+)
 ```
 
 ## Caveats

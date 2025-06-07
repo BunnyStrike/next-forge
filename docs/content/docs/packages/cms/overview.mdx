@@ -7,22 +7,22 @@ description: How the CMS is configured in next-forge.
   data={[
     {
       user: {
-        name: "Hayden Bleasel",
-        id: "haydenbleasel",
+        name: 'Hayden Bleasel',
+        id: 'haydenbleasel',
       },
       company: {
-        name: "vercel",
-        id: "vercel",
+        name: 'vercel',
+        id: 'vercel',
       },
     },
     {
       user: {
-        name: "Julian Benegas",
-        id: "julianbenegas8",
+        name: 'Julian Benegas',
+        id: 'julianbenegas8',
       },
       company: {
-        name: "BaseHub",
-        id: "basehub",
+        name: 'BaseHub',
+        id: 'basehub',
       },
     },
   ]}
@@ -57,14 +57,17 @@ Keep this connection string handy, you will need it in the next step.
 Update your [environment variables](/docs/setup/env) to use the new BaseHub token. For example:
 
 ```ts apps/web/.env
-BASEHUB_TOKEN="<token>"
+BASEHUB_TOKEN = '<token>'
 ```
 
 ### 3. Start the dev server
 
 When you run `pnpm dev`, the CMS package will generate the type-safe BaseHub SDK, and watch changes to your CMS's schema.
 
-<Note>You might need to run `Restart TS Server` in your IDE for TypeScript to pick up the new types.</Note>
+<Note>
+  You might need to run `Restart TS Server` in your IDE for TypeScript to pick
+  up the new types.
+</Note>
 
 ## Querying Basics
 

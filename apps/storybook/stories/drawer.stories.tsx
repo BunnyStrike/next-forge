@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react'
 
 import {
   Drawer,
@@ -9,7 +9,7 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from '@repo/design-system/components/ui/drawer';
+} from '@repo/design-system/components/ui/drawer'
 
 /**
  * A drawer component for React.
@@ -19,7 +19,7 @@ const meta: Meta<typeof Drawer> = {
   component: Drawer,
   tags: ['autodocs'],
   argTypes: {},
-  render: (args) => (
+  render: args => (
     <Drawer {...args}>
       <DrawerTrigger>Open</DrawerTrigger>
       <DrawerContent>
@@ -29,13 +29,13 @@ const meta: Meta<typeof Drawer> = {
         </DrawerHeader>
         <DrawerFooter>
           <button
-            type="button"
-            className="rounded bg-primary px-4 py-2 text-primary-foreground"
+            type='button'
+            className='rounded bg-primary px-4 py-2 text-primary-foreground'
           >
             Submit
           </button>
           <DrawerClose>
-            <button type="button" className="hover:underline">
+            <button type='button' className='hover:underline'>
               Cancel
             </button>
           </DrawerClose>
@@ -46,13 +46,13 @@ const meta: Meta<typeof Drawer> = {
   parameters: {
     layout: 'centered',
   },
-};
+}
 
-export default meta;
+export default meta
 
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof meta>
 
 /**
  * The default form of the drawer.
  */
-export const Default: Story = {};
+export const Default: Story = {}

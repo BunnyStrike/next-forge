@@ -1,10 +1,10 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react'
 
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@repo/design-system/components/ui/popover';
+} from '@repo/design-system/components/ui/popover'
 
 /**
  * Displays rich content in a portal, triggered by a button.
@@ -15,7 +15,7 @@ const meta = {
   tags: ['autodocs'],
   argTypes: {},
 
-  render: (args) => (
+  render: args => (
     <Popover {...args}>
       <PopoverTrigger>Open</PopoverTrigger>
       <PopoverContent>Place content for the popover here.</PopoverContent>
@@ -24,13 +24,13 @@ const meta = {
   parameters: {
     layout: 'centered',
   },
-} satisfies Meta<typeof Popover>;
+} satisfies Meta<typeof Popover>
 
-export default meta;
+export default meta
 
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof meta>
 
 /**
  * The default form of the popover.
  */
-export const Default: Story = {};
+export const Default: Story = {}

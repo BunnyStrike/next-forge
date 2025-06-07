@@ -1,12 +1,12 @@
-import type { Message as MessageType } from 'ai';
-import type { ComponentProps } from 'react';
-import Markdown from 'react-markdown';
-import { twMerge } from 'tailwind-merge';
+import type { Message as MessageType } from 'ai'
+import type { ComponentProps } from 'react'
+import Markdown from 'react-markdown'
+import { twMerge } from 'tailwind-merge'
 
 type MessageProps = {
-  data: MessageType;
-  markdown?: ComponentProps<typeof Markdown>;
-};
+  data: MessageType
+  markdown?: ComponentProps<typeof Markdown>
+}
 
 export const Message = ({ data, markdown }: MessageProps) => (
   <div
@@ -19,4 +19,4 @@ export const Message = ({ data, markdown }: MessageProps) => (
   >
     <Markdown {...markdown}>{data.content}</Markdown>
   </div>
-);
+)

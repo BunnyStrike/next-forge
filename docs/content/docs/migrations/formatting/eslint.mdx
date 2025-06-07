@@ -3,25 +3,30 @@ title: Switch to ESLint
 description: How to change the default linter to ESLint.
 ---
 
-<Authors data={[{
-  user: {
-    name: 'Hayden Bleasel',
-    id: 'haydenbleasel',
-  },
-  company: {
-    name: 'Vercel',
-    id: 'vercel',
-  },
-}, {
-  user: {
-    name: 'Nicholas C. Zakas',
-    id: 'slicknet',
-  },
-  company: {
-    name: 'ESLint',
-    id: 'eslint',
-  },
-}]} />
+<Authors
+  data={[
+    {
+      user: {
+        name: 'Hayden Bleasel',
+        id: 'haydenbleasel',
+      },
+      company: {
+        name: 'Vercel',
+        id: 'vercel',
+      },
+    },
+    {
+      user: {
+        name: 'Nicholas C. Zakas',
+        id: 'slicknet',
+      },
+      company: {
+        name: 'ESLint',
+        id: 'eslint',
+      },
+    },
+  ]}
+/>
 
 Here's how to switch from Biome to [ESLint](https://eslint.org). In this example, we'll also add the Next.js and React plugins, as well as the new ESLint Flat Config.
 
@@ -44,9 +49,9 @@ pnpm add -w -D eslint eslint-plugin-next eslint-plugin-react eslint-plugin-react
 Delete the existing `biome.json` file in the root of the project, and create a new `eslint.config.mjs` file:
 
 ```js title="eslint.config.mjs"
-import react from 'eslint-plugin-react';
-import next from '@next/eslint-plugin-next';
-import hooks from 'eslint-plugin-react-hooks';
+import react from 'eslint-plugin-react'
+import next from '@next/eslint-plugin-next'
+import hooks from 'eslint-plugin-react-hooks'
 import ts from 'typescript-eslint'
 
 export default [
@@ -54,7 +59,7 @@ export default [
   {
     ignores: ['**/.next'],
   },
-  { 
+  {
     files: ['**/*.ts', '**/*.tsx'],
     plugins: {
       react: react,
@@ -75,7 +80,8 @@ export default [
 ## 3. Install the ESLint VSCode extension
 
 <Tip>
-This is generally installed if you selected "JavaScript" as a language to support when you first set up Visual Studio Code.
+  This is generally installed if you selected "JavaScript" as a language to
+  support when you first set up Visual Studio Code.
 </Tip>
 
 Install the [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) VSCode extension to get linting and formatting support in your editor.

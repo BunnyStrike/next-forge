@@ -89,16 +89,16 @@ apps/mobile/
 The app uses NativeWind for styling, which allows you to use Tailwind CSS classes in React Native components.
 
 ```tsx
-import { View, Text } from 'react-native';
+import { View, Text } from 'react-native'
 
 export default function MyComponent() {
   return (
-    <View className="flex-1 items-center justify-center bg-white">
-      <Text className="text-2xl font-bold text-gray-800">
+    <View className='flex-1 items-center justify-center bg-white'>
+      <Text className='text-2xl font-bold text-gray-800'>
         Hello NativeWind!
       </Text>
     </View>
-  );
+  )
 }
 ```
 
@@ -153,4 +153,4 @@ eas build --platform android
 
 ### New Architecture
 
-If you encounter issues with the New Architecture, you can temporarily disable it by setting `newArchEnabled: false` in `app.json`, but this is not recommended for new projects. 
+If you encounter issues with the New Architecture, you can temporarily disable it by setting `newArchEnabled: false` in `app.json`, but this is not recommended for new projects.

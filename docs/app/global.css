@@ -1,7 +1,7 @@
 @import 'tailwindcss';
 @import 'fumadocs-ui/css/shadcn.css';
 @import 'fumadocs-ui/css/preset.css';
-@import "tw-animate-css";
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -143,7 +143,7 @@
     @apply text-muted-foreground;
   }
   button:not(:disabled),
-  [role="button"]:not(:disabled) {
+  [role='button']:not(:disabled) {
     @apply cursor-pointer;
   }
 }
@@ -152,12 +152,12 @@
   .bg-dashed {
     background-image: linear-gradient(
       45deg,
-      var(--border) 12.50%,
-      transparent 12.50%,
+      var(--border) 12.5%,
+      transparent 12.5%,
       transparent 50%,
       var(--border) 50%,
-      var(--border) 62.50%,
-      transparent 62.50%,
+      var(--border) 62.5%,
+      transparent 62.5%,
       transparent 100%
     );
     background-size: 0.25rem 0.25rem;
@@ -173,7 +173,9 @@
   }
 }
 
-h1, h2, h3 {
+h1,
+h2,
+h3 {
   @apply tracking-tight;
 }
 
@@ -182,7 +184,7 @@ h1, h2, h3 {
   @apply fill-none;
 }
 
-#nd-subnav [data-active="true"] {
+#nd-subnav [data-active='true'] {
   @apply font-medium text-primary;
 }
 

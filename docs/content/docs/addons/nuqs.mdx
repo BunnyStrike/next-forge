@@ -16,25 +16,25 @@ pnpm add nuqs
 Here is an example of how to use NUQS for URL search parameter state management:
 
 ```tsx title="my-component.tsx"
-import { useSearchParams } from 'nuqs';
+import { useSearchParams } from 'nuqs'
 
 function MyComponent() {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams()
 
-  const handleInputChange = (event) => {
-    setSearchParams({ query: event.target.value });
-  };
+  const handleInputChange = event => {
+    setSearchParams({ query: event.target.value })
+  }
 
   return (
     <div>
       <input
-        type="text"
+        type='text'
         value={searchParams.query || ''}
         onChange={handleInputChange}
       />
       <p>Search Query: {searchParams.query}</p>
     </div>
-  );
+  )
 }
 ```
 

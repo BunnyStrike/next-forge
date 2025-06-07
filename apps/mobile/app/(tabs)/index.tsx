@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native'
 
 export default function HomeScreen() {
   return (
@@ -6,7 +6,7 @@ export default function HomeScreen() {
       <Text style={styles.title}>Welcome to Mobile App</Text>
       <Text style={styles.subtitle}>Built with Expo SDK 52 & NativeWind</Text>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -25,4 +25,4 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#666',
   },
-}); 
+})

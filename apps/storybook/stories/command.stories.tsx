@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import { CommandSeparator } from 'cmdk';
+import type { Meta, StoryObj } from '@storybook/react'
+import { CommandSeparator } from 'cmdk'
 
 import {
   Command,
@@ -8,7 +8,7 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from '@repo/design-system/components/ui/command';
+} from '@repo/design-system/components/ui/command'
 
 /**
  * Fast, composable, unstyled command menu for React.
@@ -21,18 +21,18 @@ const meta = {
   args: {
     className: 'rounded-lg w-96 border shadow-md',
   },
-  render: (args) => (
+  render: args => (
     <Command {...args}>
-      <CommandInput placeholder="Type a command or search..." />
+      <CommandInput placeholder='Type a command or search...' />
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
-        <CommandGroup heading="Suggestions">
+        <CommandGroup heading='Suggestions'>
           <CommandItem>Calendar</CommandItem>
           <CommandItem>Search Emoji</CommandItem>
           <CommandItem>Calculator</CommandItem>
         </CommandGroup>
         <CommandSeparator />
-        <CommandGroup heading="Settings">
+        <CommandGroup heading='Settings'>
           <CommandItem>Profile</CommandItem>
           <CommandItem>Billing</CommandItem>
           <CommandItem>Settings</CommandItem>
@@ -43,13 +43,13 @@ const meta = {
   parameters: {
     layout: 'centered',
   },
-} satisfies Meta<typeof Command>;
+} satisfies Meta<typeof Command>
 
-export default meta;
+export default meta
 
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof meta>
 
 /**
  * The default form of the command.
  */
-export const Default: Story = {};
+export const Default: Story = {}

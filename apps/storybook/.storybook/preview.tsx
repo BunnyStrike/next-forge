@@ -1,10 +1,10 @@
-import { Toaster } from '@repo/design-system/components/ui/sonner';
-import { TooltipProvider } from '@repo/design-system/components/ui/tooltip';
-import { ThemeProvider } from '@repo/design-system/providers/theme';
-import { withThemeByClassName } from '@storybook/addon-themes';
-import type { Preview } from '@storybook/react';
+import { Toaster } from '@repo/design-system/components/ui/sonner'
+import { TooltipProvider } from '@repo/design-system/components/ui/tooltip'
+import { ThemeProvider } from '@repo/design-system/providers/theme'
+import { withThemeByClassName } from '@storybook/addon-themes'
+import type { Preview } from '@storybook/react'
 
-import '@repo/design-system/styles/globals.css';
+import '@repo/design-system/styles/globals.css'
 
 const preview: Preview = {
   parameters: {
@@ -35,9 +35,9 @@ const preview: Preview = {
       },
       defaultTheme: 'light',
     }),
-    (Story) => {
+    Story => {
       return (
-        <div className="bg-background">
+        <div className='bg-background'>
           <ThemeProvider>
             <TooltipProvider>
               <Story />
@@ -45,9 +45,9 @@ const preview: Preview = {
             <Toaster />
           </ThemeProvider>
         </div>
-      );
+      )
     },
   ],
-};
+}
 
-export default preview;
+export default preview

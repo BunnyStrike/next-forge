@@ -1,6 +1,6 @@
-import { withLogtail } from '@logtail/next';
-import { withSentryConfig } from '@sentry/nextjs';
-import { keys } from './keys';
+import { withLogtail } from '@logtail/next'
+import { withSentryConfig } from '@sentry/nextjs'
+import { keys } from './keys'
 
 export const sentryConfig: Parameters<typeof withSentryConfig>[1] = {
   org: keys().SENTRY_ORG,
@@ -35,17 +35,17 @@ export const sentryConfig: Parameters<typeof withSentryConfig>[1] = {
    * https://vercel.com/docs/cron-jobs
    */
   automaticVercelMonitors: true,
-};
+}
 
 export const withSentry = (sourceConfig: object): object => {
   const configWithTranspile = {
     ...sourceConfig,
     transpilePackages: ['@sentry/nextjs'],
-  };
+  }
 
-  return withSentryConfig(configWithTranspile, sentryConfig);
-};
+  return withSentryConfig(configWithTranspile, sentryConfig)
+}
 
 export const withLogging = (config: object): object => {
-  return withLogtail(config);
-};
+  return withLogtail(config)
+}

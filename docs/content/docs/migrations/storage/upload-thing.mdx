@@ -25,10 +25,10 @@ Next, update the environment variables across the project, for example:
 
 ```js title="apps/app/.env"
 // Remove this:
-BLOB_READ_WRITE_TOKEN=""
+BLOB_READ_WRITE_TOKEN = ''
 
 // Add this:
-UPLOADTHING_TOKEN=""
+UPLOADTHING_TOKEN = ''
 ```
 
 Additionally, replace all instances of `BLOB_READ_WRITE_TOKEN` with `UPLOADTHING_TOKEN` in the `packages/env/index.ts` file.
@@ -40,18 +40,21 @@ Update the `index.ts` and `client.ts` to use the new `uploadthing` packages:
 ### Storage
 
 ```ts title="packages/storage/index.ts"
-import { createUploadthing } from 'uploadthing/next';
+import { createUploadthing } from 'uploadthing/next'
 
-export { type FileRouter, createRouteHandler } from 'uploadthing/next';
-export { UploadThingError as UploadError, extractRouterConfig } from 'uploadthing/server';
+export { type FileRouter, createRouteHandler } from 'uploadthing/next'
+export {
+  UploadThingError as UploadError,
+  extractRouterConfig,
+} from 'uploadthing/server'
 
-export const storage = createUploadthing();
+export const storage = createUploadthing()
 ```
 
 ### Client
 
 ```ts title="packages/storage/client.ts"
-export * from '@uploadthing/react';
+export * from '@uploadthing/react'
 ```
 
 ## 4. Create new SSR file
@@ -59,7 +62,7 @@ export * from '@uploadthing/react';
 We'll also need to create a new file for the storage package to handle the Tailwind CSS classes and SSR.
 
 ```ts title="packages/storage/ssr.ts"
-export { NextSSRPlugin as StorageSSRPlugin } from '@uploadthing/react/next-ssr-plugin';
+export { NextSSRPlugin as StorageSSRPlugin } from '@uploadthing/react/next-ssr-plugin'
 ```
 
 ## 5. Create a file router in your app
@@ -69,7 +72,7 @@ Create a new file in your app's `lib` directory to define the file router. This 
 ```ts title="apps/app/app/lib/upload.ts"
 import { currentUser } from '@repo/auth/server';
 import { type FileRouter, UploadError, storage } from '@repo/storage';
-  
+
 export const router: FileRouter = {
   imageUploader: storage({
     image: {
@@ -95,10 +98,10 @@ export const router: FileRouter = {
 Create a new route handler in your app's `api` directory to handle the file routes.
 
 ```ts title="apps/app/app/api/upload/route.ts"
-import { router } from '@/app/lib/upload';
-import { createRouteHandler } from '@repo/storage';
+import { router } from '@/app/lib/upload'
+import { createRouteHandler } from '@repo/storage'
 
-export const { GET, POST } = createRouteHandler({ router });
+export const { GET, POST } = createRouteHandler({ router })
 ```
 
 ## 7. Update your root layout
@@ -106,28 +109,28 @@ export const { GET, POST } = createRouteHandler({ router });
 Update your root layout to include the `StorageSSRPlugin`. This will add SSR hydration and avoid a loading state on your upload button.
 
 ```tsx title="apps/app/app/layout.tsx {4,5,7,16}"
-import '@repo/design-system/styles/globals.css';
-import { DesignSystemProvider } from '@repo/design-system';
-import { fonts } from '@repo/design-system/lib/fonts';
-import { extractRouterConfig } from '@repo/storage';
-import { StorageSSRPlugin } from '@repo/storage/ssr';
-import type { ReactNode } from 'react';
-import { router } from './lib/upload';
+import '@repo/design-system/styles/globals.css'
+import { DesignSystemProvider } from '@repo/design-system'
+import { fonts } from '@repo/design-system/lib/fonts'
+import { extractRouterConfig } from '@repo/storage'
+import { StorageSSRPlugin } from '@repo/storage/ssr'
+import type { ReactNode } from 'react'
+import { router } from './lib/upload'
 
 type RootLayoutProperties = {
-  readonly children: ReactNode;
-};
+  readonly children: ReactNode
+}
 
 const RootLayout = ({ children }: RootLayoutProperties) => (
-  <html lang="en" className={fonts} suppressHydrationWarning>
+  <html lang='en' className={fonts} suppressHydrationWarning>
     <body>
       <StorageSSRPlugin routerConfig={extractRouterConfig(router)} />
       <DesignSystemProvider>{children}</DesignSystemProvider>
     </body>
   </html>
-);
+)
 
-export default RootLayout;
+export default RootLayout
 ```
 
 ## 8. Update your Tailwind CSS
@@ -135,7 +138,7 @@ export default RootLayout;
 Update your design system's `globals.css` file to include the following:
 
 ```css title="packages/design-system/styles/globals.css"
-@import "uploadthing/tw/v4";
+@import 'uploadthing/tw/v4';
 @source "../node_modules/@uploadthing/react/dist";
 ```
 
@@ -144,27 +147,27 @@ Update your design system's `globals.css` file to include the following:
 Create a new component for your upload button. This will use the `generateUploadButton` function to create a button that will upload files to the `imageUploader` endpoint.
 
 ```tsx title="apps/app/app/(authenticated)/components/upload-button.tsx"
-'use client';
+'use client'
 
-import type { router } from '@/app/lib/upload';
-import { generateUploadButton } from '@repo/storage/client';
-import { toast } from 'sonner';
+import type { router } from '@/app/lib/upload'
+import { generateUploadButton } from '@repo/storage/client'
+import { toast } from 'sonner'
 
-const UploadButton = generateUploadButton<typeof router>();
+const UploadButton = generateUploadButton<typeof router>()
 
 export const UploadForm = () => (
   <UploadButton
-    endpoint="imageUploader"
-    onClientUploadComplete={(res) => {
+    endpoint='imageUploader'
+    onClientUploadComplete={res => {
       // Do something with the response
-      console.log('Files: ', res);
-      toast.success('Upload Completed');
+      console.log('Files: ', res)
+      toast.success('Upload Completed')
     }}
     onUploadError={(error: Error) => {
-      toast.error(`ERROR! ${error.message}`);
+      toast.error(`ERROR! ${error.message}`)
     }}
   />
-);
+)
 ```
 
 Now you can import this component into your app and use it as a regular component.

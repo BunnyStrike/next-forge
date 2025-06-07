@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import { ArrowRightSquare } from 'lucide-react';
+import type { Meta, StoryObj } from '@storybook/react'
+import { ArrowRightSquare } from 'lucide-react'
 
 import {
   Breadcrumb,
@@ -8,7 +8,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from '@repo/design-system/components/ui/breadcrumb';
+} from '@repo/design-system/components/ui/breadcrumb'
 
 /**
  * Displays the path to the current resource using a hierarchy of links.
@@ -19,7 +19,7 @@ const meta = {
   tags: ['autodocs'],
   argTypes: {},
   args: {},
-  render: (args) => (
+  render: args => (
     <Breadcrumb {...args}>
       <BreadcrumbList>
         <BreadcrumbItem>
@@ -39,22 +39,22 @@ const meta = {
   parameters: {
     layout: 'centered',
   },
-} satisfies Meta<typeof Breadcrumb>;
+} satisfies Meta<typeof Breadcrumb>
 
-export default meta;
+export default meta
 
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof meta>
 
 /**
  * Displays the path of links to the current resource.
  */
-export const Default: Story = {};
+export const Default: Story = {}
 
 /**
  * Displays the path with a custom icon for the separator.
  */
 export const WithCustomSeparator: Story = {
-  render: (args) => (
+  render: args => (
     <Breadcrumb {...args}>
       <BreadcrumbList>
         <BreadcrumbItem>
@@ -75,4 +75,4 @@ export const WithCustomSeparator: Story = {
       </BreadcrumbList>
     </Breadcrumb>
   ),
-};
+}

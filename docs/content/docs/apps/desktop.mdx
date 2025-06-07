@@ -5,7 +5,10 @@ description: Cross-platform desktop application built with Electron and Next.js.
 
 ![/images/desktop.png](/images/desktop.png)
 
-<Tip>The `desktop` application uses Electron with Next.js, providing a native desktop experience while sharing code with your web application.</Tip>
+<Tip>
+  The `desktop` application uses Electron with Next.js, providing a native
+  desktop experience while sharing code with your web application.
+</Tip>
 
 The desktop app in next-forge is a cross-platform Electron application that wraps your Next.js web application, providing native desktop functionality while maintaining consistency with your web experience.
 
@@ -38,17 +41,20 @@ The `desktop` application is built on [Electron](https://electronjs.org), allowi
 ### Getting Started
 
 1. **Install dependencies:**
+
    ```bash
    pnpm install
    ```
 
 2. **Start development:**
+
    ```bash
    cd apps/desktop
    pnpm dev
    ```
 
    This will:
+
    - Start the Next.js development server
    - Launch Electron in development mode
    - Enable hot reloading
@@ -79,15 +85,15 @@ apps/desktop/
 The main process manages application lifecycle and creates renderer processes:
 
 ```typescript title="electron/main.ts"
-import { app, BrowserWindow, shell, protocol } from 'electron';
-import { join } from 'path';
-import { setupMenu } from './menu';
-import { setupUpdater } from './updater';
+import { app, BrowserWindow, shell, protocol } from 'electron'
+import { join } from 'path'
+import { setupMenu } from './menu'
+import { setupUpdater } from './updater'
 
-let mainWindow: BrowserWindow | null = null;
+let mainWindow: BrowserWindow | null = null
 
-const isDev = process.env.NODE_ENV === 'development';
-const port = process.env.PORT || 3000;
+const isDev = process.env.NODE_ENV === 'development'
+const port = process.env.PORT || 3000
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -103,44 +109,44 @@ function createWindow() {
     },
     titleBarStyle: 'hiddenInset',
     show: false,
-  });
+  })
 
   // Load the application
-  const url = isDev 
+  const url = isDev
     ? `http://localhost:${port}`
-    : `file://${join(__dirname, '../dist/index.html')}`;
-  
-  mainWindow.loadURL(url);
+    : `file://${join(__dirname, '../dist/index.html')}`
+
+  mainWindow.loadURL(url)
 
   // Show window when ready
   mainWindow.once('ready-to-show', () => {
-    mainWindow?.show();
-  });
+    mainWindow?.show()
+  })
 
   // Handle external links
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
-    shell.openExternal(url);
-    return { action: 'deny' };
-  });
+    shell.openExternal(url)
+    return { action: 'deny' }
+  })
 }
 
 app.whenReady().then(() => {
-  createWindow();
-  setupMenu();
-  setupUpdater();
+  createWindow()
+  setupMenu()
+  setupUpdater()
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
-      createWindow();
+      createWindow()
     }
-  });
-});
+  })
+})
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
-    app.quit();
+    app.quit()
   }
-});
+})
 ```
 
 ### Preload Script
@@ -148,57 +154,59 @@ app.on('window-all-closed', () => {
 The preload script provides secure communication between main and renderer processes:
 
 ```typescript title="electron/preload.ts"
-import { contextBridge, ipcRenderer } from 'electron';
+import { contextBridge, ipcRenderer } from 'electron'
 
 // Expose protected methods that allow the renderer process to use
 // the ipcRenderer without exposing the entire object
 contextBridge.exposeInMainWorld('electronAPI', {
   // App info
   getVersion: () => ipcRenderer.invoke('app:getVersion'),
-  
+
   // File operations
-  showOpenDialog: (options: any) => ipcRenderer.invoke('dialog:openFile', options),
-  showSaveDialog: (options: any) => ipcRenderer.invoke('dialog:saveFile', options),
-  
+  showOpenDialog: (options: any) =>
+    ipcRenderer.invoke('dialog:openFile', options),
+  showSaveDialog: (options: any) =>
+    ipcRenderer.invoke('dialog:saveFile', options),
+
   // Notifications
-  showNotification: (title: string, body: string) => 
+  showNotification: (title: string, body: string) =>
     ipcRenderer.invoke('notification:show', { title, body }),
-  
+
   // Deep linking
-  onDeepLink: (callback: (url: string) => void) => 
+  onDeepLink: (callback: (url: string) => void) =>
     ipcRenderer.on('deep-link', (_, url) => callback(url)),
-  
+
   // Window controls
   minimize: () => ipcRenderer.invoke('window:minimize'),
   maximize: () => ipcRenderer.invoke('window:maximize'),
   close: () => ipcRenderer.invoke('window:close'),
-  
+
   // Auto-updater
   checkForUpdates: () => ipcRenderer.invoke('updater:check'),
-  onUpdateAvailable: (callback: () => void) => 
+  onUpdateAvailable: (callback: () => void) =>
     ipcRenderer.on('update-available', callback),
-  onUpdateDownloaded: (callback: () => void) => 
+  onUpdateDownloaded: (callback: () => void) =>
     ipcRenderer.on('update-downloaded', callback),
   installUpdate: () => ipcRenderer.invoke('updater:install'),
-});
+})
 
 // TypeScript definitions for the exposed API
 declare global {
   interface Window {
     electronAPI: {
-      getVersion: () => Promise<string>;
-      showOpenDialog: (options: any) => Promise<any>;
-      showSaveDialog: (options: any) => Promise<any>;
-      showNotification: (title: string, body: string) => Promise<void>;
-      onDeepLink: (callback: (url: string) => void) => void;
-      minimize: () => Promise<void>;
-      maximize: () => Promise<void>;
-      close: () => Promise<void>;
-      checkForUpdates: () => Promise<void>;
-      onUpdateAvailable: (callback: () => void) => void;
-      onUpdateDownloaded: (callback: () => void) => void;
-      installUpdate: () => Promise<void>;
-    };
+      getVersion: () => Promise<string>
+      showOpenDialog: (options: any) => Promise<any>
+      showSaveDialog: (options: any) => Promise<any>
+      showNotification: (title: string, body: string) => Promise<void>
+      onDeepLink: (callback: (url: string) => void) => void
+      minimize: () => Promise<void>
+      maximize: () => Promise<void>
+      close: () => Promise<void>
+      checkForUpdates: () => Promise<void>
+      onUpdateAvailable: (callback: () => void) => void
+      onUpdateDownloaded: (callback: () => void) => void
+      installUpdate: () => Promise<void>
+    }
   }
 }
 ```
@@ -208,13 +216,13 @@ declare global {
 ### Native File Operations
 
 ```tsx title="components/FileManager.tsx"
-'use client';
+'use client'
 
-import { useState } from 'react';
-import { Button } from '@repo/design-system';
+import { useState } from 'react'
+import { Button } from '@repo/design-system'
 
 export function FileManager() {
-  const [selectedFile, setSelectedFile] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<string | null>(null)
 
   const openFile = async () => {
     if (typeof window !== 'undefined' && window.electronAPI) {
@@ -223,15 +231,15 @@ export function FileManager() {
         filters: [
           { name: 'Images', extensions: ['jpg', 'png', 'gif'] },
           { name: 'Documents', extensions: ['pdf', 'txt', 'doc', 'docx'] },
-          { name: 'All Files', extensions: ['*'] }
-        ]
-      });
+          { name: 'All Files', extensions: ['*'] },
+        ],
+      })
 
       if (!result.canceled && result.filePaths.length > 0) {
-        setSelectedFile(result.filePaths[0]);
+        setSelectedFile(result.filePaths[0])
       }
     }
-  };
+  }
 
   const saveFile = async () => {
     if (typeof window !== 'undefined' && window.electronAPI) {
@@ -239,40 +247,40 @@ export function FileManager() {
         defaultPath: 'untitled.txt',
         filters: [
           { name: 'Text Files', extensions: ['txt'] },
-          { name: 'All Files', extensions: ['*'] }
-        ]
-      });
+          { name: 'All Files', extensions: ['*'] },
+        ],
+      })
 
       if (!result.canceled && result.filePath) {
         // Save file logic here
-        console.log('Save to:', result.filePath);
+        console.log('Save to:', result.filePath)
       }
     }
-  };
+  }
 
   return (
-    <div className="space-y-4">
-      <div className="flex gap-2">
+    <div className='space-y-4'>
+      <div className='flex gap-2'>
         <Button onClick={openFile}>Open File</Button>
         <Button onClick={saveFile}>Save File</Button>
       </div>
-      
+
       {selectedFile && (
-        <div className="p-4 bg-gray-100 rounded">
+        <div className='p-4 bg-gray-100 rounded'>
           <strong>Selected File:</strong> {selectedFile}
         </div>
       )}
     </div>
-  );
+  )
 }
 ```
 
 ### Native Notifications
 
 ```tsx title="components/NotificationManager.tsx"
-'use client';
+'use client'
 
-import { Button } from '@repo/design-system';
+import { Button } from '@repo/design-system'
 
 export function NotificationManager() {
   const showNotification = async () => {
@@ -280,65 +288,61 @@ export function NotificationManager() {
       await window.electronAPI.showNotification(
         'Hello from Desktop!',
         'This is a native desktop notification.'
-      );
+      )
     }
-  };
+  }
 
-  return (
-    <Button onClick={showNotification}>
-      Show Native Notification
-    </Button>
-  );
+  return <Button onClick={showNotification}>Show Native Notification</Button>
 }
 ```
 
 ### Window Controls
 
 ```tsx title="components/WindowControls.tsx"
-'use client';
+'use client'
 
-import { Minimize, Maximize, X } from 'lucide-react';
-import { Button } from '@repo/design-system';
+import { Minimize, Maximize, X } from 'lucide-react'
+import { Button } from '@repo/design-system'
 
 export function WindowControls() {
   const handleMinimize = () => {
     if (typeof window !== 'undefined' && window.electronAPI) {
-      window.electronAPI.minimize();
+      window.electronAPI.minimize()
     }
-  };
+  }
 
   const handleMaximize = () => {
     if (typeof window !== 'undefined' && window.electronAPI) {
-      window.electronAPI.maximize();
+      window.electronAPI.maximize()
     }
-  };
+  }
 
   const handleClose = () => {
     if (typeof window !== 'undefined' && window.electronAPI) {
-      window.electronAPI.close();
+      window.electronAPI.close()
     }
-  };
+  }
 
   return (
-    <div className="flex gap-1">
-      <Button size="sm" variant="ghost" onClick={handleMinimize}>
-        <Minimize className="h-4 w-4" />
+    <div className='flex gap-1'>
+      <Button size='sm' variant='ghost' onClick={handleMinimize}>
+        <Minimize className='h-4 w-4' />
       </Button>
-      <Button size="sm" variant="ghost" onClick={handleMaximize}>
-        <Maximize className="h-4 w-4" />
+      <Button size='sm' variant='ghost' onClick={handleMaximize}>
+        <Maximize className='h-4 w-4' />
       </Button>
-      <Button size="sm" variant="ghost" onClick={handleClose}>
-        <X className="h-4 w-4" />
+      <Button size='sm' variant='ghost' onClick={handleClose}>
+        <X className='h-4 w-4' />
       </Button>
     </div>
-  );
+  )
 }
 ```
 
 ## Application Menu
 
 ```typescript title="electron/menu.ts"
-import { app, Menu, shell, BrowserWindow } from 'electron';
+import { app, Menu, shell, BrowserWindow } from 'electron'
 
 export function setupMenu() {
   const template: Electron.MenuItemConstructorOptions[] = [
@@ -350,24 +354,24 @@ export function setupMenu() {
           accelerator: 'CmdOrCtrl+N',
           click: () => {
             // Handle new file
-          }
+          },
         },
         {
           label: 'Open',
           accelerator: 'CmdOrCtrl+O',
           click: () => {
             // Handle open file
-          }
+          },
         },
         { type: 'separator' },
         {
           label: 'Quit',
           accelerator: process.platform === 'darwin' ? 'Cmd+Q' : 'Ctrl+Q',
           click: () => {
-            app.quit();
-          }
-        }
-      ]
+            app.quit()
+          },
+        },
+      ],
     },
     {
       label: 'Edit',
@@ -377,8 +381,8 @@ export function setupMenu() {
         { type: 'separator' },
         { role: 'cut' },
         { role: 'copy' },
-        { role: 'paste' }
-      ]
+        { role: 'paste' },
+      ],
     },
     {
       label: 'View',
@@ -391,15 +395,12 @@ export function setupMenu() {
         { role: 'zoomIn' },
         { role: 'zoomOut' },
         { type: 'separator' },
-        { role: 'togglefullscreen' }
-      ]
+        { role: 'togglefullscreen' },
+      ],
     },
     {
       label: 'Window',
-      submenu: [
-        { role: 'minimize' },
-        { role: 'close' }
-      ]
+      submenu: [{ role: 'minimize' }, { role: 'close' }],
     },
     {
       role: 'help',
@@ -407,48 +408,52 @@ export function setupMenu() {
         {
           label: 'About',
           click: () => {
-            shell.openExternal('https://your-website.com');
-          }
-        }
-      ]
-    }
-  ];
+            shell.openExternal('https://your-website.com')
+          },
+        },
+      ],
+    },
+  ]
 
-  const menu = Menu.buildFromTemplate(template);
-  Menu.setApplicationMenu(menu);
+  const menu = Menu.buildFromTemplate(template)
+  Menu.setApplicationMenu(menu)
 }
 ```
 
 ## Auto-Updates
 
 ```typescript title="electron/updater.ts"
-import { autoUpdater } from 'electron-updater';
-import { app, dialog } from 'electron';
+import { autoUpdater } from 'electron-updater'
+import { app, dialog } from 'electron'
 
 export function setupUpdater() {
-  autoUpdater.checkForUpdatesAndNotify();
+  autoUpdater.checkForUpdatesAndNotify()
 
   autoUpdater.on('update-available', () => {
     dialog.showMessageBox({
       type: 'info',
       title: 'Update Available',
-      message: 'A new version is available. It will be downloaded in the background.',
-      buttons: ['OK']
-    });
-  });
+      message:
+        'A new version is available. It will be downloaded in the background.',
+      buttons: ['OK'],
+    })
+  })
 
   autoUpdater.on('update-downloaded', () => {
-    dialog.showMessageBox({
-      type: 'info',
-      title: 'Update Ready',
-      message: 'Update downloaded. The application will restart to apply the update.',
-      buttons: ['Restart Now', 'Later']
-    }).then((result) => {
-      if (result.response === 0) {
-        autoUpdater.quitAndInstall();
-      }
-    });
-  });
+    dialog
+      .showMessageBox({
+        type: 'info',
+        title: 'Update Ready',
+        message:
+          'Update downloaded. The application will restart to apply the update.',
+        buttons: ['Restart Now', 'Later'],
+      })
+      .then(result => {
+        if (result.response === 0) {
+          autoUpdater.quitAndInstall()
+        }
+      })
+  })
 }
 ```
 
@@ -486,20 +491,20 @@ directories:
   buildResources: build
 
 files:
-  - "!**/.vscode/*"
-  - "!src/*"
-  - "!electron/*"
-  - "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}"
-  - "!**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}"
-  - "!**/node_modules/*.d.ts"
-  - "!**/node_modules/.bin"
-  - "!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}"
-  - "!.editorconfig"
-  - "!**/._*"
-  - "!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,.gitignore,.gitattributes}"
-  - "!**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output}"
-  - "!**/{appveyor.yml,.travis.yml,circle.yml}"
-  - "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}"
+  - '!**/.vscode/*'
+  - '!src/*'
+  - '!electron/*'
+  - '!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}'
+  - '!**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}'
+  - '!**/node_modules/*.d.ts'
+  - '!**/node_modules/.bin'
+  - '!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}'
+  - '!.editorconfig'
+  - '!**/._*'
+  - '!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,.gitignore,.gitattributes}'
+  - '!**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output}'
+  - '!**/{appveyor.yml,.travis.yml,circle.yml}'
+  - '!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}'
 
 mac:
   category: public.app-category.productivity
@@ -537,7 +542,7 @@ publish:
 
 ```typescript
 // Touch Bar support
-import { TouchBar } from 'electron';
+import { TouchBar } from 'electron'
 
 const touchBar = new TouchBar({
   items: [
@@ -546,48 +551,48 @@ const touchBar = new TouchBar({
       backgroundColor: '#007AFF',
       click: () => {
         // Handle save
-      }
-    })
-  ]
-});
+      },
+    }),
+  ],
+})
 
-mainWindow.setTouchBar(touchBar);
+mainWindow.setTouchBar(touchBar)
 ```
 
 ### Windows Integration
 
 ```typescript
 // Windows taskbar progress
-mainWindow.setProgressBar(0.5); // 50% progress
+mainWindow.setProgressBar(0.5) // 50% progress
 
 // Windows notifications
-import { Notification } from 'electron';
+import { Notification } from 'electron'
 
 new Notification({
   title: 'Task Complete',
-  body: 'Your task has been completed successfully.'
-}).show();
+  body: 'Your task has been completed successfully.',
+}).show()
 ```
 
 ### Linux Integration
 
 ```typescript
 // System tray integration
-import { app, Tray, Menu } from 'electron';
-import path from 'path';
+import { app, Tray, Menu } from 'electron'
+import path from 'path'
 
-let tray: Tray;
+let tray: Tray
 
 app.whenReady().then(() => {
-  tray = new Tray(path.join(__dirname, 'assets/tray-icon.png'));
-  
+  tray = new Tray(path.join(__dirname, 'assets/tray-icon.png'))
+
   const contextMenu = Menu.buildFromTemplate([
     { label: 'Show App', click: () => mainWindow?.show() },
-    { label: 'Quit', click: () => app.quit() }
-  ]);
-  
-  tray.setContextMenu(contextMenu);
-});
+    { label: 'Quit', click: () => app.quit() },
+  ])
+
+  tray.setContextMenu(contextMenu)
+})
 ```
 
 ## Security Best Practices
@@ -602,13 +607,13 @@ app.whenReady().then(() => {
 // Secure window configuration
 new BrowserWindow({
   webPreferences: {
-    nodeIntegration: false,           // Disable node in renderer
-    contextIsolation: true,           // Enable context isolation
-    enableRemoteModule: false,        // Disable remote module
+    nodeIntegration: false, // Disable node in renderer
+    contextIsolation: true, // Enable context isolation
+    enableRemoteModule: false, // Disable remote module
     preload: path.join(__dirname, 'preload.js'),
-    sandbox: true,                    // Enable sandbox mode
-  }
-});
+    sandbox: true, // Enable sandbox mode
+  },
+})
 ```
 
 ## Testing
@@ -626,23 +631,23 @@ pnpm test:coverage
 ### E2E Testing
 
 ```typescript title="tests/app.test.ts"
-import { test, expect } from '@playwright/test';
-import { ElectronApplication, _electron as electron } from 'playwright';
+import { test, expect } from '@playwright/test'
+import { ElectronApplication, _electron as electron } from 'playwright'
 
-let electronApp: ElectronApplication;
+let electronApp: ElectronApplication
 
 test.beforeAll(async () => {
-  electronApp = await electron.launch({ args: ['.'] });
-});
+  electronApp = await electron.launch({ args: ['.'] })
+})
 
 test.afterAll(async () => {
-  await electronApp.close();
-});
+  await electronApp.close()
+})
 
 test('window opens', async () => {
-  const window = await electronApp.firstWindow();
-  expect(await window.title()).toBe('Next Forge Desktop');
-});
+  const window = await electronApp.firstWindow()
+  expect(await window.title()).toBe('Next Forge Desktop')
+})
 ```
 
 ## Distribution
@@ -668,4 +673,4 @@ The desktop app supports automatic updates through electron-updater:
 3. Users receive notifications for new versions
 4. Updates download and install automatically
 
-The desktop app provides a powerful foundation for creating native desktop applications while leveraging your existing web codebase and maintaining consistency across platforms. 
+The desktop app provides a powerful foundation for creating native desktop applications while leveraging your existing web codebase and maintaining consistency across platforms.

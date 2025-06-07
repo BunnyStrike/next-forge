@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import { useMemo } from 'react';
+import type { Meta, StoryObj } from '@storybook/react'
+import { useMemo } from 'react'
 import {
   Area,
   AreaChart,
@@ -12,14 +12,14 @@ import {
   Pie,
   PieChart,
   XAxis,
-} from 'recharts';
+} from 'recharts'
 
 import {
   type ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from '@repo/design-system/components/ui/chart';
+} from '@repo/design-system/components/ui/chart'
 
 const multiSeriesData = [
   { month: 'January', desktop: 186, mobile: 80 },
@@ -28,7 +28,7 @@ const multiSeriesData = [
   { month: 'April', desktop: 73, mobile: 190 },
   { month: 'May', desktop: 209, mobile: 130 },
   { month: 'June', desktop: 214, mobile: 140 },
-];
+]
 
 const multiSeriesConfig = {
   desktop: {
@@ -39,13 +39,13 @@ const multiSeriesConfig = {
     label: 'Mobile',
     color: 'hsl(var(--chart-2))',
   },
-} satisfies ChartConfig;
+} satisfies ChartConfig
 
 const singleSeriesData = [
   { browser: 'chrome', visitors: 275, fill: 'var(--color-chrome)' },
   { browser: 'safari', visitors: 200, fill: 'var(--color-safari)' },
   { browser: 'other', visitors: 190, fill: 'var(--color-other)' },
-];
+]
 
 const singleSeriesConfig = {
   visitors: {
@@ -63,7 +63,7 @@ const singleSeriesConfig = {
     label: 'Other',
     color: 'hsl(var(--chart-5))',
   },
-} satisfies ChartConfig;
+} satisfies ChartConfig
 
 /**
  * Beautiful charts. Built using Recharts. Copy and paste into your apps.
@@ -76,11 +76,11 @@ const meta = {
   args: {
     children: <div />,
   },
-} satisfies Meta<typeof ChartContainer>;
+} satisfies Meta<typeof ChartContainer>
 
-export default meta;
+export default meta
 
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof meta>
 
 /**
  * Combine multiple Area components to create a stacked area chart.
@@ -89,7 +89,7 @@ export const StackedAreaChart: Story = {
   args: {
     config: multiSeriesConfig,
   },
-  render: (args) => (
+  render: args => (
     <ChartContainer {...args}>
       <AreaChart
         accessibilityLayer
@@ -101,36 +101,36 @@ export const StackedAreaChart: Story = {
       >
         <CartesianGrid vertical={false} />
         <XAxis
-          dataKey="month"
+          dataKey='month'
           tickLine={false}
           axisLine={false}
           tickMargin={8}
-          tickFormatter={(value) => value.slice(0, 3)}
+          tickFormatter={value => value.slice(0, 3)}
         />
         <ChartTooltip
           cursor={false}
-          content={<ChartTooltipContent indicator="dot" />}
+          content={<ChartTooltipContent indicator='dot' />}
         />
         <Area
-          dataKey="mobile"
-          type="natural"
-          fill="var(--color-mobile)"
+          dataKey='mobile'
+          type='natural'
+          fill='var(--color-mobile)'
           fillOpacity={0.4}
-          stroke="var(--color-mobile)"
-          stackId="a"
+          stroke='var(--color-mobile)'
+          stackId='a'
         />
         <Area
-          dataKey="desktop"
-          type="natural"
-          fill="var(--color-desktop)"
+          dataKey='desktop'
+          type='natural'
+          fill='var(--color-desktop)'
           fillOpacity={0.4}
-          stroke="var(--color-desktop)"
-          stackId="a"
+          stroke='var(--color-desktop)'
+          stackId='a'
         />
       </AreaChart>
     </ChartContainer>
   ),
-};
+}
 
 /**
  * Combine multiple Bar components to create a stacked bar chart.
@@ -139,27 +139,27 @@ export const StackedBarChart: Story = {
   args: {
     config: multiSeriesConfig,
   },
-  render: (args) => (
+  render: args => (
     <ChartContainer {...args}>
       <BarChart accessibilityLayer data={multiSeriesData}>
         <CartesianGrid vertical={false} />
         <XAxis
-          dataKey="month"
+          dataKey='month'
           tickLine={false}
           tickMargin={10}
           axisLine={false}
-          tickFormatter={(value) => value.slice(0, 3)}
+          tickFormatter={value => value.slice(0, 3)}
         />
         <ChartTooltip
           cursor={false}
-          content={<ChartTooltipContent indicator="dashed" />}
+          content={<ChartTooltipContent indicator='dashed' />}
         />
-        <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} />
-        <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} />
+        <Bar dataKey='desktop' fill='var(--color-desktop)' radius={4} />
+        <Bar dataKey='mobile' fill='var(--color-mobile)' radius={4} />
       </BarChart>
     </ChartContainer>
   ),
-};
+}
 
 /**
  * Combine multiple Line components to create a single line chart.
@@ -168,7 +168,7 @@ export const MultiLineChart: Story = {
   args: {
     config: multiSeriesConfig,
   },
-  render: (args) => (
+  render: args => (
     <ChartContainer {...args}>
       <LineChart
         accessibilityLayer
@@ -180,34 +180,34 @@ export const MultiLineChart: Story = {
       >
         <CartesianGrid vertical={false} />
         <XAxis
-          dataKey="month"
+          dataKey='month'
           tickLine={false}
           axisLine={false}
           tickMargin={8}
-          tickFormatter={(value) => value.slice(0, 3)}
+          tickFormatter={value => value.slice(0, 3)}
         />
         <ChartTooltip
           cursor={false}
           content={<ChartTooltipContent hideLabel />}
         />
         <Line
-          dataKey="desktop"
-          type="natural"
-          stroke="var(--color-desktop)"
+          dataKey='desktop'
+          type='natural'
+          stroke='var(--color-desktop)'
           strokeWidth={2}
           dot={false}
         />
         <Line
-          dataKey="mobile"
-          type="natural"
-          stroke="var(--color-mobile)"
+          dataKey='mobile'
+          type='natural'
+          stroke='var(--color-mobile)'
           strokeWidth={2}
           dot={false}
         />
       </LineChart>
     </ChartContainer>
   ),
-};
+}
 
 /**
  * Combine Pie and Label components to create a doughnut chart.
@@ -216,10 +216,10 @@ export const DoughnutChart: Story = {
   args: {
     config: singleSeriesConfig,
   },
-  render: (args) => {
+  render: args => {
     const totalVisitors = useMemo(() => {
-      return singleSeriesData.reduce((acc, curr) => acc + curr.visitors, 0);
-    }, []);
+      return singleSeriesData.reduce((acc, curr) => acc + curr.visitors, 0)
+    }, [])
     return (
       <ChartContainer {...args}>
         <PieChart>
@@ -229,8 +229,8 @@ export const DoughnutChart: Story = {
           />
           <Pie
             data={singleSeriesData}
-            dataKey="visitors"
-            nameKey="browser"
+            dataKey='visitors'
+            nameKey='browser'
             innerRadius={48}
             strokeWidth={5}
           >
@@ -241,31 +241,31 @@ export const DoughnutChart: Story = {
                     <text
                       x={viewBox.cx}
                       y={viewBox.cy}
-                      textAnchor="middle"
-                      dominantBaseline="middle"
+                      textAnchor='middle'
+                      dominantBaseline='middle'
                     >
                       <tspan
                         x={viewBox.cx}
                         y={viewBox.cy}
-                        className="fill-foreground font-bold text-3xl"
+                        className='fill-foreground font-bold text-3xl'
                       >
                         {totalVisitors.toLocaleString()}
                       </tspan>
                       <tspan
                         x={viewBox.cx}
                         y={(viewBox.cy || 0) + 24}
-                        className="fill-muted-foreground"
+                        className='fill-muted-foreground'
                       >
                         Visitors
                       </tspan>
                     </text>
-                  );
+                  )
                 }
               }}
             />
           </Pie>
         </PieChart>
       </ChartContainer>
-    );
+    )
   },
-};
+}

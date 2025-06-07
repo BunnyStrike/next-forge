@@ -3,29 +3,37 @@ title: Documentation
 description: How the documentation is configured in next-forge.
 ---
 
-<Authors data={[{
-  user: {
-    name: 'Hayden Bleasel',
-    id: 'haydenbleasel',
-  },
-  company: {
-    name: 'Vercel',
-    id: 'vercel',
-  },
-}, {
-  user: {
-    name: 'Flo Merian',
-    id: 'fmerian',
-  },
-  company: {
-    name: 'Mintlify',
-    id: 'mintlify',
-  },
-}]} />
+<Authors
+  data={[
+    {
+      user: {
+        name: 'Hayden Bleasel',
+        id: 'haydenbleasel',
+      },
+      company: {
+        name: 'Vercel',
+        id: 'vercel',
+      },
+    },
+    {
+      user: {
+        name: 'Flo Merian',
+        id: 'fmerian',
+      },
+      company: {
+        name: 'Mintlify',
+        id: 'mintlify',
+      },
+    },
+  ]}
+/>
 
 ![/images/docs.png](/images/docs.png)
 
-<Tip>The `docs` application runs on port 3004. We recommend deploying it to `docs.{yourdomain}.com`.</Tip>
+<Tip>
+  The `docs` application runs on port 3004. We recommend deploying it to `docs.
+  {yourdomain}.com`.
+</Tip>
 
 next-forge uses [Mintlify](https://mintlify.com) to generate beautiful docs. Each page is a `.mdx` file, written in Markdown, with built-in UI components and API playground.
 
@@ -48,13 +56,13 @@ To add a page to the sidebar, you'll need to define it in the `mint.json` file i
 
 ```mdx title="mint.json {2-5}"
 "navigation": [
-  {
-    "group": "Getting Started",
-    "pages": ["hello-world"]
-  },
-  {
-    // ...
-  }
+{
+"group": "Getting Started",
+"pages": ["hello-world"]
+},
+{
+// ...
+}
 ]
 ```
 
@@ -62,10 +70,20 @@ To add a page to the sidebar, you'll need to define it in the `mint.json` file i
 
 You can build the docs you want with advanced features.
 
-<Card title="Global Settings" icon="wrench" href="https://mintlify.com/docs/settings/global" horizontal>
+<Card
+  title='Global Settings'
+  icon='wrench'
+  href='https://mintlify.com/docs/settings/global'
+  horizontal
+>
   Customize your documentation using the mint.json file
 </Card>
 
-<Card title="Components" icon="shapes" href="https://mintlify.com/docs/content/components" horizontal>
+<Card
+  title='Components'
+  icon='shapes'
+  href='https://mintlify.com/docs/content/components'
+  horizontal
+>
   Explore the variety of components available
 </Card>

@@ -1,7 +1,7 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import { Bold, Italic } from 'lucide-react';
+import type { Meta, StoryObj } from '@storybook/react'
+import { Bold, Italic } from 'lucide-react'
 
-import { Toggle } from '@repo/design-system/components/ui/toggle';
+import { Toggle } from '@repo/design-system/components/ui/toggle'
 
 /**
  * A two-state button that can be either on or off.
@@ -16,21 +16,21 @@ const meta: Meta<typeof Toggle> = {
     },
   },
   args: {
-    children: <Bold className="h-4 w-4" />,
+    children: <Bold className='h-4 w-4' />,
     'aria-label': 'Toggle bold',
   },
   parameters: {
     layout: 'centered',
   },
-};
-export default meta;
+}
+export default meta
 
-type Story = StoryObj<typeof Toggle>;
+type Story = StoryObj<typeof Toggle>
 
 /**
  * The default form of the toggle.
  */
-export const Default: Story = {};
+export const Default: Story = {}
 
 /**
  * Use the `outline` variant for a distinct outline, emphasizing the boundary
@@ -39,23 +39,23 @@ export const Default: Story = {};
 export const Outline: Story = {
   args: {
     variant: 'outline',
-    children: <Italic className="h-4 w-4" />,
+    children: <Italic className='h-4 w-4' />,
     'aria-label': 'Toggle italic',
   },
-};
+}
 
 /**
  * Use the text element to add a label to the toggle.
  */
 export const WithText: Story = {
-  render: (args) => (
+  render: args => (
     <Toggle {...args}>
-      <Italic className="mr-2 h-4 w-4" />
+      <Italic className='mr-2 h-4 w-4' />
       Italic
     </Toggle>
   ),
   args: { ...Outline.args },
-};
+}
 
 /**
  * Use the `sm` size for a smaller toggle, suitable for interfaces needing
@@ -65,7 +65,7 @@ export const Small: Story = {
   args: {
     size: 'sm',
   },
-};
+}
 
 /**
  * Use the `lg` size for a larger toggle, offering better visibility and
@@ -75,7 +75,7 @@ export const Large: Story = {
   args: {
     size: 'lg',
   },
-};
+}
 
 /**
  * Add the `disabled` prop to prevent interactions with the toggle.
@@ -84,4 +84,4 @@ export const Disabled: Story = {
   args: {
     disabled: true,
   },
-};
+}

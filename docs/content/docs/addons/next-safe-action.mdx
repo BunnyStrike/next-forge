@@ -20,53 +20,53 @@ Here is a basic example of how to use Next Safe Action to call your Server Actio
 ### Server Action
 
 ```ts title="action.ts"
-"use server"
+'use server'
 
-import { createSafeActionClient } from "next-safe-action";
-import { z } from "zod";
+import { createSafeActionClient } from 'next-safe-action'
+import { z } from 'zod'
 
 export const serverAction = createSafeActionClient()
   .schema(
     z.object({
       name: z.string(),
-      id: z.string()
+      id: z.string(),
     })
   )
   .action(async ({ parsedInput: { name, id } }) => {
     // Fetch data in server
-    const data = await fetchData(name, id);
-    
+    const data = await fetchData(name, id)
+
     // Write server logic here ...
-    
+
     // Return here the value to the client
-    return data;
-  });
+    return data
+  })
 ```
 
 ### Client Component
 
 ```tsx title="my-component.tsx"
-"use client"
+'use client'
 
-import { serverAction } from "./action"
-import { useAction } from "next-safe-action/hooks";
-import { toast } from "@repo/design-system/components/ui/sonner";
+import { serverAction } from './action'
+import { useAction } from 'next-safe-action/hooks'
+import { toast } from '@repo/design-system/components/ui/sonner'
 
 function MyComponent() {
   const { execute, isPending } = useAction(serverAction, {
     onSuccess() {
       // Display success message to client
-      toast.success("Action Success");
+      toast.success('Action Success')
     },
     onError({ error }) {
       // Display error message to client
-      toast.error("Action Failed");
+      toast.error('Action Failed')
     },
-  });
+  })
 
   const onClick = () => {
-    execute({ name: "next-forge", id: "example" });
-  };
+    execute({ name: 'next-forge', id: 'example' })
+  }
 
   return (
     <div>
@@ -74,7 +74,7 @@ function MyComponent() {
         Click to call action
       </Button>
     </div>
-  );
+  )
 }
 ```
 

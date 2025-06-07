@@ -1,20 +1,20 @@
-import 'server-only';
-import { auth } from '@repo/auth/server';
-import { Svix } from 'svix';
-import { keys } from '../keys';
+import 'server-only'
+import { auth } from '@repo/auth/server'
+import { Svix } from 'svix'
+import { keys } from '../keys'
 
-const svixToken = keys().SVIX_TOKEN;
+const svixToken = keys().SVIX_TOKEN
 
 export const send = async (eventType: string, payload: object) => {
   if (!svixToken) {
-    throw new Error('SVIX_TOKEN is not set');
+    throw new Error('SVIX_TOKEN is not set')
   }
 
-  const svix = new Svix(svixToken);
-  const { orgId } = await auth();
+  const svix = new Svix(svixToken)
+  const { orgId } = await auth()
 
   if (!orgId) {
-    return;
+    return
   }
 
   return svix.message.create(orgId, {
@@ -27,19 +27,19 @@ export const send = async (eventType: string, payload: object) => {
       name: orgId,
       uid: orgId,
     },
-  });
-};
+  })
+}
 
 export const getAppPortal = async () => {
   if (!svixToken) {
-    throw new Error('SVIX_TOKEN is not set');
+    throw new Error('SVIX_TOKEN is not set')
   }
 
-  const svix = new Svix(svixToken);
-  const { orgId } = await auth();
+  const svix = new Svix(svixToken)
+  const { orgId } = await auth()
 
   if (!orgId) {
-    return;
+    return
   }
 
   return svix.authentication.appPortalAccess(orgId, {
@@ -47,5 +47,5 @@ export const getAppPortal = async () => {
       name: orgId,
       uid: orgId,
     },
-  });
-};
+  })
+}

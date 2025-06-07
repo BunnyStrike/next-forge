@@ -4,7 +4,8 @@ description: How to change the authentication provider to Auth.js.
 ---
 
 <Warning>
-next-forge support for Auth.js is currently blocked by [this issue](https://github.com/nextauthjs/next-auth/issues/11076).
+  next-forge support for Auth.js is currently blocked by [this
+  issue](https://github.com/nextauthjs/next-auth/issues/11076).
 </Warning>
 
 Here's how to switch from Clerk to [Auth.js](https://authjs.dev/).
@@ -40,11 +41,11 @@ This will automatically add an `AUTH_SECRET` environment variable to the `.env.l
 Delete the existing `client.ts` and `server.ts` files in the `auth` package. Then, create the following file:
 
 ```tsx title="packages/auth/index.ts"
-import NextAuth from "next-auth";
- 
+import NextAuth from 'next-auth'
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [],
-});
+})
 ```
 
 ## 4. Update the middleware
@@ -52,9 +53,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 Update the `middleware.ts` file in the `auth` package with the following content:
 
 ```tsx title="packages/auth/middleware.ts"
-import 'server-only';
+import 'server-only'
 
-export { auth as authMiddleware } from './';
+export { auth as authMiddleware } from './'
 ```
 
 ## 5. Update the auth components
@@ -64,35 +65,35 @@ Auth.js has no concept of "sign up", so we'll use the `signIn` function to sign 
 ### Sign In
 
 ```tsx title="packages/auth/components/sign-in.tsx"
-import { signIn } from '../';
+import { signIn } from '../'
 
 export const SignIn = () => (
   <form
     action={async () => {
-      "use server";
-      await signIn();
+      'use server'
+      await signIn()
     }}
   >
-    <button type="submit">Sign in</button>
+    <button type='submit'>Sign in</button>
   </form>
-);
+)
 ```
 
 ### Sign Up
 
 ```tsx title="packages/auth/components/sign-up.tsx"
-import { signIn } from '../';
+import { signIn } from '../'
 
 export const SignUp = () => (
   <form
     action={async () => {
-      "use server";
-      await signIn();
+      'use server'
+      await signIn()
     }}
   >
-    <button type="submit">Sign up</button>
+    <button type='submit'>Sign up</button>
   </form>
-);
+)
 ```
 
 ## 6. Update the Provider file
@@ -100,13 +101,13 @@ export const SignUp = () => (
 Auth.js has no concept of a Provider as a higher-order component, so you can either remove it entirely or just replace it with a stub, like so:
 
 ```tsx title="packages/auth/provider.tsx"
-import type { ReactNode } from 'react';
+import type { ReactNode } from 'react'
 
 type AuthProviderProps = {
-  children: ReactNode;
-};
+  children: ReactNode
+}
 
-export const AuthProvider = ({ children }: AuthProviderProps) => children;
+export const AuthProvider = ({ children }: AuthProviderProps) => children
 ```
 
 ## 7. Create an auth route handler
@@ -114,9 +115,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => children;
 In your `app` application, create an auth route handler file with the following content:
 
 ```tsx title="apps/app/api/auth/[...nextauth]/route.ts"
-import { handlers } from "@repo/auth"
+import { handlers } from '@repo/auth'
 
-export const { GET, POST } = handlers;
+export const { GET, POST } = handlers
 ```
 
 ## 8. Update your apps
@@ -124,9 +125,9 @@ export const { GET, POST } = handlers;
 From here, you'll need to replace any remaining Clerk implementations in your apps with Auth.js references. This means swapping out references like:
 
 ```tsx title="page.tsx"
-const { orgId } = await auth();
-const { redirectToSignIn } = await auth();
-const user = await currentUser();
+const { orgId } = await auth()
+const { redirectToSignIn } = await auth()
+const user = await currentUser()
 ```
 
 Etcetera. Keep in mind that you'll need to build your own "organization" logic as Auth.js doesn't have a concept of organizations.

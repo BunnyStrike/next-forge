@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-import { program } from 'commander';
-import { initialize } from './initialize.js';
-import { update } from './update.js';
+import { program } from 'commander'
+import { initialize } from './initialize.js'
+import { update } from './update.js'
 
 program
   .command('init')
@@ -13,13 +13,13 @@ program
     'Package manager to use (npm, yarn, bun, pnpm)'
   )
   .option('--disable-git', 'Disable git initialization')
-  .action(initialize);
+  .action(initialize)
 
 program
   .command('update')
   .description('Update the project from one version to another')
   .option('--from <version>', 'Version to update from e.g. 1.0.0')
   .option('--to <version>', 'Version to update to e.g. 2.0.0')
-  .action(update);
+  .action(update)
 
-program.parse(process.argv);
+program.parse(process.argv)

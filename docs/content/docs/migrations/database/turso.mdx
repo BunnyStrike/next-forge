@@ -7,22 +7,22 @@ description: How to change the database provider to Turso.
   data={[
     {
       user: {
-        name: "Hayden Bleasel",
-        id: "haydenbleasel",
+        name: 'Hayden Bleasel',
+        id: 'haydenbleasel',
       },
       company: {
-        name: "Vercel",
-        id: "vercel",
+        name: 'Vercel',
+        id: 'vercel',
       },
     },
     {
       user: {
-        name: "Jamie Barton",
-        id: "notrab",
+        name: 'Jamie Barton',
+        id: 'notrab',
       },
       company: {
-        name: "Turso",
-        id: "turso",
+        name: 'Turso',
+        id: 'turso',
       },
     },
   ]}
@@ -71,13 +71,13 @@ turso db tokens create <database-name>
 Update your environment variables to use the new Turso connection string:
 
 ```js title="apps/database/.env"
-DATABASE_URL="libsql://<database-name>-<account-or-org-slug>.turso.io"
-DATABASE_AUTH_TOKEN="..."
+DATABASE_URL = 'libsql://<database-name>-<account-or-org-slug>.turso.io'
+DATABASE_AUTH_TOKEN = '...'
 ```
 
 ```js title="apps/app/.env.local"
-DATABASE_URL="libsql://<database-name>-<account-or-org-slug>.turso.io"
-DATABASE_AUTH_TOKEN="..."
+DATABASE_URL = 'libsql://<database-name>-<account-or-org-slug>.turso.io'
+DATABASE_AUTH_TOKEN = '...'
 ```
 
 Etcetera.
@@ -85,11 +85,11 @@ Etcetera.
 Now inside `packages/env/index.ts`, add `DATABASE_AUTH_TOKEN` to the `server` and `runtimeEnv` objects:
 
 ```ts title="{3,12}"
-const server: Parameters<typeof createEnv>[0]["server"] = {
+const server: Parameters<typeof createEnv>[0]['server'] = {
   // ...
   DATABASE_AUTH_TOKEN: z.string(),
   // ...
-};
+}
 
 export const env = createEnv({
   client,
@@ -99,7 +99,7 @@ export const env = createEnv({
     DATABASE_AUTH_TOKEN: process.env.DATABASE_AUTH_TOKEN,
     // ...
   },
-});
+})
 ```
 
 ## 5. Install @libsql/client
@@ -127,12 +127,12 @@ let nextConfig: NextConfig = {
   ...config,
   webpack: (config, { isServer }) => {
     if (isServer) {
-      config.externals = [...(config.externals || []), "@libsql/client"];
+      config.externals = [...(config.externals || []), '@libsql/client']
     }
 
     // ...
   },
-};
+}
 ```
 
 ## 7. Update the database connection code
@@ -140,17 +140,17 @@ let nextConfig: NextConfig = {
 Open `packages/database/index.ts` and make the following changes:
 
 ```ts title="packages/database/index.ts"
-import "server-only";
+import 'server-only'
 
-import { createClient } from "@libsql/client";
-import { env } from "@repo/env";
+import { createClient } from '@libsql/client'
+import { env } from '@repo/env'
 
 const libsql = createClient({
   url: env.DATABASE_URL,
   authToken: env.DATABASE_AUTH_TOKEN,
-});
+})
 
-export const database = libsql;
+export const database = libsql
 ```
 
 ## 8. Apply schema changes
@@ -176,18 +176,17 @@ CREATE TABLE pages (
 Now wherever you would usually call Prisma, use the `libsql` client instead:
 
 ```ts title="packages/app/app/(authenticated)/page.tsx"
-import { database } from "@repo/database";
+import { database } from '@repo/database'
 
 type PageType = {
-  id: number;
-  email: string;
-  name?: string;
-};
+  id: number
+  email: string
+  name?: string
+}
 
 // ...
 
-const { rows } = await database.execute(`SELECT * FROM pages`);
+const { rows } = await database.execute(`SELECT * FROM pages`)
 
-const pages = rows as unknown as Array<PageType>;
+const pages = rows as unknown as Array<PageType>
 ```
-

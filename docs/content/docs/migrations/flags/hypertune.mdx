@@ -3,34 +3,40 @@ title: Switch to Hypertune
 description: How to change the feature flag provider to Hypertune.
 ---
 
-<Authors data={[{
-  user: {
-    name: 'Hayden Bleasel',
-    id: 'haydenbleasel',
-  },
-  company: {
-    name: 'Vercel',
-    id: 'vercel',
-  },
-}, {
-  user: {
-    name: 'Michal Bock',
-    id: 'michalbock',
-  },
-  company: {
-    name: 'Hypertune',
-    id: 'hypertune',
-  },
-}, {
-  user: {
-    name: 'Miraan Tabrez',
-    id: 'miraantabrez',
-  },
-  company: {
-    name: 'Hypertune',
-    id: 'hypertune',
-  },
-}]} />
+<Authors
+  data={[
+    {
+      user: {
+        name: 'Hayden Bleasel',
+        id: 'haydenbleasel',
+      },
+      company: {
+        name: 'Vercel',
+        id: 'vercel',
+      },
+    },
+    {
+      user: {
+        name: 'Michal Bock',
+        id: 'michalbock',
+      },
+      company: {
+        name: 'Hypertune',
+        id: 'hypertune',
+      },
+    },
+    {
+      user: {
+        name: 'Miraan Tabrez',
+        id: 'miraantabrez',
+      },
+      company: {
+        name: 'Hypertune',
+        id: 'hypertune',
+      },
+    },
+  ]}
+/>
 
 [Hypertune](https://www.hypertune.com/) is the most flexible platform for feature flags, A/B testing, analytics and app configuration. Built with full end-to-end type-safety, Git version control and local, synchronous, in-memory flag evaluation. Optimized for TypeScript, React and Next.js.
 
@@ -46,7 +52,7 @@ Update the environment variables across the project. For example:
 
 ```js title="apps/app/.env"
 // Add this:
-NEXT_PUBLIC_HYPERTUNE_TOKEN=""
+NEXT_PUBLIC_HYPERTUNE_TOKEN = ''
 ```
 
 Add a `.env` file to the `feature-flags` package with the following contents:
@@ -64,8 +70,8 @@ HYPERTUNE_GET_HYPERTUNE_IMPORT_PATH=../lib/getHypertune
 Use the `NEXT_PUBLIC_HYPERTUNE_TOKEN` environment variable in the call to `createEnv`:
 
 ```ts title="packages/feature-flags/keys.ts {6-8,14}"
-import { createEnv } from '@t3-oss/env-nextjs';
-import { z } from 'zod';
+import { createEnv } from '@t3-oss/env-nextjs'
+import { z } from 'zod'
 
 export const keys = () =>
   createEnv({
@@ -79,7 +85,7 @@ export const keys = () =>
       FLAGS_SECRET: process.env.FLAGS_SECRET,
       NEXT_PUBLIC_HYPERTUNE_TOKEN: process.env.NEXT_PUBLIC_HYPERTUNE_TOKEN,
     },
-  });
+  })
 ```
 
 ## 4. Swap out the required dependencies
@@ -114,7 +120,7 @@ Add `analyze` and `build` scripts to the `package.json` file for the `feature-fl
 Then run code generation with the following command:
 
 ```sh title="Terminal"
-pnpm build --filter @repo/feature-flags 
+pnpm build --filter @repo/feature-flags
 ```
 
 This will generate the following files:
@@ -130,30 +136,30 @@ packages/feature-flags/generated/hypertune.vercel.tsx
 Add a `getHypertune.ts` file in the `feature-flags` package which defines a `getHypertune` function that returns an initialized instance of the Hypertune SDK on the server:
 
 ```ts title="packages/feature-flags/lib/getHypertune.ts"
-import 'server-only';
-import { auth } from '@repo/auth/server';
-import { unstable_noStore as noStore } from 'next/cache';
-import type { ReadonlyHeaders } from 'next/dist/server/web/spec-extension/adapters/headers';
-import type { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
-import { createSource } from '../generated/hypertune';
-import { getVercelOverride } from '../generated/hypertune.vercel';
-import { keys } from '../keys';
+import 'server-only'
+import { auth } from '@repo/auth/server'
+import { unstable_noStore as noStore } from 'next/cache'
+import type { ReadonlyHeaders } from 'next/dist/server/web/spec-extension/adapters/headers'
+import type { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies'
+import { createSource } from '../generated/hypertune'
+import { getVercelOverride } from '../generated/hypertune.vercel'
+import { keys } from '../keys'
 
 const hypertuneSource = createSource({
   token: keys().NEXT_PUBLIC_HYPERTUNE_TOKEN,
-});
+})
 
 export default async function getHypertune(params?: {
-  headers?: ReadonlyHeaders;
-  cookies?: ReadonlyRequestCookies;
+  headers?: ReadonlyHeaders
+  cookies?: ReadonlyRequestCookies
 }) {
-  noStore();
-  await hypertuneSource.initIfNeeded(); // Check for flag updates
+  noStore()
+  await hypertuneSource.initIfNeeded() // Check for flag updates
 
-  const { userId, orgId, sessionId } = await auth();
+  const { userId, orgId, sessionId } = await auth()
 
   // Respect flag overrides set by the Vercel Toolbar
-  hypertuneSource.setOverride(await getVercelOverride());
+  hypertuneSource.setOverride(await getVercelOverride())
 
   return hypertuneSource.root({
     args: {
@@ -163,7 +169,7 @@ export default async function getHypertune(params?: {
         org: { id: orgId ?? '' },
       },
     },
-  });
+  })
 }
 ```
 
@@ -172,7 +178,7 @@ export default async function getHypertune(params?: {
 Hypertune automatically generates feature flag functions that use the `flags` package. To export them the same way as before, update the `index.ts` file to export everything from the `generated/hypertune.vercel.ts` file:
 
 ```ts title="packages/feature-flags/index.ts"
-export * from "./generated/hypertune.vercel.tsx"
+export * from './generated/hypertune.vercel.tsx'
 ```
 
 Hypertune adds a `Flag` suffix to all these generated feature flag functions, so you will need to update flag usages with this, e.g. `showBetaFeature` => `showBetaFeatureFlag`.

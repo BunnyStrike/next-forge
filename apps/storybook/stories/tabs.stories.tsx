@@ -1,11 +1,11 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react'
 
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from '@repo/design-system/components/ui/tabs';
+} from '@repo/design-system/components/ui/tabs'
 
 /**
  * A set of layered sections of content—known as tab panels—that are displayed
@@ -20,28 +20,28 @@ const meta = {
     defaultValue: 'account',
     className: 'w-96',
   },
-  render: (args) => (
+  render: args => (
     <Tabs {...args}>
-      <TabsList className="grid grid-cols-2">
-        <TabsTrigger value="account">Account</TabsTrigger>
-        <TabsTrigger value="password">Password</TabsTrigger>
+      <TabsList className='grid grid-cols-2'>
+        <TabsTrigger value='account'>Account</TabsTrigger>
+        <TabsTrigger value='password'>Password</TabsTrigger>
       </TabsList>
-      <TabsContent value="account">
+      <TabsContent value='account'>
         Make changes to your account here.
       </TabsContent>
-      <TabsContent value="password">Change your password here.</TabsContent>
+      <TabsContent value='password'>Change your password here.</TabsContent>
     </Tabs>
   ),
   parameters: {
     layout: 'centered',
   },
-} satisfies Meta<typeof Tabs>;
+} satisfies Meta<typeof Tabs>
 
-export default meta;
+export default meta
 
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof meta>
 
 /**
  * The default form of the tabs.
  */
-export const Default: Story = {};
+export const Default: Story = {}

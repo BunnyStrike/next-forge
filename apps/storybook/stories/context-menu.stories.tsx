@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react'
 
 import {
   ContextMenu,
@@ -14,7 +14,7 @@ import {
   ContextMenuSubContent,
   ContextMenuSubTrigger,
   ContextMenuTrigger,
-} from '@repo/design-system/components/ui/context-menu';
+} from '@repo/design-system/components/ui/context-menu'
 
 /**
  * Displays a menu to the user — such as a set of actions or functions —
@@ -26,12 +26,12 @@ const meta = {
   tags: ['autodocs'],
   argTypes: {},
   args: {},
-  render: (args) => (
+  render: args => (
     <ContextMenu {...args}>
-      <ContextMenuTrigger className="flex h-48 w-96 items-center justify-center rounded-md border border-dashed bg-accent text-sm">
+      <ContextMenuTrigger className='flex h-48 w-96 items-center justify-center rounded-md border border-dashed bg-accent text-sm'>
         Right click here
       </ContextMenuTrigger>
-      <ContextMenuContent className="w-32">
+      <ContextMenuContent className='w-32'>
         <ContextMenuItem>Profile</ContextMenuItem>
         <ContextMenuItem>Billing</ContextMenuItem>
         <ContextMenuItem>Team</ContextMenuItem>
@@ -42,27 +42,27 @@ const meta = {
   parameters: {
     layout: 'centered',
   },
-} satisfies Meta<typeof ContextMenu>;
+} satisfies Meta<typeof ContextMenu>
 
-export default meta;
+export default meta
 
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof meta>
 
 /**
  * The default form of the context menu.
  */
-export const Default: Story = {};
+export const Default: Story = {}
 
 /**
  * A context menu with shortcuts.
  */
 export const WithShortcuts: Story = {
-  render: (args) => (
+  render: args => (
     <ContextMenu {...args}>
-      <ContextMenuTrigger className="flex h-48 w-96 items-center justify-center rounded-md border border-dashed bg-accent text-sm">
+      <ContextMenuTrigger className='flex h-48 w-96 items-center justify-center rounded-md border border-dashed bg-accent text-sm'>
         Right click here
       </ContextMenuTrigger>
-      <ContextMenuContent className="w-32">
+      <ContextMenuContent className='w-32'>
         <ContextMenuItem>
           Back
           <ContextMenuShortcut>⌘[</ContextMenuShortcut>
@@ -78,18 +78,18 @@ export const WithShortcuts: Story = {
       </ContextMenuContent>
     </ContextMenu>
   ),
-};
+}
 
 /**
  * A context menu with a submenu.
  */
 export const WithSubmenu: Story = {
-  render: (args) => (
+  render: args => (
     <ContextMenu {...args}>
-      <ContextMenuTrigger className="flex h-48 w-96 items-center justify-center rounded-md border border-dashed bg-accent text-sm">
+      <ContextMenuTrigger className='flex h-48 w-96 items-center justify-center rounded-md border border-dashed bg-accent text-sm'>
         Right click here
       </ContextMenuTrigger>
-      <ContextMenuContent className="w-32">
+      <ContextMenuContent className='w-32'>
         <ContextMenuItem>
           New Tab
           <ContextMenuShortcut>⌘N</ContextMenuShortcut>
@@ -110,18 +110,18 @@ export const WithSubmenu: Story = {
       </ContextMenuContent>
     </ContextMenu>
   ),
-};
+}
 
 /**
  * A context menu with checkboxes.
  */
 export const WithCheckboxes: Story = {
-  render: (args) => (
+  render: args => (
     <ContextMenu {...args}>
-      <ContextMenuTrigger className="flex h-48 w-96 items-center justify-center rounded-md border border-dashed bg-accent text-sm">
+      <ContextMenuTrigger className='flex h-48 w-96 items-center justify-center rounded-md border border-dashed bg-accent text-sm'>
         Right click here
       </ContextMenuTrigger>
-      <ContextMenuContent className="w-64">
+      <ContextMenuContent className='w-64'>
         <ContextMenuCheckboxItem checked>
           Show Comments
           <ContextMenuShortcut>⌘⇧C</ContextMenuShortcut>
@@ -130,24 +130,24 @@ export const WithCheckboxes: Story = {
       </ContextMenuContent>
     </ContextMenu>
   ),
-};
+}
 
 /**
  * A context menu with a radio group.
  */
 export const WithRadioGroup: Story = {
-  render: (args) => (
+  render: args => (
     <ContextMenu {...args}>
-      <ContextMenuTrigger className="flex h-48 w-96 items-center justify-center rounded-md border border-dashed bg-accent text-sm">
+      <ContextMenuTrigger className='flex h-48 w-96 items-center justify-center rounded-md border border-dashed bg-accent text-sm'>
         Right click here
       </ContextMenuTrigger>
-      <ContextMenuContent className="w-64">
-        <ContextMenuRadioGroup value="light">
+      <ContextMenuContent className='w-64'>
+        <ContextMenuRadioGroup value='light'>
           <ContextMenuLabel inset>Theme</ContextMenuLabel>
-          <ContextMenuRadioItem value="light">Light</ContextMenuRadioItem>
-          <ContextMenuRadioItem value="dark">Dark</ContextMenuRadioItem>
+          <ContextMenuRadioItem value='light'>Light</ContextMenuRadioItem>
+          <ContextMenuRadioItem value='dark'>Dark</ContextMenuRadioItem>
         </ContextMenuRadioGroup>
       </ContextMenuContent>
     </ContextMenu>
   ),
-};
+}

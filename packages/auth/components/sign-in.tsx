@@ -1,4 +1,4 @@
-import { SignIn as ClerkSignIn } from '@clerk/nextjs';
+import { SignIn as ClerkSignIn } from '@clerk/nextjs'
 
 export const SignIn = () => (
   <ClerkSignIn
@@ -8,4 +8,4 @@ export const SignIn = () => (
       },
     }}
   />
-);
+)

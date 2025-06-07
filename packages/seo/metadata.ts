@@ -1,21 +1,21 @@
-import merge from 'lodash.merge';
-import type { Metadata } from 'next';
+import merge from 'lodash.merge'
+import type { Metadata } from 'next'
 
 type MetadataGenerator = Omit<Metadata, 'description' | 'title'> & {
-  title: string;
-  description: string;
-  image?: string;
-};
+  title: string
+  description: string
+  image?: string
+}
 
-const applicationName = 'next-forge';
+const applicationName = 'next-forge'
 const author: Metadata['authors'] = {
   name: 'Vercel',
   url: 'https://vercel.com/',
-};
-const publisher = 'Vercel';
-const twitterHandle = '@vercel';
-const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http';
-const productionUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL;
+}
+const publisher = 'Vercel'
+const twitterHandle = '@vercel'
+const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http'
+const productionUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
 
 export const createMetadata = ({
   title,
@@ -23,7 +23,7 @@ export const createMetadata = ({
   image,
   ...properties
 }: MetadataGenerator): Metadata => {
-  const parsedTitle = `${title} | ${applicationName}`;
+  const parsedTitle = `${title} | ${applicationName}`
   const defaultMetadata: Metadata = {
     title: parsedTitle,
     description,
@@ -53,9 +53,9 @@ export const createMetadata = ({
       card: 'summary_large_image',
       creator: twitterHandle,
     },
-  };
+  }
 
-  const metadata: Metadata = merge(defaultMetadata, properties);
+  const metadata: Metadata = merge(defaultMetadata, properties)
 
   if (image && metadata.openGraph) {
     metadata.openGraph.images = [
@@ -65,8 +65,8 @@ export const createMetadata = ({
         height: 630,
         alt: title,
       },
-    ];
+    ]
   }
 
-  return metadata;
-};
+  return metadata
+}

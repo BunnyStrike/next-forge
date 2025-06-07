@@ -1,22 +1,22 @@
-'use server';
+'use server'
 
 import {
   type OrganizationMembership,
   auth,
   clerkClient,
-} from '@repo/auth/server';
+} from '@repo/auth/server'
 
 const getName = (user: OrganizationMembership): string | undefined => {
-  let name = user.publicUserData?.firstName;
+  let name = user.publicUserData?.firstName
 
   if (name && user.publicUserData?.lastName) {
-    name = `${name} ${user.publicUserData.lastName}`;
+    name = `${name} ${user.publicUserData.lastName}`
   } else if (!name) {
-    name = user.publicUserData?.identifier;
+    name = user.publicUserData?.identifier
   }
 
-  return name;
-};
+  return name
+}
 
 const colors = [
   'var(--color-red-500)',
@@ -36,46 +36,46 @@ const colors = [
   'var(--color-fuchsia-500)',
   'var(--color-pink-500)',
   'var(--color-rose-500)',
-];
+]
 
 export const getUsers = async (
   userIds: string[]
 ): Promise<
   | {
-      data: Liveblocks['UserMeta']['info'][];
+      data: Liveblocks['UserMeta']['info'][]
     }
   | {
-      error: unknown;
+      error: unknown
     }
 > => {
   try {
-    const { orgId } = await auth();
+    const { orgId } = await auth()
 
     if (!orgId) {
-      throw new Error('Not logged in');
+      throw new Error('Not logged in')
     }
 
-    const clerk = await clerkClient();
+    const clerk = await clerkClient()
 
     const members = await clerk.organizations.getOrganizationMembershipList({
       organizationId: orgId,
       limit: 100,
-    });
+    })
 
     const data: Liveblocks['UserMeta']['info'][] = members.data
       .filter(
-        (user) =>
+        user =>
           user.publicUserData?.userId &&
           userIds.includes(user.publicUserData.userId)
       )
-      .map((user) => ({
+      .map(user => ({
         name: getName(user) ?? 'Unknown user',
         picture: user.publicUserData?.imageUrl ?? '',
         color: colors[Math.floor(Math.random() * colors.length)],
-      }));
+      }))
 
-    return { data };
+    return { data }
   } catch (error) {
-    return { error };
+    return { error }
   }
-};
+}

@@ -16,22 +16,22 @@ pnpm add fuse.js
 Here is an example of how to use `fuse.js` for searching through an array of objects:
 
 ```tsx title="search.ts"
-import Fuse from 'fuse.js';
+import Fuse from 'fuse.js'
 
 const data = [
   { id: 1, name: 'John Doe', email: 'john.doe@example.com' },
   { id: 2, name: 'Jane Doe', email: 'jane.doe@example.com' },
-];
+]
 
 const fuse = new Fuse(data, {
   keys: ['name', 'email'],
   minMatchCharLength: 1,
   threshold: 0.3,
-});
+})
 
-const results = fuse.search('john');
+const results = fuse.search('john')
 
-console.log(results);
+console.log(results)
 ```
 
 ### Benefits

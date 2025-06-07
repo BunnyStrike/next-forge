@@ -13,10 +13,10 @@ Start by importing the `analytics` object for the relevant environment:
 
 ```tsx
 // For server-side code
-import { analytics } from '@repo/analytics/posthog/server';
+import { analytics } from '@repo/analytics/posthog/server'
 
 // For client-side code
-import { analytics } from '@repo/analytics/posthog/client';
+import { analytics } from '@repo/analytics/posthog/client'
 ```
 
 Then, you can use the `capture` method to send events:
@@ -25,7 +25,7 @@ Then, you can use the `capture` method to send events:
 analytics.capture({
   event: 'Product Purchased',
   distinctId: 'user_123',
-});
+})
 ```
 
 ## Webhooks
@@ -40,16 +40,16 @@ graph TD
   B -->|Sends Data| C1[webhooks/auth]
   E -->|Sends Data| C2[webhooks/payments]
 
-  subgraph API
-    C1
-    C2
-  end
+subgraph API
+C1
+C2
+end
 
-  subgraph PostHog
-  end
+subgraph PostHog
+end
 
-  C1 -->|Auth Events| PostHog
-  C2 -->|Payments Events| PostHog
+C1 -->|Auth Events| PostHog
+C2 -->|Payments Events| PostHog
 `} />
 
 ## Reverse Proxy

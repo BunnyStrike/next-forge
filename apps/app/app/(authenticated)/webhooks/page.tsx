@@ -1,29 +1,29 @@
-import { webhooks } from '@repo/webhooks';
-import { notFound } from 'next/navigation';
+import { webhooks } from '@repo/webhooks'
+import { notFound } from 'next/navigation'
 
 export const metadata = {
   title: 'Webhooks',
   description: 'Send webhooks to your users.',
-};
+}
 
 const WebhooksPage = async () => {
-  const response = await webhooks.getAppPortal();
+  const response = await webhooks.getAppPortal()
 
   if (!response?.url) {
-    notFound();
+    notFound()
   }
 
   return (
-    <div className="h-full w-full overflow-hidden">
+    <div className='h-full w-full overflow-hidden'>
       <iframe
-        title="Webhooks"
+        title='Webhooks'
         src={response.url}
-        className="h-full w-full border-none"
-        allow="clipboard-write"
-        loading="lazy"
+        className='h-full w-full border-none'
+        allow='clipboard-write'
+        loading='lazy'
       />
     </div>
-  );
-};
+  )
+}
 
-export default WebhooksPage;
+export default WebhooksPage

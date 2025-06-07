@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react'
 
 import {
   Pagination,
@@ -8,7 +8,7 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from '@repo/design-system/components/ui/pagination';
+} from '@repo/design-system/components/ui/pagination'
 
 /**
  * Pagination with page navigation, next and previous links.
@@ -18,26 +18,26 @@ const meta = {
   component: Pagination,
   tags: ['autodocs'],
   argTypes: {},
-  render: (args) => (
+  render: args => (
     <Pagination {...args}>
       <PaginationContent>
         <PaginationItem>
-          <PaginationPrevious href="#" />
+          <PaginationPrevious href='#' />
         </PaginationItem>
         <PaginationItem>
-          <PaginationLink href="#">1</PaginationLink>
+          <PaginationLink href='#'>1</PaginationLink>
         </PaginationItem>
         <PaginationItem>
-          <PaginationLink href="#">2</PaginationLink>
+          <PaginationLink href='#'>2</PaginationLink>
         </PaginationItem>
         <PaginationItem>
-          <PaginationLink href="#">3</PaginationLink>
+          <PaginationLink href='#'>3</PaginationLink>
         </PaginationItem>
         <PaginationItem>
           <PaginationEllipsis />
         </PaginationItem>
         <PaginationItem>
-          <PaginationNext href="#" />
+          <PaginationNext href='#' />
         </PaginationItem>
       </PaginationContent>
     </Pagination>
@@ -45,13 +45,13 @@ const meta = {
   parameters: {
     layout: 'centered',
   },
-} satisfies Meta<typeof Pagination>;
+} satisfies Meta<typeof Pagination>
 
-export default meta;
+export default meta
 
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof meta>
 
 /**
  * The default form of the pagination.
  */
-export const Default: Story = {};
+export const Default: Story = {}

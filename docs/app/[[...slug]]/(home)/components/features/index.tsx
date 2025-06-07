@@ -1,33 +1,33 @@
-import Image from 'next/image';
+import Image from 'next/image'
 
-import BaseHub from './basehub.svg';
-import BetterStack from './better-stack.svg';
-import Clerk from './clerk.svg';
-import GoogleAnalytics from './google-analytics.svg';
-import Prisma from './prisma.svg';
-import Radix from './radix.svg';
+import BaseHub from './basehub.svg'
+import BetterStack from './better-stack.svg'
+import Clerk from './clerk.svg'
+import GoogleAnalytics from './google-analytics.svg'
+import Prisma from './prisma.svg'
+import Radix from './radix.svg'
 
-import ReactEmail from './react-email.svg';
-import Sentry from './sentry.svg';
-import Stripe from './stripe.svg';
-import Svix from './svix.svg';
-import Tailwind from './tailwind.svg';
-import TypeScript from './typescript.svg';
+import ReactEmail from './react-email.svg'
+import Sentry from './sentry.svg'
+import Stripe from './stripe.svg'
+import Svix from './svix.svg'
+import Tailwind from './tailwind.svg'
+import TypeScript from './typescript.svg'
 
-import Arcjet from './arcjet.svg';
-import Lucide from './lucide.svg';
-import Neon from './neon.svg';
-import React from './react.svg';
-import Ultracite from './ultracite.svg';
-import Vercel from './vercel.svg';
+import Arcjet from './arcjet.svg'
+import Lucide from './lucide.svg'
+import Neon from './neon.svg'
+import React from './react.svg'
+import Ultracite from './ultracite.svg'
+import Vercel from './vercel.svg'
 
-import { cn } from '@/lib/utils';
-import Cmdk from './cmdk.svg';
-import Liveblocks from './liveblocks.svg';
-import Posthog from './posthog.svg';
-import Recharts from './recharts.svg';
-import Resend from './resend.svg';
-import Zod from './zod.svg';
+import { cn } from '@/lib/utils'
+import Cmdk from './cmdk.svg'
+import Liveblocks from './liveblocks.svg'
+import Posthog from './posthog.svg'
+import Recharts from './recharts.svg'
+import Resend from './resend.svg'
+import Zod from './zod.svg'
 
 const rows = [
   {
@@ -174,26 +174,26 @@ const rows = [
       },
     ],
   },
-];
+]
 
 export const Features = () => (
-  <section className="dark h-[400px] sm:h-[800px]" id="features">
+  <section className='dark h-[400px] sm:h-[800px]' id='features'>
     <div
-      aria-hidden="true"
-      className="relative h-full overflow-hidden bg-background py-24 ring-inset sm:py-32"
+      aria-hidden='true'
+      className='relative h-full overflow-hidden bg-background py-24 ring-inset sm:py-32'
     >
-      <div className="-translate-x-1/2 -translate-y-1/2 absolute top-1/2 left-1/2 mx-auto w-full max-w-[90%] text-center">
-        <div className="relative z-10">
-          <p className="mx-auto mt-2 max-w-3xl text-pretty font-semibold text-4xl text-foreground/10 tracking-tight sm:text-5xl md:text-6xl">
+      <div className='-translate-x-1/2 -translate-y-1/2 absolute top-1/2 left-1/2 mx-auto w-full max-w-[90%] text-center'>
+        <div className='relative z-10'>
+          <p className='mx-auto mt-2 max-w-3xl text-pretty font-semibold text-4xl text-foreground/10 tracking-tight sm:text-5xl md:text-6xl'>
             Built with the best tools for modern developers
           </p>
         </div>
       </div>
-      <div className="absolute inset-0 grid grid-cols-1 pt-0 [container-type:inline-size]">
+      <div className='absolute inset-0 grid grid-cols-1 pt-0 [container-type:inline-size]'>
         {rows.map((rowData, index) => (
-          <div className="group relative" key={index}>
-            <div className="absolute inset-x-0 top-1/2 h-0.5 bg-[length:12px_100%] bg-gradient-to-r from-[2px] from-background/15 to-[2px] dark:from-foreground/15" />
-            <div className="absolute inset-x-0 bottom-0 h-0.5 bg-[length:12px_100%] bg-gradient-to-r from-[2px] from-background/5 to-[2px] group-last:hidden dark:from-foreground/5" />
+          <div className='group relative' key={index}>
+            <div className='absolute inset-x-0 top-1/2 h-0.5 bg-[length:12px_100%] bg-gradient-to-r from-[2px] from-background/15 to-[2px] dark:from-foreground/15' />
+            <div className='absolute inset-x-0 bottom-0 h-0.5 bg-[length:12px_100%] bg-gradient-to-r from-[2px] from-background/5 to-[2px] group-last:hidden dark:from-foreground/5' />
             {rowData.row.map((logo, _logoIndex) => (
               <div
                 key={logo.label}
@@ -205,8 +205,8 @@ export const Features = () => (
                   'shadow-[0_0_15px_rgba(255,255,255,0.1)] dark:shadow-[0_0_15px_rgba(0,0,0,0.2)]'
                 )}
               >
-                <Image alt="" src={logo.src} className="size-4" />
-                <span className="font-medium text-foreground text-sm/6">
+                <Image alt='' src={logo.src} className='size-4' />
+                <span className='font-medium text-foreground text-sm/6'>
                   {logo.label}
                 </span>
               </div>
@@ -216,4 +216,4 @@ export const Features = () => (
       </div>
     </div>
   </section>
-);
+)

@@ -1,4 +1,4 @@
-const { createConfig } = require('@repo/next-config');
+const { createConfig } = require('@repo/next-config')
 
 /** @type {import('next').NextConfig} */
 const nextConfig = createConfig({
@@ -10,6 +10,6 @@ const nextConfig = createConfig({
   experimental: {
     esmExternals: 'loose',
   },
-});
+})
 
-module.exports = nextConfig; 
+module.exports = nextConfig

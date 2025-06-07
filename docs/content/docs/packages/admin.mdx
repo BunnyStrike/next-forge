@@ -31,7 +31,7 @@ pnpm install
 Add the admin system to your application:
 
 ```tsx title="app/layout.tsx"
-import { AdminProvider, AdminTrigger } from '@repo/admin';
+import { AdminProvider, AdminTrigger } from '@repo/admin'
 
 export default function RootLayout({ children }) {
   return (
@@ -43,7 +43,7 @@ export default function RootLayout({ children }) {
         </AdminProvider>
       </body>
     </html>
-  );
+  )
 }
 ```
 
@@ -52,15 +52,15 @@ export default function RootLayout({ children }) {
 Integrate with your auth system to control access:
 
 ```tsx title="components/admin-wrapper.tsx"
-import { AdminProvider, AdminTrigger } from '@repo/admin';
-import { currentUser } from '@repo/auth/server';
+import { AdminProvider, AdminTrigger } from '@repo/admin'
+import { currentUser } from '@repo/auth/server'
 
 export async function AdminWrapper({ children }) {
-  const user = await currentUser();
-  const isAdmin = user?.role === 'admin';
+  const user = await currentUser()
+  const isAdmin = user?.role === 'admin'
 
   if (!isAdmin) {
-    return <>{children}</>;
+    return <>{children}</>
   }
 
   return (
@@ -68,7 +68,7 @@ export async function AdminWrapper({ children }) {
       {children}
       <AdminTrigger />
     </AdminProvider>
-  );
+  )
 }
 ```
 
@@ -79,13 +79,13 @@ export async function AdminWrapper({ children }) {
 The main provider that manages admin state and provides context.
 
 ```tsx
-import { AdminProvider } from '@repo/admin';
+import { AdminProvider } from '@repo/admin'
 
-<AdminProvider
+;<AdminProvider
   initialContent={pageContent}
   initialCollections={collections}
-  onContentUpdate={(content) => saveContent(content)}
-  onCollectionUpdate={(collections) => saveCollections(collections)}
+  onContentUpdate={content => saveContent(content)}
+  onCollectionUpdate={collections => saveCollections(collections)}
 >
   {children}
 </AdminProvider>
@@ -96,9 +96,9 @@ import { AdminProvider } from '@repo/admin';
 A floating button that opens the admin sidebar when clicked.
 
 ```tsx
-import { AdminTrigger } from '@repo/admin';
+import { AdminTrigger } from '@repo/admin'
 
-<AdminTrigger className="fixed bottom-4 right-4" />
+;<AdminTrigger className='fixed bottom-4 right-4' />
 ```
 
 ### AdminSidebar
@@ -106,12 +106,9 @@ import { AdminTrigger } from '@repo/admin';
 The main sliding sidebar interface (automatically included in AdminProvider).
 
 ```tsx
-import { AdminSidebar } from '@repo/admin';
+import { AdminSidebar } from '@repo/admin'
 
-<AdminSidebar 
-  isOpen={isOpen}
-  onClose={() => setIsOpen(false)}
-/>
+;<AdminSidebar isOpen={isOpen} onClose={() => setIsOpen(false)} />
 ```
 
 ## Content Management
@@ -129,15 +126,15 @@ const pageContent = {
     title: {
       type: 'text',
       value: 'Welcome to Our Site',
-      label: 'Hero Title'
+      label: 'Hero Title',
     },
     description: {
       type: 'rich-text',
       value: '<p>This is the hero description</p>',
-      label: 'Hero Description'
-    }
-  }
-};
+      label: 'Hero Description',
+    },
+  },
+}
 ```
 
 ### Button Fields
@@ -151,11 +148,11 @@ const buttonContent = {
     value: {
       text: 'Get Started',
       href: '/signup',
-      variant: 'primary'
+      variant: 'primary',
     },
-    label: 'Call to Action'
-  }
-};
+    label: 'Call to Action',
+  },
+}
 ```
 
 ### Rich Text
@@ -167,9 +164,9 @@ const richTextContent = {
   body: {
     type: 'rich-text',
     value: '<h2>Section Title</h2><p>Rich text content...</p>',
-    label: 'Page Body'
-  }
-};
+    label: 'Page Body',
+  },
+}
 ```
 
 ## Collection Management
@@ -187,7 +184,7 @@ const collections = {
       slug: { type: 'text', label: 'Slug', required: true },
       content: { type: 'rich-text', label: 'Content' },
       published: { type: 'boolean', label: 'Published' },
-      publishDate: { type: 'date', label: 'Publish Date' }
+      publishDate: { type: 'date', label: 'Publish Date' },
     },
     items: [
       {
@@ -196,11 +193,11 @@ const collections = {
         slug: 'first-post',
         content: '<p>Post content...</p>',
         published: true,
-        publishDate: '2024-01-01'
-      }
-    ]
-  }
-};
+        publishDate: '2024-01-01',
+      },
+    ],
+  },
+}
 ```
 
 ### Field Types
@@ -221,7 +218,7 @@ Supported field types for collections:
 Access admin state and actions:
 
 ```tsx
-import { useAdmin } from '@repo/admin';
+import { useAdmin } from '@repo/admin'
 
 function MyComponent() {
   const {
@@ -231,18 +228,16 @@ function MyComponent() {
     updateContent,
     updateCollection,
     openAdmin,
-    closeAdmin
-  } = useAdmin();
+    closeAdmin,
+  } = useAdmin()
 
   return (
     <div>
-      <button onClick={() => openAdmin()}>
-        Open Admin
-      </button>
-      
+      <button onClick={() => openAdmin()}>Open Admin</button>
+
       <h1>{content.hero?.title?.value}</h1>
     </div>
-  );
+  )
 }
 ```
 
@@ -255,10 +250,10 @@ Extend the admin system with custom field types:
 ```tsx
 // Define custom field type
 interface CustomFieldType extends AdminField {
-  type: 'custom';
+  type: 'custom'
   value: {
-    customProperty: string;
-  };
+    customProperty: string
+  }
 }
 
 // Use in content
@@ -266,9 +261,9 @@ const customContent = {
   special: {
     type: 'custom' as const,
     value: { customProperty: 'value' },
-    label: 'Special Field'
-  }
-};
+    label: 'Special Field',
+  },
+}
 ```
 
 ### Permissions
@@ -279,12 +274,10 @@ Control access to different admin features:
 const permissions = {
   canEditContent: true,
   canManageCollections: false,
-  canPublish: true
-};
+  canPublish: true,
+}
 
-<AdminProvider permissions={permissions}>
-  {children}
-</AdminProvider>
+;<AdminProvider permissions={permissions}>{children}</AdminProvider>
 ```
 
 ### Integration with Database
@@ -292,15 +285,15 @@ const permissions = {
 Save changes to your database:
 
 ```tsx
-import { AdminProvider } from '@repo/admin';
-import { updatePageContent, updateCollections } from '@/lib/api';
+import { AdminProvider } from '@repo/admin'
+import { updatePageContent, updateCollections } from '@/lib/api'
 
-<AdminProvider
-  onContentUpdate={async (content) => {
-    await updatePageContent(content);
+;<AdminProvider
+  onContentUpdate={async content => {
+    await updatePageContent(content)
   }}
-  onCollectionUpdate={async (collections) => {
-    await updateCollections(collections);
+  onCollectionUpdate={async collections => {
+    await updateCollections(collections)
   }}
 >
   {children}
@@ -312,7 +305,7 @@ import { updatePageContent, updateCollections } from '@/lib/api';
 The admin components use your design system and can be customized:
 
 ```tsx
-<AdminTrigger 
+<AdminTrigger
   className="bg-blue-600 hover:bg-blue-700 text-white"
 />
 
@@ -336,19 +329,21 @@ The admin components use your design system and can be customized:
 ### Blog Management
 
 ```tsx
-import { AdminProvider, useAdmin } from '@repo/admin';
+import { AdminProvider, useAdmin } from '@repo/admin'
 
 function BlogPost({ post }) {
-  const { content, updateContent } = useAdmin();
-  
+  const { content, updateContent } = useAdmin()
+
   return (
     <article>
       <h1>{content.title?.value || post.title}</h1>
-      <div dangerouslySetInnerHTML={{ 
-        __html: content.body?.value || post.content 
-      }} />
+      <div
+        dangerouslySetInnerHTML={{
+          __html: content.body?.value || post.content,
+        }}
+      />
     </article>
-  );
+  )
 }
 
 export default function BlogPage({ post }) {
@@ -356,16 +351,16 @@ export default function BlogPage({ post }) {
     <AdminProvider
       initialContent={{
         title: { type: 'text', value: post.title, label: 'Title' },
-        body: { type: 'rich-text', value: post.content, label: 'Content' }
+        body: { type: 'rich-text', value: post.content, label: 'Content' },
       }}
-      onContentUpdate={(content) => {
+      onContentUpdate={content => {
         // Save to database
-        updatePost(post.id, content);
+        updatePost(post.id, content)
       }}
     >
       <BlogPost post={post} />
     </AdminProvider>
-  );
+  )
 }
 ```
 
@@ -375,8 +370,8 @@ export default function BlogPage({ post }) {
 function ProductCatalog() {
   const products = [
     { id: 1, name: 'Product 1', price: 99.99 },
-    { id: 2, name: 'Product 2', price: 149.99 }
-  ];
+    { id: 2, name: 'Product 2', price: 149.99 },
+  ]
 
   return (
     <AdminProvider
@@ -386,20 +381,20 @@ function ProductCatalog() {
           fields: {
             name: { type: 'text', label: 'Product Name', required: true },
             price: { type: 'number', label: 'Price', required: true },
-            description: { type: 'rich-text', label: 'Description' }
+            description: { type: 'rich-text', label: 'Description' },
           },
-          items: products
-        }
+          items: products,
+        },
       }}
-      onCollectionUpdate={(collections) => {
+      onCollectionUpdate={collections => {
         // Save products to database
-        saveProducts(collections.products.items);
+        saveProducts(collections.products.items)
       }}
     >
       <ProductGrid />
     </AdminProvider>
-  );
+  )
 }
 ```
 
-This admin package provides a powerful, flexible foundation for content management that can be adapted to your specific needs while maintaining a clean, user-friendly interface. 
+This admin package provides a powerful, flexible foundation for content management that can be adapted to your specific needs while maintaining a clean, user-friendly interface.

@@ -1,12 +1,12 @@
 // Components
-export { AdminProvider } from './components/admin-provider';
-export { AdminSidebar } from './components/admin-sidebar';
-export { AdminTrigger } from './components/admin-trigger';
-export { ContentManager } from './components/content-manager';
-export { CollectionManager } from './components/collection-manager';
+export { AdminProvider } from './components/admin-provider'
+export { AdminSidebar } from './components/admin-sidebar'
+export { AdminTrigger } from './components/admin-trigger'
+export { ContentManager } from './components/content-manager'
+export { CollectionManager } from './components/collection-manager'
 
 // Hooks
-export { useAdmin } from './hooks/use-admin';
+export { useAdmin } from './hooks/use-admin'
 
 // Types
 export type {
@@ -17,4 +17,4 @@ export type {
   AdminContextType,
   AdminPermission,
   AdminUser,
-} from './lib/types'; 
+} from './lib/types'

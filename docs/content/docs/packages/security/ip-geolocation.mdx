@@ -3,25 +3,30 @@ title: IP Geolocation
 description: Accessing IP geolocation data in your application.
 ---
 
-<Authors data={[{
-  user: {
-    name: 'Hayden Bleasel',
-    id: 'haydenbleasel',
-  },
-  company: {
-    name: 'Vercel',
-    id: 'vercel',
-  },
-}, {
-  user: {
-    name: 'David Mytton',
-    id: 'davidmytton',
-  },
-  company: {
-    name: 'Arcjet',
-    id: 'arcjet',
-  },
-}]} />
+<Authors
+  data={[
+    {
+      user: {
+        name: 'Hayden Bleasel',
+        id: 'haydenbleasel',
+      },
+      company: {
+        name: 'Vercel',
+        id: 'vercel',
+      },
+    },
+    {
+      user: {
+        name: 'David Mytton',
+        id: 'davidmytton',
+      },
+      company: {
+        name: 'Arcjet',
+        id: 'arcjet',
+      },
+    },
+  ]}
+/>
 
 next-forge uses [Arcjet](https://arcjet.com) for [application security](/packages/security/application) which includes [IP details and geolocation information](https://docs.arcjet.com/reference/nextjs#ip-analysis) you can use in your application.
 
@@ -37,21 +42,21 @@ The IP details are available in the Arcjet decision object, which is returned fr
 
 ```ts
 // ...
-const decision = await aj.protect(req);
+const decision = await aj.protect(req)
 
-if (decision.ip.hasCity() && decision.ip.city === "San Francisco") {
+if (decision.ip.hasCity() && decision.ip.city === 'San Francisco') {
   // Create a custom response for San Francisco
 }
 
-if (decision.ip.hasRegion() && decision.ip.region === "California") {
+if (decision.ip.hasRegion() && decision.ip.region === 'California') {
   // Create a custom response for California
 }
 
-if (decision.ip.hasCountry() && decision.ip.country === "US") {
+if (decision.ip.hasCountry() && decision.ip.country === 'US') {
   // Create a custom response for the United States
 }
 
-if (decision.ip.hasContinent() && decision.ip.continent === "NA") {
+if (decision.ip.hasContinent() && decision.ip.continent === 'NA') {
   // Create a custom response for North America
 }
 ```
@@ -65,5 +70,8 @@ Next.js does not allow passing data from [the root layout](https://nextjs.org/do
 See the Arcjet documentation on how to call `aj.protect()` in [route handlers](https://docs.arcjet.com/reference/nextjs#protect), [pages / server components](https://docs.arcjet.com/reference/nextjs#pages--page-components), and [server actions](https://docs.arcjet.com/reference/nextjs#server-actions).
 
 <Note>
-  If you remove the Arcjet call from `apps/app/app/(authenticated)/layout.tsx` or `middleware.ts` it will no longer run on every request. You will need to call `aj.protect()` everywhere you wish to apply Arcjet rules, even if you don't need the IP details.
+  If you remove the Arcjet call from `apps/app/app/(authenticated)/layout.tsx`
+  or `middleware.ts` it will no longer run on every request. You will need to
+  call `aj.protect()` everywhere you wish to apply Arcjet rules, even if you
+  don't need the IP details.
 </Note>

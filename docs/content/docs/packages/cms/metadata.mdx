@@ -7,22 +7,22 @@ description: How the title, description, and Open Graph images are configured in
   data={[
     {
       user: {
-        name: "Hayden Bleasel",
-        id: "haydenbleasel",
+        name: 'Hayden Bleasel',
+        id: 'haydenbleasel',
       },
       company: {
-        name: "vercel",
-        id: "vercel",
+        name: 'vercel',
+        id: 'vercel',
       },
     },
     {
       user: {
-        name: "Julian Benegas",
-        id: "julianbenegas8",
+        name: 'Julian Benegas',
+        id: 'julianbenegas8',
       },
       company: {
-        name: "BaseHub",
-        id: "basehub",
+        name: 'BaseHub',
+        id: 'basehub',
       },
     },
   ]}
@@ -33,36 +33,36 @@ To generate metadata for a particular page or collection item, we can use the Ba
 For example, here's how we've wired up the metadata for the blog post page, using the `createMetadata` function from the [SEO](/packages/seo/metadata) package:
 
 ```tsx apps/web/app/blog/[slug]/page.tsx
-import { blog } from '@repo/cms';
+import { blog } from '@repo/cms'
 
 type BlogPostProperties = {
   readonly params: Promise<{
-    slug: string;
-  }>;
-};
+    slug: string
+  }>
+}
 
 export const generateMetadata = async ({
   params,
 }: BlogPostProperties): Promise<Metadata> => {
-  const { slug } = await params;
-  const post = await blog.getPost(slug);
+  const { slug } = await params
+  const post = await blog.getPost(slug)
 
   if (!post) {
-    return {};
+    return {}
   }
 
   return createMetadata({
     title: post._title,
     description: post.description,
     image: post.image.url,
-  });
-};
+  })
+}
 ```
 
 `blog.getPost` is a function that abstracts the logic of fetching the blog post from the CMS. Under the hood, it uses the BaseHub SDK to fetch the blog post from the CMS:
 
 ```tsx packages/cms/index.ts
-import { basehub, fragmentOn } from 'basehub';
+import { basehub, fragmentOn } from 'basehub'
 
 const postFragment = fragmentOn('PostsItem', {
   _slug: true,
@@ -86,7 +86,7 @@ const postFragment = fragmentOn('PostsItem', {
   date: true,
   description: true,
   image: imageFragment,
-});
+})
 
 export const blog = {
   // ...
@@ -105,10 +105,10 @@ export const blog = {
   }),
 
   getPost: async (slug: string) => {
-    const query = blog.postQuery(slug);
-    const data = await basehub().query(query);
+    const query = blog.postQuery(slug)
+    const data = await basehub().query(query)
 
-    return data.blog.posts.items.at(0);
+    return data.blog.posts.items.at(0)
   },
-};
+}
 ```

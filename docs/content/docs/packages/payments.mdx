@@ -10,11 +10,11 @@ next-forge uses [Stripe](https://stripe.com/) by default for payments and billin
 You can use Stripe anywhere in your app by importing the `stripe` object like so:
 
 ```ts title="page.tsx {1,5}"
-import { stripe } from '@repo/payments';
+import { stripe } from '@repo/payments'
 
 // ...
 
-await stripe.prices.list();
+await stripe.prices.list()
 ```
 
 ## Webhooks
@@ -53,6 +53,7 @@ Stripe Radar supports more [advanced anti-fraud features](https://docs.stripe.co
 
     export default RootLayout;
     ```
+
   </Step>
   <Step title="Add script to the website">
     Add the same script to the website in `apps/web/app/layout.tsx`.
@@ -65,7 +66,7 @@ Stripe Radar supports more [advanced anti-fraud features](https://docs.stripe.co
 For example, in `apps/app/app/(authenticated)/layout.tsx` you could add this after the call to `aj.protect()`:
 
 ```ts
-import { redirect } from 'next/navigation';
+import { redirect } from 'next/navigation'
 // ...
 
 if (
@@ -80,11 +81,11 @@ if (
     if (decision.ip.service !== 'Apple Private Relay') {
       // We trust Apple Private Relay because it requires an active iCloud
       // subscription, so deny all other VPNs
-      redirect('/vpn-blocked');
+      redirect('/vpn-blocked')
     }
   } else {
     // The service name is not available, but we still think it's a VPN
-    redirect('/vpn-blocked');
+    redirect('/vpn-blocked')
   }
 }
 ```

@@ -1,19 +1,19 @@
-import { authMiddleware } from '@repo/auth/middleware';
+import { authMiddleware } from '@repo/auth/middleware'
 import {
   noseconeMiddleware,
   noseconeOptions,
   noseconeOptionsWithToolbar,
-} from '@repo/security/middleware';
-import type { NextMiddleware } from 'next/server';
-import { env } from './env';
+} from '@repo/security/middleware'
+import type { NextMiddleware } from 'next/server'
+import { env } from './env'
 
 const securityHeaders = env.FLAGS_SECRET
   ? noseconeMiddleware(noseconeOptionsWithToolbar)
-  : noseconeMiddleware(noseconeOptions);
+  : noseconeMiddleware(noseconeOptions)
 
 export default authMiddleware(() =>
   securityHeaders()
-) as unknown as NextMiddleware;
+) as unknown as NextMiddleware
 
 export const config = {
   matcher: [
@@ -22,4 +22,4 @@ export const config = {
     // Always run for API routes
     '/(api|trpc)(.*)',
   ],
-};
+}

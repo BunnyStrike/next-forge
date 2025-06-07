@@ -1,10 +1,10 @@
-import withBundleAnalyzer from '@next/bundle-analyzer';
+import withBundleAnalyzer from '@next/bundle-analyzer'
 
 // @ts-expect-error No declaration file
-import { PrismaPlugin } from '@prisma/nextjs-monorepo-workaround-plugin';
-import type { NextConfig } from 'next';
+import { PrismaPlugin } from '@prisma/nextjs-monorepo-workaround-plugin'
+import type { NextConfig } from 'next'
 
-const otelRegex = /@opentelemetry\/instrumentation/;
+const otelRegex = /@opentelemetry\/instrumentation/
 
 export const config: NextConfig = {
   images: {
@@ -32,23 +32,23 @@ export const config: NextConfig = {
         source: '/ingest/decide',
         destination: 'https://us.i.posthog.com/decide',
       },
-    ];
+    ]
   },
 
   webpack(config, { isServer }) {
     if (isServer) {
-      config.plugins = config.plugins || [];
-      config.plugins.push(new PrismaPlugin());
+      config.plugins = config.plugins || []
+      config.plugins.push(new PrismaPlugin())
     }
 
-    config.ignoreWarnings = [{ module: otelRegex }];
+    config.ignoreWarnings = [{ module: otelRegex }]
 
-    return config;
+    return config
   },
 
   // This is required to support PostHog trailing slash API requests
   skipTrailingSlashRedirect: true,
-};
+}
 
 export const withAnalyzer = (sourceConfig: NextConfig): NextConfig =>
-  withBundleAnalyzer()(sourceConfig);
+  withBundleAnalyzer()(sourceConfig)

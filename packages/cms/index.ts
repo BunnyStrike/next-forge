@@ -1,9 +1,9 @@
-import { basehub as basehubClient, fragmentOn } from 'basehub';
-import { keys } from './keys';
+import { basehub as basehubClient, fragmentOn } from 'basehub'
+import { keys } from './keys'
 
 const basehub = basehubClient({
   token: keys().BASEHUB_TOKEN,
-});
+})
 
 /* -------------------------------------------------------------------------------------------------
  * Common Fragments
@@ -15,7 +15,7 @@ const imageFragment = fragmentOn('BlockImage', {
   height: true,
   alt: true,
   blurDataURL: true,
-});
+})
 
 /* -------------------------------------------------------------------------------------------------
  * Blog Fragments & Queries
@@ -35,7 +35,7 @@ const postMetaFragment = fragmentOn('PostsItem', {
   date: true,
   description: true,
   image: imageFragment,
-});
+})
 
 const postFragment = fragmentOn('PostsItem', {
   ...postMetaFragment,
@@ -47,10 +47,10 @@ const postFragment = fragmentOn('PostsItem', {
     },
     readingTime: true,
   },
-});
+})
 
-export type PostMeta = fragmentOn.infer<typeof postMetaFragment>;
-export type Post = fragmentOn.infer<typeof postFragment>;
+export type PostMeta = fragmentOn.infer<typeof postMetaFragment>
+export type Post = fragmentOn.infer<typeof postFragment>
 
 export const blog = {
   postsQuery: fragmentOn('Query', {
@@ -86,24 +86,24 @@ export const blog = {
   }),
 
   getPosts: async (): Promise<PostMeta[]> => {
-    const data = await basehub.query(blog.postsQuery);
+    const data = await basehub.query(blog.postsQuery)
 
-    return data.blog.posts.items;
+    return data.blog.posts.items
   },
 
   getLatestPost: async () => {
-    const data = await basehub.query(blog.latestPostQuery);
+    const data = await basehub.query(blog.latestPostQuery)
 
-    return data.blog.posts.item;
+    return data.blog.posts.item
   },
 
   getPost: async (slug: string) => {
-    const query = blog.postQuery(slug);
-    const data = await basehub.query(query);
+    const query = blog.postQuery(slug)
+    const data = await basehub.query(query)
 
-    return data.blog.posts.item;
+    return data.blog.posts.item
   },
-};
+}
 
 /* -------------------------------------------------------------------------------------------------
  * Legal Fragments & Queries
@@ -113,7 +113,7 @@ const legalPostMetaFragment = fragmentOn('LegalPagesItem', {
   _slug: true,
   _title: true,
   description: true,
-});
+})
 
 const legalPostFragment = fragmentOn('LegalPagesItem', {
   ...legalPostMetaFragment,
@@ -125,10 +125,10 @@ const legalPostFragment = fragmentOn('LegalPagesItem', {
     },
     readingTime: true,
   },
-});
+})
 
-export type LegalPostMeta = fragmentOn.infer<typeof legalPostMetaFragment>;
-export type LegalPost = fragmentOn.infer<typeof legalPostFragment>;
+export type LegalPostMeta = fragmentOn.infer<typeof legalPostMetaFragment>
+export type LegalPost = fragmentOn.infer<typeof legalPostFragment>
 
 export const legal = {
   postsQuery: fragmentOn('Query', {
@@ -159,21 +159,21 @@ export const legal = {
     }),
 
   getPosts: async (): Promise<LegalPost[]> => {
-    const data = await basehub.query(legal.postsQuery);
+    const data = await basehub.query(legal.postsQuery)
 
-    return data.legalPages.items;
+    return data.legalPages.items
   },
 
   getLatestPost: async () => {
-    const data = await basehub.query(legal.latestPostQuery);
+    const data = await basehub.query(legal.latestPostQuery)
 
-    return data.legalPages.item;
+    return data.legalPages.item
   },
 
   getPost: async (slug: string) => {
-    const query = legal.postQuery(slug);
-    const data = await basehub.query(query);
+    const query = legal.postQuery(slug)
+    const data = await basehub.query(query)
 
-    return data.legalPages.item;
+    return data.legalPages.item
   },
-};
+}

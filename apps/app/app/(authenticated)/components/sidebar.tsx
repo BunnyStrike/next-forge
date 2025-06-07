@@ -1,20 +1,20 @@
-'use client';
+'use client'
 
-import { OrganizationSwitcher, UserButton } from '@repo/auth/client';
-import { ModeToggle } from '@repo/design-system/components/mode-toggle';
-import { Button } from '@repo/design-system/components/ui/button';
+import { OrganizationSwitcher, UserButton } from '@repo/auth/client'
+import { ModeToggle } from '@repo/design-system/components/mode-toggle'
+import { Button } from '@repo/design-system/components/ui/button'
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from '@repo/design-system/components/ui/collapsible';
+} from '@repo/design-system/components/ui/collapsible'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@repo/design-system/components/ui/dropdown-menu';
+} from '@repo/design-system/components/ui/dropdown-menu'
 import {
   Sidebar,
   SidebarContent,
@@ -32,9 +32,9 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
   useSidebar,
-} from '@repo/design-system/components/ui/sidebar';
-import { cn } from '@repo/design-system/lib/utils';
-import { NotificationsTrigger } from '@repo/notifications/components/trigger';
+} from '@repo/design-system/components/ui/sidebar'
+import { cn } from '@repo/design-system/lib/utils'
+import { NotificationsTrigger } from '@repo/notifications/components/trigger'
 import {
   AnchorIcon,
   BookOpenIcon,
@@ -51,14 +51,14 @@ import {
   ShareIcon,
   SquareTerminalIcon,
   Trash2Icon,
-} from 'lucide-react';
-import Link from 'next/link';
-import type { ReactNode } from 'react';
-import { Search } from './search';
+} from 'lucide-react'
+import Link from 'next/link'
+import type { ReactNode } from 'react'
+import { Search } from './search'
 
 type GlobalSidebarProperties = {
-  readonly children: ReactNode;
-};
+  readonly children: ReactNode
+}
 
 const data = {
   user: {
@@ -187,14 +187,14 @@ const data = {
       icon: MapIcon,
     },
   ],
-};
+}
 
 export const GlobalSidebar = ({ children }: GlobalSidebarProperties) => {
-  const sidebar = useSidebar();
+  const sidebar = useSidebar()
 
   return (
     <>
-      <Sidebar variant="inset">
+      <Sidebar variant='inset'>
         <SidebarHeader>
           <SidebarMenu>
             <SidebarMenuItem>
@@ -206,7 +206,7 @@ export const GlobalSidebar = ({ children }: GlobalSidebarProperties) => {
               >
                 <OrganizationSwitcher
                   hidePersonal
-                  afterSelectOrganizationUrl="/"
+                  afterSelectOrganizationUrl='/'
                 />
               </div>
             </SidebarMenuItem>
@@ -217,7 +217,7 @@ export const GlobalSidebar = ({ children }: GlobalSidebarProperties) => {
           <SidebarGroup>
             <SidebarGroupLabel>Platform</SidebarGroupLabel>
             <SidebarMenu>
-              {data.navMain.map((item) => (
+              {data.navMain.map(item => (
                 <Collapsible
                   key={item.title}
                   asChild
@@ -233,14 +233,14 @@ export const GlobalSidebar = ({ children }: GlobalSidebarProperties) => {
                     {item.items?.length ? (
                       <>
                         <CollapsibleTrigger asChild>
-                          <SidebarMenuAction className="data-[state=open]:rotate-90">
+                          <SidebarMenuAction className='data-[state=open]:rotate-90'>
                             <ChevronRightIcon />
-                            <span className="sr-only">Toggle</span>
+                            <span className='sr-only'>Toggle</span>
                           </SidebarMenuAction>
                         </CollapsibleTrigger>
                         <CollapsibleContent>
                           <SidebarMenuSub>
-                            {item.items?.map((subItem) => (
+                            {item.items?.map(subItem => (
                               <SidebarMenuSubItem key={subItem.title}>
                                 <SidebarMenuSubButton asChild>
                                   <Link href={subItem.url}>
@@ -258,10 +258,10 @@ export const GlobalSidebar = ({ children }: GlobalSidebarProperties) => {
               ))}
             </SidebarMenu>
           </SidebarGroup>
-          <SidebarGroup className="group-data-[collapsible=icon]:hidden">
+          <SidebarGroup className='group-data-[collapsible=icon]:hidden'>
             <SidebarGroupLabel>Projects</SidebarGroupLabel>
             <SidebarMenu>
-              {data.projects.map((item) => (
+              {data.projects.map(item => (
                 <SidebarMenuItem key={item.name}>
                   <SidebarMenuButton asChild>
                     <Link href={item.url}>
@@ -273,25 +273,25 @@ export const GlobalSidebar = ({ children }: GlobalSidebarProperties) => {
                     <DropdownMenuTrigger asChild>
                       <SidebarMenuAction showOnHover>
                         <MoreHorizontalIcon />
-                        <span className="sr-only">More</span>
+                        <span className='sr-only'>More</span>
                       </SidebarMenuAction>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent
-                      className="w-48"
-                      side="bottom"
-                      align="end"
+                      className='w-48'
+                      side='bottom'
+                      align='end'
                     >
                       <DropdownMenuItem>
-                        <FolderIcon className="text-muted-foreground" />
+                        <FolderIcon className='text-muted-foreground' />
                         <span>View Project</span>
                       </DropdownMenuItem>
                       <DropdownMenuItem>
-                        <ShareIcon className="text-muted-foreground" />
+                        <ShareIcon className='text-muted-foreground' />
                         <span>Share Project</span>
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem>
-                        <Trash2Icon className="text-muted-foreground" />
+                        <Trash2Icon className='text-muted-foreground' />
                         <span>Delete Project</span>
                       </DropdownMenuItem>
                     </DropdownMenuContent>
@@ -306,10 +306,10 @@ export const GlobalSidebar = ({ children }: GlobalSidebarProperties) => {
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroup>
-          <SidebarGroup className="mt-auto">
+          <SidebarGroup className='mt-auto'>
             <SidebarGroupContent>
               <SidebarMenu>
-                {data.navSecondary.map((item) => (
+                {data.navSecondary.map(item => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>
                       <Link href={item.url}>
@@ -325,7 +325,7 @@ export const GlobalSidebar = ({ children }: GlobalSidebarProperties) => {
         </SidebarContent>
         <SidebarFooter>
           <SidebarMenu>
-            <SidebarMenuItem className="flex items-center gap-2">
+            <SidebarMenuItem className='flex items-center gap-2'>
               <UserButton
                 showName
                 appearance={{
@@ -336,15 +336,15 @@ export const GlobalSidebar = ({ children }: GlobalSidebarProperties) => {
                   },
                 }}
               />
-              <div className="flex shrink-0 items-center gap-px">
+              <div className='flex shrink-0 items-center gap-px'>
                 <ModeToggle />
                 <Button
-                  variant="ghost"
-                  size="icon"
-                  className="shrink-0"
+                  variant='ghost'
+                  size='icon'
+                  className='shrink-0'
                   asChild
                 >
-                  <div className="h-4 w-4">
+                  <div className='h-4 w-4'>
                     <NotificationsTrigger />
                   </div>
                 </Button>
@@ -355,5 +355,5 @@ export const GlobalSidebar = ({ children }: GlobalSidebarProperties) => {
       </Sidebar>
       <SidebarInset>{children}</SidebarInset>
     </>
-  );
-};
+  )
+}

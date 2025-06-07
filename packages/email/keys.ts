@@ -1,5 +1,5 @@
-import { createEnv } from '@t3-oss/env-nextjs';
-import { z } from 'zod';
+import { createEnv } from '@t3-oss/env-nextjs'
+import { z } from 'zod'
 
 export const keys = () =>
   createEnv({
@@ -11,4 +11,4 @@ export const keys = () =>
       RESEND_FROM: process.env.RESEND_FROM,
       RESEND_TOKEN: process.env.RESEND_TOKEN,
     },
-  });
+  })

@@ -1,25 +1,25 @@
-import { getMDXComponents } from '@/mdx-components';
-import { DocsLayout } from 'fumadocs-ui/layouts/notebook';
-import { createRelativeLink } from 'fumadocs-ui/mdx';
+import { getMDXComponents } from '@/mdx-components'
+import { DocsLayout } from 'fumadocs-ui/layouts/notebook'
+import { createRelativeLink } from 'fumadocs-ui/mdx'
 import {
   DocsBody,
   DocsDescription,
   DocsPage,
   DocsTitle,
-} from 'fumadocs-ui/page';
-import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
-import { source } from '../../lib/source';
-import { baseOptions } from '../layout.config';
-import Home from './(home)';
+} from 'fumadocs-ui/page'
+import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
+import { source } from '../../lib/source'
+import { baseOptions } from '../layout.config'
+import Home from './(home)'
 
 type PageProps = {
-  params: Promise<{ slug?: string[] }>;
-};
+  params: Promise<{ slug?: string[] }>
+}
 
 const Page = async (props: PageProps) => {
-  const params = await props.params;
-  const page = source.getPage(params.slug);
+  const params = await props.params
+  const page = source.getPage(params.slug)
 
   if (!params.slug) {
     return (
@@ -31,14 +31,14 @@ const Page = async (props: PageProps) => {
       >
         <Home />
       </DocsLayout>
-    );
+    )
   }
 
   if (!page) {
-    notFound();
+    notFound()
   }
 
-  const MDX = page.data.body;
+  const MDX = page.data.body
 
   return (
     <DocsLayout
@@ -69,7 +69,7 @@ const Page = async (props: PageProps) => {
           },
         ],
       }}
-      tabMode="navbar"
+      tabMode='navbar'
       nav={{
         ...baseOptions.nav,
         mode: 'top',
@@ -92,27 +92,27 @@ const Page = async (props: PageProps) => {
         </DocsBody>
       </DocsPage>
     </DocsLayout>
-  );
-};
+  )
+}
 
-export const generateStaticParams = async () => source.generateParams();
+export const generateStaticParams = async () => source.generateParams()
 
 export async function generateMetadata(props: {
-  params: Promise<{ slug?: string[] }>;
+  params: Promise<{ slug?: string[] }>
 }): Promise<Metadata> {
-  const params = await props.params;
-  const page = source.getPage(params.slug);
+  const params = await props.params
+  const page = source.getPage(params.slug)
 
   if (!params.slug) {
     return {
       title: 'Production-grade Turborepo template for Next.js apps',
       description:
         "A monorepo template designed to have everything you need to build your new SaaS app as quick as possible. Authentication, billing, analytics, SEO, database ORM and more — it's all here.",
-    };
+    }
   }
 
   if (!page) {
-    notFound();
+    notFound()
   }
 
   return {
@@ -130,7 +130,7 @@ export async function generateMetadata(props: {
         },
       ],
     },
-  };
+  }
 }
 
-export default Page;
+export default Page

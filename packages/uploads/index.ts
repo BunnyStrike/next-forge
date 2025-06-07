@@ -1,15 +1,15 @@
 // Components
-export { UploadDropzone } from './components/upload-dropzone';
-export { FilePreview } from './components/file-preview';
-export { UploadManager } from './components/upload-manager';
+export { UploadDropzone } from './components/upload-dropzone'
+export { FilePreview } from './components/file-preview'
+export { UploadManager } from './components/upload-manager'
 
 // Hooks
-export { useUpload } from './hooks/use-upload';
+export { useUpload } from './hooks/use-upload'
 
 // Adapters
-export { S3Adapter } from './lib/adapters/s3';
-export { VercelBlobAdapter } from './lib/adapters/vercel-blob';
-export { UploadThingAdapter } from './lib/adapters/uploadthing';
+export { S3Adapter } from './lib/adapters/s3'
+export { VercelBlobAdapter } from './lib/adapters/vercel-blob'
+export { UploadThingAdapter } from './lib/adapters/uploadthing'
 
 // Types
 export type {
@@ -28,7 +28,7 @@ export type {
   CloudinaryConfig,
   VercelBlobConfig,
   UploadThingConfig,
-} from './lib/types';
+} from './lib/types'
 
 // Utilities
 export {
@@ -43,4 +43,4 @@ export {
   revokePreviewUrl,
   resizeImage,
   generateThumbnail,
-} from './lib/utils'; 
+} from './lib/utils'

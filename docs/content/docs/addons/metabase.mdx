@@ -3,25 +3,30 @@ title: Metabase
 description: How to add business intelligence and analytics to your app with Metabase.
 ---
 
-<Authors data={[{
-  user: {
-    name: 'Hayden Bleasel',
-    id: 'haydenbleasel',
-  },
-  company: {
-    name: 'Vercel',
-    id: 'vercel',
-  },
-}, {
-  user: {
-    name: 'Matthew Hefferon',
-    id: 'heffhq',
-  },
-  company: {
-    name: 'Metabase',
-    id: 'metabase',
-  },
-}]} />
+<Authors
+  data={[
+    {
+      user: {
+        name: 'Hayden Bleasel',
+        id: 'haydenbleasel',
+      },
+      company: {
+        name: 'Vercel',
+        id: 'vercel',
+      },
+    },
+    {
+      user: {
+        name: 'Matthew Hefferon',
+        id: 'heffhq',
+      },
+      company: {
+        name: 'Metabase',
+        id: 'metabase',
+      },
+    },
+  ]}
+/>
 
 While next-forge does not come with BI tooling out of the box, you can easily add business intelligence and analytics to your app with [Metabase](https://www.metabase.com/).
 
@@ -56,7 +61,8 @@ By default, next-forge uses Neon as its database provider. Metabase works great 
 You can find these details in your `DATABASE_URL` environment variable:
 
 ```js
-DATABASE_URL="postgresql://[username]:[password]@[hostname]:[port]/[database_name]?sslmode=require"
+DATABASE_URL =
+  'postgresql://[username]:[password]@[hostname]:[port]/[database_name]?sslmode=require'
 ```
 
 Next, plug your database connection credentials into Metabase:

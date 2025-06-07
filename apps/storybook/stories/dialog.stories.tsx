@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react'
 
 import {
   Dialog,
@@ -9,7 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@repo/design-system/components/ui/dialog';
+} from '@repo/design-system/components/ui/dialog'
 
 /**
  * A window overlaid on either the primary window or another dialog window,
@@ -20,7 +20,7 @@ const meta = {
   component: Dialog,
   tags: ['autodocs'],
   argTypes: {},
-  render: (args) => (
+  render: args => (
     <Dialog {...args}>
       <DialogTrigger>Open</DialogTrigger>
       <DialogContent>
@@ -31,14 +31,14 @@ const meta = {
             account and remove your data from our servers.
           </DialogDescription>
         </DialogHeader>
-        <DialogFooter className="gap-4">
-          <button type="button" className="hover:underline">
+        <DialogFooter className='gap-4'>
+          <button type='button' className='hover:underline'>
             Cancel
           </button>
           <DialogClose>
             <button
-              type="button"
-              className="rounded bg-primary px-4 py-2 text-primary-foreground"
+              type='button'
+              className='rounded bg-primary px-4 py-2 text-primary-foreground'
             >
               Continue
             </button>
@@ -50,13 +50,13 @@ const meta = {
   parameters: {
     layout: 'centered',
   },
-} satisfies Meta<typeof Dialog>;
+} satisfies Meta<typeof Dialog>
 
-export default meta;
+export default meta
 
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof meta>
 
 /**
  * The default form of the dialog.
  */
-export const Default: Story = {};
+export const Default: Story = {}

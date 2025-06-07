@@ -17,7 +17,7 @@ A comprehensive admin package that provides content and collection management ca
 The package is already included in the monorepo. Import it in your app:
 
 ```tsx
-import { AdminProvider, AdminSidebar, AdminTrigger } from '@repo/admin';
+import { AdminProvider, AdminSidebar, AdminTrigger } from '@repo/admin'
 ```
 
 ## Basic Setup
@@ -25,40 +25,38 @@ import { AdminProvider, AdminSidebar, AdminTrigger } from '@repo/admin';
 ### 1. Wrap your app with AdminProvider
 
 ```tsx
-import { AdminProvider } from '@repo/admin';
+import { AdminProvider } from '@repo/admin'
 
 export default function RootLayout({ children }) {
   return (
     <html>
       <body>
-        <AdminProvider>
-          {children}
-        </AdminProvider>
+        <AdminProvider>{children}</AdminProvider>
       </body>
     </html>
-  );
+  )
 }
 ```
 
 ### 2. Add the AdminSidebar and AdminTrigger
 
 ```tsx
-import { AdminSidebar, AdminTrigger } from '@repo/admin';
+import { AdminSidebar, AdminTrigger } from '@repo/admin'
 
 export default function Layout({ children }) {
   return (
     <>
       {children}
-      
+
       {/* Floating admin trigger button */}
-      <div className="fixed bottom-4 right-4 z-30">
+      <div className='fixed bottom-4 right-4 z-30'>
         <AdminTrigger />
       </div>
-      
+
       {/* Admin sidebar */}
       <AdminSidebar />
     </>
-  );
+  )
 }
 ```
 
@@ -69,9 +67,7 @@ export default function Layout({ children }) {
 Provides admin context to child components.
 
 ```tsx
-<AdminProvider>
-  {/* Your app */}
-</AdminProvider>
+<AdminProvider>{/* Your app */}</AdminProvider>
 ```
 
 ### AdminTrigger
@@ -79,11 +75,7 @@ Provides admin context to child components.
 Button to open the admin panel.
 
 ```tsx
-<AdminTrigger 
-  variant="outline" 
-  size="icon"
-  className="custom-class"
-/>
+<AdminTrigger variant='outline' size='icon' className='custom-class' />
 ```
 
 ### AdminSidebar
@@ -107,15 +99,15 @@ Interface for managing data collections (available within AdminSidebar).
 The admin package is designed to work with the auth package. Wrap the admin components with authentication checks:
 
 ```tsx
-import { useUser } from '@repo/auth';
-import { AdminTrigger, AdminSidebar } from '@repo/admin';
+import { useUser } from '@repo/auth'
+import { AdminTrigger, AdminSidebar } from '@repo/admin'
 
 export default function AdminComponents() {
-  const { user } = useUser();
-  
+  const { user } = useUser()
+
   // Only show admin to authenticated users with admin permissions
   if (!user || !user.permissions?.includes('admin')) {
-    return null;
+    return null
   }
 
   return (
@@ -123,7 +115,7 @@ export default function AdminComponents() {
       <AdminTrigger />
       <AdminSidebar />
     </>
-  );
+  )
 }
 ```
 
@@ -134,11 +126,11 @@ export default function AdminComponents() {
 Extend the AdminContent type to add your own content types:
 
 ```tsx
-import type { AdminContent } from '@repo/admin';
+import type { AdminContent } from '@repo/admin'
 
 type CustomContent = AdminContent & {
-  type: 'text' | 'image' | 'rich-text' | 'video' | 'gallery';
-};
+  type: 'text' | 'image' | 'rich-text' | 'video' | 'gallery'
+}
 ```
 
 ### Custom Collections
@@ -146,7 +138,7 @@ type CustomContent = AdminContent & {
 Define your own collection schemas:
 
 ```tsx
-import type { AdminCollection } from '@repo/admin';
+import type { AdminCollection } from '@repo/admin'
 
 const blogCollection: AdminCollection = {
   id: 'blog',
@@ -156,10 +148,15 @@ const blogCollection: AdminCollection = {
     { id: '1', name: 'title', type: 'text', required: true },
     { id: '2', name: 'content', type: 'rich-text', required: true },
     { id: '3', name: 'published', type: 'boolean', required: false },
-    { id: '4', name: 'category', type: 'select', options: ['Tech', 'Design', 'Business'] },
+    {
+      id: '4',
+      name: 'category',
+      type: 'select',
+      options: ['Tech', 'Design', 'Business'],
+    },
   ],
   items: [],
-};
+}
 ```
 
 ## API Integration
@@ -173,9 +170,9 @@ const updateContent = async (id: string, updates: Partial<AdminContent>) => {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(updates),
-  });
-  return response.json();
-};
+  })
+  return response.json()
+}
 ```
 
 ## Styling
@@ -189,7 +186,7 @@ The admin package uses the design system components and follows the same theming
 Show admin controls only in development:
 
 ```tsx
-const isDev = process.env.NODE_ENV === 'development';
+const isDev = process.env.NODE_ENV === 'development'
 
 return (
   <>
@@ -201,7 +198,7 @@ return (
       </>
     )}
   </>
-);
+)
 ```
 
 ### Custom Trigger
@@ -209,16 +206,16 @@ return (
 Create a custom trigger button:
 
 ```tsx
-import { useAdmin } from '@repo/admin';
+import { useAdmin } from '@repo/admin'
 
 function CustomAdminButton() {
-  const { openAdmin } = useAdmin();
-  
+  const { openAdmin } = useAdmin()
+
   return (
-    <button onClick={openAdmin} className="admin-button">
+    <button onClick={openAdmin} className='admin-button'>
       Open Admin Panel
     </button>
-  );
+  )
 }
 ```
 
@@ -227,9 +224,9 @@ function CustomAdminButton() {
 The package is fully typed. Import types as needed:
 
 ```tsx
-import type { 
-  AdminContent, 
-  AdminCollection, 
-  AdminContextType 
-} from '@repo/admin';
-``` 
+import type {
+  AdminContent,
+  AdminCollection,
+  AdminContextType,
+} from '@repo/admin'
+```

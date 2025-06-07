@@ -22,7 +22,6 @@ npx next-forge@latest init
 
 Then read the [docs](https://www.next-forge.com/docs) for more information.
 
-
 <!-- 🚀 Essential Missing Packages
 1. File Upload Package (@repo/uploads)
 Why Essential: Nearly every app needs file handling

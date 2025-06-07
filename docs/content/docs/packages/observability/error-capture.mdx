@@ -20,9 +20,9 @@ The `next.config.ts` file imports shared Sentry-specific settings through `withS
 If you want to capture a specific exception rather than letting it bubble up to Sentry, you can use the `captureException` function:
 
 ```tsx title="page.tsx"
-import { captureException } from '@sentry/nextjs';
+import { captureException } from '@sentry/nextjs'
 
-captureException(new Error('My error message'));
+captureException(new Error('My error message'))
 ```
 
 ## Tunneling
@@ -30,6 +30,6 @@ captureException(new Error('My error message'));
 The `sentryConfig.tunnelRoute` option in `@repo/next-config`'s Sentry configuration routes browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers. This can increase your server load as well as your hosting bill.
 
 <Warning>
-  Check that the configured route will not match with your Next.js middleware, otherwise reporting of client-side errors will fail.
+  Check that the configured route will not match with your Next.js middleware,
+  otherwise reporting of client-side errors will fail.
 </Warning>
-

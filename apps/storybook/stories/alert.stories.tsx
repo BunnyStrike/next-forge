@@ -1,11 +1,11 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import { AlertCircle } from 'lucide-react';
+import type { Meta, StoryObj } from '@storybook/react'
+import { AlertCircle } from 'lucide-react'
 
 import {
   Alert,
   AlertDescription,
   AlertTitle,
-} from '@repo/design-system/components/ui/alert';
+} from '@repo/design-system/components/ui/alert'
 
 /**
  * Displays a callout for user attention.
@@ -23,7 +23,7 @@ const meta = {
   args: {
     variant: 'default',
   },
-  render: (args) => (
+  render: args => (
     <Alert {...args}>
       <AlertTitle>Heads up!</AlertTitle>
       <AlertDescription>
@@ -31,23 +31,23 @@ const meta = {
       </AlertDescription>
     </Alert>
   ),
-} satisfies Meta<typeof Alert>;
+} satisfies Meta<typeof Alert>
 
-export default meta;
+export default meta
 
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof meta>
 /**
  * The default form of the alert.
  */
-export const Default: Story = {};
+export const Default: Story = {}
 
 /**
  * Use the `destructive` alert to indicate a destructive action.
  */
 export const Destructive: Story = {
-  render: (args) => (
+  render: args => (
     <Alert {...args}>
-      <AlertCircle className="h-4 w-4" />
+      <AlertCircle className='h-4 w-4' />
       <AlertTitle>Error</AlertTitle>
       <AlertDescription>
         Your session has expired. Please log in again.
@@ -57,4 +57,4 @@ export const Destructive: Story = {
   args: {
     variant: 'destructive',
   },
-};
+}

@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react'
 
-import { Checkbox } from '@repo/design-system/components/ui/checkbox';
+import { Checkbox } from '@repo/design-system/components/ui/checkbox'
 
 /**
  * A control that allows the user to toggle between checked and not checked.
@@ -14,12 +14,12 @@ const meta: Meta<typeof Checkbox> = {
     id: 'terms',
     disabled: false,
   },
-  render: (args) => (
-    <div className="flex space-x-2">
+  render: args => (
+    <div className='flex space-x-2'>
       <Checkbox {...args} />
       <label
         htmlFor={args.id}
-        className="font-medium text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+        className='font-medium text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-50'
       >
         Accept terms and conditions
       </label>
@@ -28,16 +28,16 @@ const meta: Meta<typeof Checkbox> = {
   parameters: {
     layout: 'centered',
   },
-} satisfies Meta<typeof Checkbox>;
+} satisfies Meta<typeof Checkbox>
 
-export default meta;
+export default meta
 
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof meta>
 
 /**
  * The default form of the checkbox.
  */
-export const Default: Story = {};
+export const Default: Story = {}
 
 /**
  * Use the `disabled` prop to disable the checkbox.
@@ -47,4 +47,4 @@ export const Disabled: Story = {
     id: 'disabled-terms',
     disabled: true,
   },
-};
+}

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react'
 
 import {
   NavigationMenu,
@@ -8,7 +8,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
-} from '@repo/design-system/components/ui/navigation-menu';
+} from '@repo/design-system/components/ui/navigation-menu'
 
 /**
  * A collection of links for navigating websites.
@@ -18,7 +18,7 @@ const meta = {
   component: NavigationMenu,
   tags: ['autodocs'],
   argTypes: {},
-  render: (args) => (
+  render: args => (
     <NavigationMenu {...args}>
       <NavigationMenuList>
         <NavigationMenuItem>
@@ -32,7 +32,7 @@ const meta = {
               Documentation
             </NavigationMenuTrigger>
             <NavigationMenuContent>
-              <ul className="grid w-96 p-2">
+              <ul className='grid w-96 p-2'>
                 <li>
                   <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                     API Reference
@@ -55,8 +55,8 @@ const meta = {
         <NavigationMenuItem>
           <NavigationMenuLink
             className={navigationMenuTriggerStyle()}
-            href="https:www.google.com"
-            target="_blank"
+            href='https:www.google.com'
+            target='_blank'
           >
             External
           </NavigationMenuLink>
@@ -67,13 +67,13 @@ const meta = {
   parameters: {
     layout: 'centered',
   },
-} satisfies Meta<typeof NavigationMenu>;
+} satisfies Meta<typeof NavigationMenu>
 
-export default meta;
+export default meta
 
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof meta>
 
 /**
  * The default form of the navigation menu.
  */
-export const Default: Story = {};
+export const Default: Story = {}

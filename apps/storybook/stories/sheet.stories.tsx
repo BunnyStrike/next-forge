@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react'
 
 import {
   Sheet,
@@ -9,7 +9,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from '@repo/design-system/components/ui/sheet';
+} from '@repo/design-system/components/ui/sheet'
 
 /**
  * Extends the Dialog component to display content that complements the main
@@ -30,7 +30,7 @@ const meta: Meta<typeof SheetContent> = {
   args: {
     side: 'right',
   },
-  render: (args) => (
+  render: args => (
     <Sheet>
       <SheetTrigger>Open</SheetTrigger>
       <SheetContent {...args}>
@@ -43,13 +43,13 @@ const meta: Meta<typeof SheetContent> = {
         </SheetHeader>
         <SheetFooter>
           <SheetClose>
-            <button type="button" className="hover:underline">
+            <button type='button' className='hover:underline'>
               Cancel
             </button>
           </SheetClose>
           <button
-            type="button"
-            className="rounded bg-primary px-4 py-2 text-primary-foreground"
+            type='button'
+            className='rounded bg-primary px-4 py-2 text-primary-foreground'
           >
             Submit
           </button>
@@ -60,13 +60,13 @@ const meta: Meta<typeof SheetContent> = {
   parameters: {
     layout: 'centered',
   },
-} satisfies Meta<typeof SheetContent>;
+} satisfies Meta<typeof SheetContent>
 
-export default meta;
+export default meta
 
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof meta>
 
 /**
  * The default form of the sheet.
  */
-export const Default: Story = {};
+export const Default: Story = {}

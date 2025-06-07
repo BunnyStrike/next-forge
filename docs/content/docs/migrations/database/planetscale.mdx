@@ -20,11 +20,13 @@ Keep this connection string handy, you will need it in the next step.
 Update your environment variables to use the new PlanetScale connection string:
 
 ```js title="apps/database/.env"
-DATABASE_URL="mysql://<username>:<password>@<region>.aws.connect.psdb.cloud/<database>"
+DATABASE_URL =
+  'mysql://<username>:<password>@<region>.aws.connect.psdb.cloud/<database>'
 ```
 
 ```js title="apps/app/.env.local"
-DATABASE_URL="mysql://<username>:<password>@<region>.aws.connect.psdb.cloud/<database>"
+DATABASE_URL =
+  'mysql://<username>:<password>@<region>.aws.connect.psdb.cloud/<database>'
 ```
 
 Etcetera.
@@ -48,21 +50,21 @@ pnpm add @planetscale/database @prisma/adapter-planetscale --filter @repo/databa
 Update the database connection code to use the new PlanetScale adapter:
 
 ```ts title="packages/database/index.ts {3-4, 17-18}"
-import 'server-only';
+import 'server-only'
 
-import { Client, connect } from '@planetscale/database';
-import { PrismaPlanetScale } from '@prisma/adapter-planetscale';
-import { PrismaClient } from '@prisma/client';
-import { env } from '@repo/env';
+import { Client, connect } from '@planetscale/database'
+import { PrismaPlanetScale } from '@prisma/adapter-planetscale'
+import { PrismaClient } from '@prisma/client'
+import { env } from '@repo/env'
 
 declare global {
-  var cachedPrisma: PrismaClient | undefined;
+  var cachedPrisma: PrismaClient | undefined
 }
 
-const client = connect({ url: env.DATABASE_URL });
-const adapter = new PrismaPlanetScale(client);
+const client = connect({ url: env.DATABASE_URL })
+const adapter = new PrismaPlanetScale(client)
 
-export const database = new PrismaClient({ adapter });
+export const database = new PrismaClient({ adapter })
 ```
 
 ## 5. Update your Prisma schema

@@ -1,5 +1,5 @@
-@import "tailwindcss";
-@import "tw-animate-css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
 @source "../**/*.{ts,tsx}";
 
 @plugin '@tailwindcss/typography';
@@ -174,7 +174,7 @@
     @apply text-muted-foreground;
   }
   button:not(:disabled),
-  [role="button"]:not(:disabled) {
+  [role='button']:not(:disabled) {
     @apply cursor-pointer;
   }
 }

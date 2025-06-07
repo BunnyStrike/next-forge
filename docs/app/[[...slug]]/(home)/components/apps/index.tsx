@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils'
 import {
   BookIcon,
   CurlyBracesIcon,
@@ -7,15 +7,15 @@ import {
   LaptopIcon,
   MailIcon,
   ServerIcon,
-} from 'lucide-react';
-import Image from 'next/image';
-import ApiImage from './api.png';
-import AppImage from './app.png';
-import DocsImage from './docs.png';
-import EmailImage from './email.png';
-import StorybookImage from './storybook.png';
-import StudioImage from './studio.png';
-import WebImage from './web.png';
+} from 'lucide-react'
+import Image from 'next/image'
+import ApiImage from './api.png'
+import AppImage from './app.png'
+import DocsImage from './docs.png'
+import EmailImage from './email.png'
+import StorybookImage from './storybook.png'
+import StudioImage from './studio.png'
+import WebImage from './web.png'
 
 const apps = [
   {
@@ -74,34 +74,34 @@ const apps = [
       'Built-in Storybook instance, allowing you to create reusable components and pages that can be tested and previewed in isolation.',
     image: StorybookImage,
   },
-];
+]
 
 const App = ({ app }: { app: (typeof apps)[number] }) => (
-  <div className="relative flex flex-col gap-8 overflow-hidden p-8 pb-0">
-    <div className="flex flex-col gap-4">
-      <div className="flex items-center gap-2 text-muted-foreground">
+  <div className='relative flex flex-col gap-8 overflow-hidden p-8 pb-0'>
+    <div className='flex flex-col gap-4'>
+      <div className='flex items-center gap-2 text-muted-foreground'>
         <app.icon size={14} />
         <small>/apps/{app.name}</small>
       </div>
-      <div className="flex flex-col gap-2">
-        <h2 className="font-semibold text-2xl sm:truncate">{app.title}</h2>
-        <p className="text-balance text-muted-foreground sm:line-clamp-2">
+      <div className='flex flex-col gap-2'>
+        <h2 className='font-semibold text-2xl sm:truncate'>{app.title}</h2>
+        <p className='text-balance text-muted-foreground sm:line-clamp-2'>
           {app.description}
         </p>
       </div>
     </div>
-    <div className="h-48 overflow-hidden md:h-80">
+    <div className='h-48 overflow-hidden md:h-80'>
       <Image
-        alt=""
+        alt=''
         src={app.image}
-        className="h-auto w-full overflow-hidden rounded-md border object-cover object-left shadow-sm"
+        className='h-auto w-full overflow-hidden rounded-md border object-cover object-left shadow-sm'
       />
     </div>
   </div>
-);
+)
 
 export const Apps = () => (
-  <section className="grid sm:grid-cols-2" id="apps">
+  <section className='grid sm:grid-cols-2' id='apps'>
     {apps.map((app, index) => (
       <div
         className={cn(
@@ -115,7 +115,7 @@ export const Apps = () => (
       </div>
     ))}
     {apps.length % 2 === 1 && (
-      <div className="h-full w-full border-t border-l bg-dashed" />
+      <div className='h-full w-full border-t border-l bg-dashed' />
     )}
   </section>
-);
+)

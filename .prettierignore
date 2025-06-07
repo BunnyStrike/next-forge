@@ -1,0 +1,51 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build outputs
+dist/
+build/
+.next/
+.vercel/
+.turbo/
+
+# Design system generated files
+packages/design-system/components/ui/**
+packages/design-system/lib/**
+packages/design-system/hooks/**
+
+# Configuration files
+packages/collaboration/config.ts
+
+# Documentation JSON files
+apps/docs/**/*.json
+
+# Email templates
+apps/email/.react-email/**
+
+# Database files
+*.db
+*.db-*
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db 

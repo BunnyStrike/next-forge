@@ -28,7 +28,10 @@ This will run our update script, which will guide you through the process of upd
 
 This will clone the latest version of next-forge into a temporary directory, apply the updates, and then copy the files over to your project. From here, you can commit the changes and push them to your repository.
 
-<Tip>Because next-forge is a boilerplate and not a library, you'll likely need to manually merge the changes you've made with the changes from the update.</Tip>
+<Tip>
+  Because next-forge is a boilerplate and not a library, you'll likely need to
+  manually merge the changes you've made with the changes from the update.
+</Tip>
 
 ## Upgrading dependencies
 
@@ -40,7 +43,11 @@ pnpm bump-deps
 
 This will update all the dependencies in your `package.json` files and install the new versions.
 
-<Tip>You should run a `pnpm build` after running `bump-deps` to ensure the project builds correctly. You should also run `pnpm dev` and ensure the project runs correctly in runtime.</Tip>
+<Tip>
+  You should run a `pnpm build` after running `bump-deps` to ensure the project
+  builds correctly. You should also run `pnpm dev` and ensure the project runs
+  correctly in runtime.
+</Tip>
 
 ## Upgrading shadcn/ui components
 
@@ -52,6 +59,14 @@ pnpm bump-ui
 
 This will update all the shadcn/ui components, as well as the relevant dependencies in the Design System's `package.json` file.
 
-<Warning>This will override all customization you've made to the components. To avoid this happening, we recommend proxying the components into a new folder, such as `@repo/design-system/components`.</Warning>
+<Warning>
+  This will override all customization you've made to the components. To avoid
+  this happening, we recommend proxying the components into a new folder, such
+  as `@repo/design-system/components`.
+</Warning>
 
-<Warning>The `shadcn` CLI will likely make some unwanted changes to your shared Tailwind config file and global CSS. Make sure you review changes before committing them.</Warning>
+<Warning>
+  The `shadcn` CLI will likely make some unwanted changes to your shared
+  Tailwind config file and global CSS. Make sure you review changes before
+  committing them.
+</Warning>

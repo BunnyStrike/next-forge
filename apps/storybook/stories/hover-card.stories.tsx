@@ -1,10 +1,10 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react'
 
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
-} from '@repo/design-system/components/ui/hover-card';
+} from '@repo/design-system/components/ui/hover-card'
 
 /**
  * For sighted users to preview content available behind a link.
@@ -15,7 +15,7 @@ const meta = {
   tags: ['autodocs'],
   argTypes: {},
   args: {},
-  render: (args) => (
+  render: args => (
     <HoverCard {...args}>
       <HoverCardTrigger>Hover</HoverCardTrigger>
       <HoverCardContent>
@@ -26,16 +26,16 @@ const meta = {
   parameters: {
     layout: 'centered',
   },
-} satisfies Meta<typeof HoverCard>;
+} satisfies Meta<typeof HoverCard>
 
-export default meta;
+export default meta
 
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof meta>
 
 /**
  * The default form of the hover card.
  */
-export const Default: Story = {};
+export const Default: Story = {}
 
 /**
  * Use the `openDelay` and `closeDelay` props to control the delay before the
@@ -46,4 +46,4 @@ export const Instant: Story = {
     openDelay: 0,
     closeDelay: 0,
   },
-};
+}

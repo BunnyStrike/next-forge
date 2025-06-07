@@ -8,7 +8,9 @@ description: How to change the database provider to Supabase.
 `next-forge` uses Neon as the database provider with Prisma as the ORM as well as Clerk for authentication. This guide will provide the steps you need to switch the database provider from Neon to Supabase. This guide is based on a few existing resources, including [Supabase's guide](https://supabase.com/partners/integrations/prisma) and [Prisma's guide](https://www.prisma.io/docs/orm/overview/databases/supabase).
 
 <Note>
- For authentication, another guide will be provided to switch to Supabase Auth with feature parity to Clerk like organization management, user roles, and more (coming soon).
+  For authentication, another guide will be provided to switch to Supabase Auth
+  with feature parity to Clerk like organization management, user roles, and
+  more (coming soon).
 </Note>
 
 Here's how to switch from Neon to [Supabase](https://supabase.com) for your `next-forge` project.
@@ -30,15 +32,19 @@ We'll need to keep track of the following for the next step:
 
 ## 3. Update the environment variables
 
-Update the `.env` file with the Supabase connection details. Make sure you add `?pgbouncer=true&connection_limit=1` to the end of the `DATABASE_URL` value. 
+Update the `.env` file with the Supabase connection details. Make sure you add `?pgbouncer=true&connection_limit=1` to the end of the `DATABASE_URL` value.
 
 ```js title=".env"
-DATABASE_URL="postgres://postgres:postgres@127.0.0.1:54322/postgres?pgbouncer=true&connection_limit=1"
-DIRECT_URL="postgres://postgres:postgres@127.0.0.1:54322/postgres"
+DATABASE_URL =
+  'postgres://postgres:postgres@127.0.0.1:54322/postgres?pgbouncer=true&connection_limit=1'
+DIRECT_URL = 'postgres://postgres:postgres@127.0.0.1:54322/postgres'
 ```
 
 <Note>
-`pgbouncer=true` disables Prisma from generating prepared statements. This is required since our connection pooler does not support prepared statements in transaction mode yet. The `connection_limit=1` parameter is only required if you are using Prisma from a serverless environment.
+  `pgbouncer=true` disables Prisma from generating prepared statements. This is
+  required since our connection pooler does not support prepared statements in
+  transaction mode yet. The `connection_limit=1` parameter is only required if
+  you are using Prisma from a serverless environment.
 </Note>
 
 ## 4. Replace the dependencies
@@ -62,12 +68,12 @@ pnpm install -D supabase --filter @repo/database
 Update the `database` package. We'll remove the Neon extensions and connect to Supabase directly, which should automatically use the environment variables we set earlier.
 
 ```ts title="packages/database/index.ts"
-import 'server-only';
-import { PrismaClient } from '@prisma/client';
+import 'server-only'
+import { PrismaClient } from '@prisma/client'
 
-export const database = new PrismaClient();
+export const database = new PrismaClient()
 
-export * from '@prisma/client';
+export * from '@prisma/client'
 ```
 
 ## 6. Update the Prisma schema

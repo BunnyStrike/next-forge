@@ -3,25 +3,30 @@ title: Notifications
 description: In-app notifications for your users.
 ---
 
-<Authors data={[{
-  user: {
-    name: 'Hayden Bleasel',
-    id: 'haydenbleasel',
-  },
-  company: {
-    name: 'Vercel',
-    id: 'vercel',
-  },
-}, {
-  user: {
-    name: 'Jeff Everhart',
-    id: 'j_everhart383',
-  },
-  company: {
-    name: 'Knock',
-    id: 'knock',
-  },
-}]} />
+<Authors
+  data={[
+    {
+      user: {
+        name: 'Hayden Bleasel',
+        id: 'haydenbleasel',
+      },
+      company: {
+        name: 'Vercel',
+        id: 'vercel',
+      },
+    },
+    {
+      user: {
+        name: 'Jeff Everhart',
+        id: 'j_everhart383',
+      },
+      company: {
+        name: 'Knock',
+        id: 'knock',
+      },
+    },
+  ]}
+/>
 
 next-forge offers a notifications package that allows you to send in-app notifications to your users. By default, it uses [Knock](https://knock.app/), a cross-channel notification platform that supports in-app, email, SMS, push, and chat notifications. Knock allows you to centralize your notification logic and templates in one place and [orchestrate complex workflows](https://docs.knock.app/designing-workflows/overview) with things like branching, batching, throttling, delays, and conditional sending.
 
@@ -34,11 +39,11 @@ To use the notifications package, you need to add the required environment varia
 To render an in-app notifications feed, import the `NotificationsTrigger` component from the `@repo/notifications` package and use it in your app. We've already added this to the sidebar in the example app:
 
 ```tsx title="apps/app/app/(authenticated)/components/sidebar.tsx"
-import { NotificationsTrigger } from '@repo/notifications/components/trigger';
+import { NotificationsTrigger } from '@repo/notifications/components/trigger'
 
-<NotificationsTrigger>
-  <Button variant="ghost" size="icon" className="shrink-0">
-    <BellIcon size={16} className="text-muted-foreground" />
+;<NotificationsTrigger>
+  <Button variant='ghost' size='icon' className='shrink-0'>
+    <BellIcon size={16} className='text-muted-foreground' />
   </Button>
 </NotificationsTrigger>
 ```
@@ -52,17 +57,19 @@ Knock sends notifications using workflows. To send an in-app notification, creat
 Then you can [trigger that workflow](https://docs.knock.app/send-notifications/triggering-workflows) for a particular user in your app, passing in the necessary data to populate the message template:
 
 ```tsx title="notify.ts"
-import { notifications } from '@repo/notifications';
+import { notifications } from '@repo/notifications'
 
 await notifications.workflows.trigger('workflow-key', {
-  recipients: [{
-    id: 'user-id',
-    email: 'user-email',
-  }],
+  recipients: [
+    {
+      id: 'user-id',
+      email: 'user-email',
+    },
+  ],
   data: {
     message: 'Hello, world!',
   },
-});
+})
 ```
 
 ## Multi-channel notifications

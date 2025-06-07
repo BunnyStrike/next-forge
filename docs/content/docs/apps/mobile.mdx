@@ -5,7 +5,10 @@ description: Cross-platform mobile application built with Expo and React Native.
 
 ![/images/mobile.png](/images/mobile.png)
 
-<Tip>The `mobile` application uses Expo SDK 52 with React Native 0.76 and the New Architecture enabled by default for better performance.</Tip>
+<Tip>
+  The `mobile` application uses Expo SDK 52 with React Native 0.76 and the New
+  Architecture enabled by default for better performance.
+</Tip>
 
 The mobile app in next-forge is a cross-platform React Native application built with Expo, designed to provide a native mobile experience while sharing code and design patterns with the web application.
 
@@ -37,27 +40,30 @@ The `mobile` application is built on [Expo](https://expo.dev) and [React Native]
 ### Getting Started
 
 1. **Install dependencies:**
+
    ```bash
    pnpm install
    ```
 
 2. **Start the development server:**
+
    ```bash
    cd apps/mobile
    pnpm dev
    ```
 
 3. **Run on different platforms:**
+
    ```bash
    # iOS Simulator
    pnpm ios
-   
+
    # Android Emulator
    pnpm android
-   
+
    # Web browser (for testing)
    pnpm web
-   
+
    # Physical device with Expo Go
    pnpm start
    ```
@@ -90,8 +96,8 @@ The mobile app uses [Expo Router](https://docs.expo.dev/router/introduction/) fo
 ### Tab Navigation
 
 ```tsx title="app/(tabs)/_layout.tsx"
-import { Tabs } from 'expo-router';
-import { TabBarIcon } from '@/components/TabBarIcon';
+import { Tabs } from 'expo-router'
+import { TabBarIcon } from '@/components/TabBarIcon'
 
 export default function TabLayout() {
   return (
@@ -102,44 +108,50 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
-        name="index"
+        name='index'
         options={{
           title: 'Home',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
+            <TabBarIcon
+              name={focused ? 'home' : 'home-outline'}
+              color={color}
+            />
           ),
         }}
       />
       <Tabs.Screen
-        name="profile"
+        name='profile'
         options={{
           title: 'Profile',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'person' : 'person-outline'} color={color} />
+            <TabBarIcon
+              name={focused ? 'person' : 'person-outline'}
+              color={color}
+            />
           ),
         }}
       />
     </Tabs>
-  );
+  )
 }
 ```
 
 ### Stack Navigation
 
 ```tsx title="app/_layout.tsx"
-import { Stack } from 'expo-router';
-import { useAuth } from '@repo/auth';
+import { Stack } from 'expo-router'
+import { useAuth } from '@repo/auth'
 
 export default function RootLayout() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated } = useAuth()
 
   return (
     <Stack>
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      <Stack.Screen name="login" options={{ presentation: 'modal' }} />
-      <Stack.Screen name="+not-found" />
+      <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
+      <Stack.Screen name='login' options={{ presentation: 'modal' }} />
+      <Stack.Screen name='+not-found' />
     </Stack>
-  );
+  )
 }
 ```
 
@@ -148,23 +160,23 @@ export default function RootLayout() {
 The mobile app uses [NativeWind](https://www.nativewind.dev/) to bring Tailwind CSS to React Native:
 
 ```tsx title="components/ThemedButton.tsx"
-import { Pressable, Text } from 'react-native';
-import { styled } from 'nativewind';
+import { Pressable, Text } from 'react-native'
+import { styled } from 'nativewind'
 
-const StyledPressable = styled(Pressable);
-const StyledText = styled(Text);
+const StyledPressable = styled(Pressable)
+const StyledText = styled(Text)
 
 export function ThemedButton({ title, onPress }) {
   return (
     <StyledPressable
-      className="bg-blue-500 hover:bg-blue-600 active:bg-blue-700 px-4 py-2 rounded-lg"
+      className='bg-blue-500 hover:bg-blue-600 active:bg-blue-700 px-4 py-2 rounded-lg'
       onPress={onPress}
     >
-      <StyledText className="text-white font-semibold text-center">
+      <StyledText className='text-white font-semibold text-center'>
         {title}
       </StyledText>
     </StyledPressable>
-  );
+  )
 }
 ```
 
@@ -173,26 +185,26 @@ export function ThemedButton({ title, onPress }) {
 The mobile app leverages shared components from the design system:
 
 ```tsx title="components/UserProfile.tsx"
-import { View, Text } from 'react-native';
-import { Avatar } from '@repo/design-system/native';
-import { useUser } from '@repo/auth';
+import { View, Text } from 'react-native'
+import { Avatar } from '@repo/design-system/native'
+import { useUser } from '@repo/auth'
 
 export function UserProfile() {
-  const { user } = useUser();
+  const { user } = useUser()
 
   return (
-    <View className="flex-row items-center p-4">
+    <View className='flex-row items-center p-4'>
       <Avatar
         src={user?.image}
         fallback={user?.name?.[0]}
-        className="w-12 h-12 mr-3"
+        className='w-12 h-12 mr-3'
       />
       <View>
-        <Text className="text-lg font-semibold">{user?.name}</Text>
-        <Text className="text-gray-600">{user?.email}</Text>
+        <Text className='text-lg font-semibold'>{user?.name}</Text>
+        <Text className='text-gray-600'>{user?.email}</Text>
       </View>
     </View>
-  );
+  )
 }
 ```
 
@@ -201,59 +213,57 @@ export function UserProfile() {
 The mobile app integrates with the same auth system as the web app:
 
 ```tsx title="app/login.tsx"
-import { View, Text, TextInput, Pressable } from 'react-native';
-import { useState } from 'react';
-import { useAuth } from '@repo/auth';
-import { router } from 'expo-router';
+import { View, Text, TextInput, Pressable } from 'react-native'
+import { useState } from 'react'
+import { useAuth } from '@repo/auth'
+import { router } from 'expo-router'
 
 export default function LoginScreen() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const { signIn, isLoading } = useAuth();
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const { signIn, isLoading } = useAuth()
 
   const handleSignIn = async () => {
     try {
-      await signIn(email, password);
-      router.replace('/(tabs)');
+      await signIn(email, password)
+      router.replace('/(tabs)')
     } catch (error) {
-      console.error('Sign in failed:', error);
+      console.error('Sign in failed:', error)
     }
-  };
+  }
 
   return (
-    <View className="flex-1 justify-center p-6">
-      <Text className="text-2xl font-bold text-center mb-8">
-        Sign In
-      </Text>
-      
+    <View className='flex-1 justify-center p-6'>
+      <Text className='text-2xl font-bold text-center mb-8'>Sign In</Text>
+
       <TextInput
-        className="border border-gray-300 rounded-lg px-4 py-3 mb-4"
-        placeholder="Email"
+        className='border border-gray-300 rounded-lg px-4 py-3 mb-4'
+        placeholder='Email'
         value={email}
         onChangeText={setEmail}
-        keyboardType="email-address"
-        autoCapitalize="none"
+        keyboardType='email-address'
+        autoCapitalize='none'
       />
-      
+
       <TextInput
-        className="border border-gray-300 rounded-lg px-4 py-3 mb-6"
-        placeholder="Password"
+        className='border border-gray-300 rounded-lg px-4 py-3 mb-6'
+        placeholder='Password'
         value={password}
         onChangeText={setPassword}
         secureTextEntry
       />
-      
+
       <Pressable
-        className="bg-blue-500 rounded-lg py-3"
+        className='bg-blue-500 rounded-lg py-3'
         onPress={handleSignIn}
         disabled={isLoading}
       >
-        <Text className="text-white text-center font-semibold">
+        <Text className='text-white text-center font-semibold'>
           {isLoading ? 'Signing In...' : 'Sign In'}
         </Text>
       </Pressable>
     </View>
-  );
+  )
 }
 ```
 
@@ -262,33 +272,33 @@ export default function LoginScreen() {
 The mobile app connects to the same API as the web application:
 
 ```tsx title="lib/api.ts"
-import { api } from '@repo/api-actions';
+import { api } from '@repo/api-actions'
 
 export const mobileApi = {
   // Use shared API actions
   async getUser() {
-    return api.user.getCurrent();
+    return api.user.getCurrent()
   },
-  
+
   async getPages() {
-    return api.pages.getAll();
+    return api.pages.getAll()
   },
-  
+
   // Mobile-specific endpoints
   async uploadImage(uri: string) {
-    const formData = new FormData();
+    const formData = new FormData()
     formData.append('image', {
       uri,
       type: 'image/jpeg',
       name: 'image.jpg',
-    } as any);
-    
+    } as any)
+
     return fetch('/api/mobile/upload', {
       method: 'POST',
       body: formData,
-    });
+    })
   },
-};
+}
 ```
 
 ## Native Features
@@ -296,13 +306,13 @@ export const mobileApi = {
 ### Camera Integration
 
 ```tsx title="components/CameraUpload.tsx"
-import { useState } from 'react';
-import { View, Text, Pressable, Image } from 'react-native';
-import { Camera } from 'expo-camera';
-import * as ImagePicker from 'expo-image-picker';
+import { useState } from 'react'
+import { View, Text, Pressable, Image } from 'react-native'
+import { Camera } from 'expo-camera'
+import * as ImagePicker from 'expo-image-picker'
 
 export function CameraUpload() {
-  const [image, setImage] = useState<string | null>(null);
+  const [image, setImage] = useState<string | null>(null)
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -310,54 +320,54 @@ export function CameraUpload() {
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
-    });
+    })
 
     if (!result.canceled) {
-      setImage(result.assets[0].uri);
+      setImage(result.assets[0].uri)
     }
-  };
+  }
 
   const takePhoto = async () => {
     const result = await ImagePicker.launchCameraAsync({
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
-    });
+    })
 
     if (!result.canceled) {
-      setImage(result.assets[0].uri);
+      setImage(result.assets[0].uri)
     }
-  };
+  }
 
   return (
-    <View className="items-center">
+    <View className='items-center'>
       {image && (
-        <Image source={{ uri: image }} className="w-64 h-48 rounded-lg mb-4" />
+        <Image source={{ uri: image }} className='w-64 h-48 rounded-lg mb-4' />
       )}
-      
+
       <Pressable
-        className="bg-blue-500 px-6 py-3 rounded-lg mb-2"
+        className='bg-blue-500 px-6 py-3 rounded-lg mb-2'
         onPress={takePhoto}
       >
-        <Text className="text-white font-semibold">Take Photo</Text>
+        <Text className='text-white font-semibold'>Take Photo</Text>
       </Pressable>
-      
+
       <Pressable
-        className="bg-gray-500 px-6 py-3 rounded-lg"
+        className='bg-gray-500 px-6 py-3 rounded-lg'
         onPress={pickImage}
       >
-        <Text className="text-white font-semibold">Choose from Library</Text>
+        <Text className='text-white font-semibold'>Choose from Library</Text>
       </Pressable>
     </View>
-  );
+  )
 }
 ```
 
 ### Push Notifications
 
 ```tsx title="lib/notifications.ts"
-import { Platform } from 'react-native';
-import * as Notifications from 'expo-notifications';
+import { Platform } from 'react-native'
+import * as Notifications from 'expo-notifications'
 
 // Configure notification behavior
 Notifications.setNotificationHandler({
@@ -366,10 +376,10 @@ Notifications.setNotificationHandler({
     shouldPlaySound: false,
     shouldSetBadge: false,
   }),
-});
+})
 
 export async function registerForPushNotifications() {
-  let token;
+  let token
 
   if (Platform.OS === 'android') {
     await Notifications.setNotificationChannelAsync('default', {
@@ -377,25 +387,25 @@ export async function registerForPushNotifications() {
       importance: Notifications.AndroidImportance.MAX,
       vibrationPattern: [0, 250, 250, 250],
       lightColor: '#FF231F7C',
-    });
+    })
   }
 
-  const { status: existingStatus } = await Notifications.getPermissionsAsync();
-  let finalStatus = existingStatus;
-  
+  const { status: existingStatus } = await Notifications.getPermissionsAsync()
+  let finalStatus = existingStatus
+
   if (existingStatus !== 'granted') {
-    const { status } = await Notifications.requestPermissionsAsync();
-    finalStatus = status;
+    const { status } = await Notifications.requestPermissionsAsync()
+    finalStatus = status
   }
-  
+
   if (finalStatus !== 'granted') {
-    alert('Failed to get push token for push notification!');
-    return;
+    alert('Failed to get push token for push notification!')
+    return
   }
-  
-  token = (await Notifications.getExpoPushTokenAsync()).data;
-  
-  return token;
+
+  token = (await Notifications.getExpoPushTokenAsync()).data
+
+  return token
 }
 ```
 
@@ -461,13 +471,13 @@ npx eas submit --platform android
 ### Metro Configuration
 
 ```js title="metro.config.js"
-const { getDefaultConfig } = require('expo/metro-config');
-const { withNativeWind } = require('nativewind/metro');
+const { getDefaultConfig } = require('expo/metro-config')
+const { withNativeWind } = require('nativewind/metro')
 
-const config = getDefaultConfig(__dirname);
+const config = getDefaultConfig(__dirname)
 
 // Enable NativeWind
-module.exports = withNativeWind(config, { input: './global.css' });
+module.exports = withNativeWind(config, { input: './global.css' })
 ```
 
 ## Best Practices
@@ -479,4 +489,4 @@ module.exports = withNativeWind(config, { input: './global.css' });
 5. **Styling**: Use NativeWind for consistent styling with web
 6. **Testing**: Test on both iOS and Android platforms regularly
 
-The mobile app provides a solid foundation for cross-platform mobile development while maintaining consistency with your web application and leveraging the power of the Next Forge ecosystem. 
+The mobile app provides a solid foundation for cross-platform mobile development while maintaining consistency with your web application and leveraging the power of the Next Forge ecosystem.

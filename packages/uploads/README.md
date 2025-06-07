@@ -29,13 +29,13 @@ pnpm install
 ### Simple Upload Manager with Vercel Blob
 
 ```tsx
-import { UploadManager, VercelBlobAdapter } from '@repo/uploads';
+import { UploadManager, VercelBlobAdapter } from '@repo/uploads'
 
 // Configure Vercel Blob adapter
 const vercelBlobAdapter = new VercelBlobAdapter({
   token: process.env.BLOB_READ_WRITE_TOKEN!,
   addRandomSuffix: true,
-});
+})
 
 export function MyUploadForm() {
   return (
@@ -51,27 +51,27 @@ export function MyUploadForm() {
         maxWidth: 1920,
         maxHeight: 1080,
       }}
-      onUploadComplete={(files) => {
-        console.log('Upload complete:', files);
+      onUploadComplete={files => {
+        console.log('Upload complete:', files)
       }}
-      onError={(error) => {
-        console.error('Upload error:', error);
+      onError={error => {
+        console.error('Upload error:', error)
       }}
     />
-  );
+  )
 }
 ```
 
 ### Upload Manager with UploadThing
 
 ```tsx
-import { UploadManager, UploadThingAdapter } from '@repo/uploads';
+import { UploadManager, UploadThingAdapter } from '@repo/uploads'
 
 // Configure UploadThing adapter
 const uploadThingAdapter = new UploadThingAdapter({
   apiKey: process.env.UPLOADTHING_SECRET!,
   endpoint: '/api/uploadthing',
-});
+})
 
 export function MyUploadForm() {
   return (
@@ -84,21 +84,21 @@ export function MyUploadForm() {
         autoUpload: false,
         generateThumbnails: true,
       }}
-      onUploadComplete={(files) => {
-        console.log('Upload complete:', files);
+      onUploadComplete={files => {
+        console.log('Upload complete:', files)
       }}
-      onError={(error) => {
-        console.error('Upload error:', error);
+      onError={error => {
+        console.error('Upload error:', error)
       }}
     />
-  );
+  )
 }
 ```
 
 ### Custom Dropzone
 
 ```tsx
-import { UploadDropzone, useUpload } from '@repo/uploads';
+import { UploadDropzone, useUpload } from '@repo/uploads'
 
 export function CustomUploader() {
   const { files, addFiles, uploadAll } = useUpload({
@@ -106,24 +106,22 @@ export function CustomUploader() {
       maxFiles: 3,
       acceptedFileTypes: ['image/*'],
     },
-  });
+  })
 
   return (
-    <div className="space-y-4">
+    <div className='space-y-4'>
       <UploadDropzone
         maxFiles={3}
         acceptedFileTypes={['image/*']}
         onDrop={addFiles}
-        onReject={(files) => alert(`${files.length} files rejected`)}
+        onReject={files => alert(`${files.length} files rejected`)}
       />
-      
+
       {files.length > 0 && (
-        <button onClick={uploadAll}>
-          Upload {files.length} files
-        </button>
+        <button onClick={uploadAll}>Upload {files.length} files</button>
       )}
     </div>
-  );
+  )
 }
 ```
 
@@ -133,16 +131,16 @@ export function CustomUploader() {
 
 ```tsx
 interface UploadConfig {
-  maxFileSize?: number;        // Maximum file size in bytes
-  maxFiles?: number;           // Maximum number of files
-  acceptedFileTypes?: string[]; // Accepted MIME types (supports wildcards)
-  autoUpload?: boolean;        // Upload immediately after file selection
-  generateThumbnails?: boolean; // Generate thumbnails for images
-  resizeImages?: boolean;      // Resize images to max dimensions
-  compressionQuality?: number; // Image compression quality (0-1)
-  maxWidth?: number;          // Maximum image width
-  maxHeight?: number;         // Maximum image height
-  storageProvider?: string;   // Storage provider identifier
+  maxFileSize?: number // Maximum file size in bytes
+  maxFiles?: number // Maximum number of files
+  acceptedFileTypes?: string[] // Accepted MIME types (supports wildcards)
+  autoUpload?: boolean // Upload immediately after file selection
+  generateThumbnails?: boolean // Generate thumbnails for images
+  resizeImages?: boolean // Resize images to max dimensions
+  compressionQuality?: number // Image compression quality (0-1)
+  maxWidth?: number // Maximum image width
+  maxHeight?: number // Maximum image height
+  storageProvider?: string // Storage provider identifier
 }
 ```
 
@@ -161,7 +159,7 @@ The package supports validation and preview for:
 ### S3 Adapter
 
 ```tsx
-import { S3Adapter } from '@repo/uploads';
+import { S3Adapter } from '@repo/uploads'
 
 const s3Adapter = new S3Adapter({
   accessKeyId: 'your-access-key',
@@ -169,29 +167,29 @@ const s3Adapter = new S3Adapter({
   region: 'us-east-1',
   bucket: 'your-bucket',
   endpoint: 'optional-custom-endpoint', // For S3-compatible services
-});
+})
 ```
 
 ### Vercel Blob Adapter
 
 ```tsx
-import { VercelBlobAdapter } from '@repo/uploads';
+import { VercelBlobAdapter } from '@repo/uploads'
 
 const vercelBlobAdapter = new VercelBlobAdapter({
   token: process.env.BLOB_READ_WRITE_TOKEN!, // Get from Vercel dashboard
   addRandomSuffix: true, // Optional: adds random suffix to prevent conflicts
-});
+})
 ```
 
 ### UploadThing Adapter
 
 ```tsx
-import { UploadThingAdapter } from '@repo/uploads';
+import { UploadThingAdapter } from '@repo/uploads'
 
 const uploadThingAdapter = new UploadThingAdapter({
   apiKey: process.env.UPLOADTHING_SECRET!, // Your UploadThing secret key
   endpoint: '/api/uploadthing', // Your UploadThing API route
-});
+})
 ```
 
 ### Custom Adapter
@@ -199,21 +197,21 @@ const uploadThingAdapter = new UploadThingAdapter({
 Create your own storage adapter by implementing the `UploadAdapter` interface:
 
 ```tsx
-import type { UploadAdapter, UploadOptions, UploadResult } from '@repo/uploads';
+import type { UploadAdapter, UploadOptions, UploadResult } from '@repo/uploads'
 
 class MyCustomAdapter implements UploadAdapter {
   async upload(file: File, options?: UploadOptions): Promise<UploadResult> {
     // Your upload logic here
-    const formData = new FormData();
-    formData.append('file', file);
-    
+    const formData = new FormData()
+    formData.append('file', file)
+
     const response = await fetch('/api/upload', {
       method: 'POST',
       body: formData,
-    });
-    
-    const result = await response.json();
-    
+    })
+
+    const result = await response.json()
+
     return {
       url: result.url,
       thumbnailUrl: result.thumbnailUrl,
@@ -224,13 +222,13 @@ class MyCustomAdapter implements UploadAdapter {
         lastModified: file.lastModified,
         fileType: getFileType(file.type),
       },
-    };
+    }
   }
 
   async delete(fileUrl: string): Promise<void> {
     await fetch(`/api/upload?url=${encodeURIComponent(fileUrl)}`, {
       method: 'DELETE',
-    });
+    })
   }
 }
 ```
@@ -245,9 +243,9 @@ The main component that combines dropzone, file list, and upload controls.
 <UploadManager
   adapter={adapter}
   config={config}
-  onFilesChange={(files) => console.log(files)}
-  onUploadComplete={(files) => console.log('Complete:', files)}
-  onError={(error) => console.error(error)}
+  onFilesChange={files => console.log(files)}
+  onUploadComplete={files => console.log('Complete:', files)}
+  onError={error => console.error(error)}
 />
 ```
 
@@ -260,8 +258,8 @@ A customizable drag & drop area for file selection.
   maxFiles={10}
   acceptedFileTypes={['image/*', 'application/pdf']}
   disabled={false}
-  onDrop={(files) => handleFiles(files)}
-  onReject={(files) => handleRejection(files)}
+  onDrop={files => handleFiles(files)}
+  onReject={files => handleRejection(files)}
   loading={isProcessing}
   error={errorMessage}
 >
@@ -277,8 +275,8 @@ Individual file preview with progress, actions, and metadata.
 ```tsx
 <FilePreview
   file={uploadFile}
-  onRemove={(id) => removeFile(id)}
-  onRetry={(id) => retryUpload(id)}
+  onRemove={id => removeFile(id)}
+  onRetry={id => retryUpload(id)}
   showProgress={true}
   showThumbnail={true}
 />
@@ -292,17 +290,17 @@ The main hook for managing upload state and operations.
 
 ```tsx
 const {
-  files,              // Array of upload files
-  config,             // Current configuration
-  isUploading,        // Global uploading state
-  addFiles,           // Add files to upload queue
-  removeFile,         // Remove a file by ID
-  uploadFile,         // Upload a specific file
-  uploadAll,          // Upload all pending files
-  retryFile,          // Retry a failed upload
-  clearFiles,         // Clear all files
-  getFileById,        // Get file by ID
-  getFilesByStatus,   // Filter files by status
+  files, // Array of upload files
+  config, // Current configuration
+  isUploading, // Global uploading state
+  addFiles, // Add files to upload queue
+  removeFile, // Remove a file by ID
+  uploadFile, // Upload a specific file
+  uploadAll, // Upload all pending files
+  retryFile, // Retry a failed upload
+  clearFiles, // Clear all files
+  getFileById, // Get file by ID
+  getFilesByStatus, // Filter files by status
   // Statistics
   totalFiles,
   successfulUploads,
@@ -312,10 +310,10 @@ const {
 } = useUpload({
   adapter,
   config,
-  onSuccess: (file) => console.log('Success:', file),
+  onSuccess: file => console.log('Success:', file),
   onError: (file, error) => console.log('Error:', error),
   onProgress: (file, progress) => console.log('Progress:', progress),
-});
+})
 ```
 
 ## Utilities
@@ -324,18 +322,18 @@ The package includes various utility functions:
 
 ```tsx
 import {
-  formatFileSize,      // Convert bytes to readable format
-  getFileType,         // Determine file type from MIME
+  formatFileSize, // Convert bytes to readable format
+  getFileType, // Determine file type from MIME
   extractFileMetadata, // Extract file metadata
-  validateFile,        // Validate file against config
-  resizeImage,         // Resize image file
-  generateThumbnail,   // Generate image thumbnail
-} from '@repo/uploads';
+  validateFile, // Validate file against config
+  resizeImage, // Resize image file
+  generateThumbnail, // Generate image thumbnail
+} from '@repo/uploads'
 
 // Examples
-const size = formatFileSize(1024000); // "1 MB"
-const type = getFileType('image/jpeg'); // "image"
-const isValid = validateFile(file, { maxFileSize: 1000000 });
+const size = formatFileSize(1024000) // "1 MB"
+const type = getFileType('image/jpeg') // "image"
+const isValid = validateFile(file, { maxFileSize: 1000000 })
 ```
 
 ## Styling
@@ -346,10 +344,12 @@ The components use Tailwind CSS classes and can be customized through className 
 
 ```tsx
 <UploadManager
-  className="my-custom-uploader"
-  config={{
-    // ... config
-  }}
+  className='my-custom-uploader'
+  config={
+    {
+      // ... config
+    }
+  }
 />
 ```
 
@@ -373,16 +373,16 @@ const { files } = useUpload({
   onError: (file, error) => {
     switch (error) {
       case 'File size exceeds limit':
-        toast.error('File too large');
-        break;
+        toast.error('File too large')
+        break
       case 'File type not supported':
-        toast.error('File type not allowed');
-        break;
+        toast.error('File type not allowed')
+        break
       default:
-        toast.error('Upload failed');
+        toast.error('Upload failed')
     }
   },
-});
+})
 ```
 
 ## Examples
@@ -390,10 +390,10 @@ const { files } = useUpload({
 ### Image Gallery Upload
 
 ```tsx
-import { UploadManager } from '@repo/uploads';
+import { UploadManager } from '@repo/uploads'
 
 export function ImageGallery() {
-  const [images, setImages] = useState([]);
+  const [images, setImages] = useState([])
 
   return (
     <div>
@@ -406,23 +406,23 @@ export function ImageGallery() {
           maxWidth: 1200,
           maxHeight: 1200,
         }}
-        onUploadComplete={(files) => {
-          setImages(prev => [...prev, ...files]);
+        onUploadComplete={files => {
+          setImages(prev => [...prev, ...files])
         }}
       />
-      
-      <div className="grid grid-cols-4 gap-4 mt-8">
-        {images.map((image) => (
+
+      <div className='grid grid-cols-4 gap-4 mt-8'>
+        {images.map(image => (
           <img
             key={image.id}
             src={image.thumbnailUrl || image.url}
             alt={image.metadata.originalName}
-            className="w-full h-32 object-cover rounded-lg"
+            className='w-full h-32 object-cover rounded-lg'
           />
         ))}
       </div>
     </div>
-  );
+  )
 }
 ```
 
@@ -441,15 +441,15 @@ export function DocumentUploader() {
         maxFileSize: 25 * 1024 * 1024, // 25MB
         maxFiles: 5,
       }}
-      onError={(error) => {
+      onError={error => {
         if (error.includes('file size')) {
-          alert('File must be smaller than 25MB');
+          alert('File must be smaller than 25MB')
         } else if (error.includes('file type')) {
-          alert('Only PDF and Word documents are allowed');
+          alert('Only PDF and Word documents are allowed')
         }
       }}
     />
-  );
+  )
 }
 ```
 
@@ -458,12 +458,14 @@ export function DocumentUploader() {
 ### Vercel Blob Setup
 
 1. **Get a Vercel Blob token:**
+
    - Go to your Vercel dashboard
    - Navigate to Storage → Blob
    - Create a new blob store or use existing
    - Copy the `BLOB_READ_WRITE_TOKEN`
 
 2. **Add to environment variables:**
+
    ```env
    BLOB_READ_WRITE_TOKEN=your_blob_token_here
    ```
@@ -472,39 +474,42 @@ export function DocumentUploader() {
    ```tsx
    const adapter = new VercelBlobAdapter({
      token: process.env.BLOB_READ_WRITE_TOKEN!,
-   });
+   })
    ```
 
 ### UploadThing Setup
 
 1. **Create UploadThing account:**
+
    - Go to [uploadthing.com](https://uploadthing.com)
    - Create an account and get your API keys
 
 2. **Add to environment variables:**
+
    ```env
    UPLOADTHING_SECRET=your_secret_key_here
    ```
 
 3. **Create API route** (`app/api/uploadthing/route.ts`):
+
    ```tsx
-   import { createUploadthing, type FileRouter } from "uploadthing/next";
-   
-   const f = createUploadthing();
-   
+   import { createUploadthing, type FileRouter } from 'uploadthing/next'
+
+   const f = createUploadthing()
+
    export const ourFileRouter = {
-     imageUploader: f({ image: { maxFileSize: "4MB" } })
+     imageUploader: f({ image: { maxFileSize: '4MB' } })
        .middleware(async ({ req }) => {
          // This code runs on your server before upload
-         return { userId: "user123" }; // Add your auth logic here
+         return { userId: 'user123' } // Add your auth logic here
        })
        .onUploadComplete(async ({ metadata, file }) => {
-         console.log("Upload complete for userId:", metadata.userId);
-         console.log("file url", file.url);
+         console.log('Upload complete for userId:', metadata.userId)
+         console.log('file url', file.url)
        }),
-   } satisfies FileRouter;
-   
-   export type OurFileRouter = typeof ourFileRouter;
+   } satisfies FileRouter
+
+   export type OurFileRouter = typeof ourFileRouter
    ```
 
 4. **Use in your app:**
@@ -512,7 +517,7 @@ export function DocumentUploader() {
    const adapter = new UploadThingAdapter({
      apiKey: process.env.UPLOADTHING_SECRET!,
      endpoint: '/api/uploadthing',
-   });
+   })
    ```
 
 ## Development
@@ -526,4 +531,4 @@ To contribute to this package:
 
 ## License
 
-MIT License - see the main repository license for details. 
+MIT License - see the main repository license for details.

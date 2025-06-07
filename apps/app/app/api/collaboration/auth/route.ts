@@ -1,5 +1,5 @@
-import { auth, currentUser } from '@repo/auth/server';
-import { authenticate } from '@repo/collaboration/auth';
+import { auth, currentUser } from '@repo/auth/server'
+import { authenticate } from '@repo/collaboration/auth'
 
 const COLORS = [
   'var(--color-red-500)',
@@ -19,14 +19,14 @@ const COLORS = [
   'var(--color-fuchsia-500)',
   'var(--color-pink-500)',
   'var(--color-rose-500)',
-];
+]
 
 export const POST = async () => {
-  const user = await currentUser();
-  const { orgId } = await auth();
+  const user = await currentUser()
+  const { orgId } = await auth()
 
   if (!user || !orgId) {
-    return new Response('Unauthorized', { status: 401 });
+    return new Response('Unauthorized', { status: 401 })
   }
 
   return authenticate({
@@ -38,5 +38,5 @@ export const POST = async () => {
       avatar: user.imageUrl ?? undefined,
       color: COLORS[Math.floor(Math.random() * COLORS.length)],
     },
-  });
-};
+  })
+}

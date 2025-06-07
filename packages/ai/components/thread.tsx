@@ -1,7 +1,7 @@
-import type { HTMLAttributes } from 'react';
-import { twMerge } from 'tailwind-merge';
+import type { HTMLAttributes } from 'react'
+import { twMerge } from 'tailwind-merge'
 
-type ThreadProps = HTMLAttributes<HTMLDivElement>;
+type ThreadProps = HTMLAttributes<HTMLDivElement>
 
 export const Thread = ({ children, className, ...props }: ThreadProps) => (
   <div
@@ -13,4 +13,4 @@ export const Thread = ({ children, className, ...props }: ThreadProps) => (
   >
     {children}
   </div>
-);
+)

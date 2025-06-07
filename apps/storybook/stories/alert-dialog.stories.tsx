@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react'
 
 import {
   AlertDialog,
@@ -10,7 +10,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '@repo/design-system/components/ui/alert-dialog';
+} from '@repo/design-system/components/ui/alert-dialog'
 
 /**
  * A modal dialog that interrupts the user with important content and expects
@@ -21,7 +21,7 @@ const meta = {
   component: AlertDialog,
   tags: ['autodocs'],
   argTypes: {},
-  render: (args) => (
+  render: args => (
     <AlertDialog {...args}>
       <AlertDialogTrigger>Open</AlertDialogTrigger>
       <AlertDialogContent>
@@ -42,13 +42,13 @@ const meta = {
   parameters: {
     layout: 'centered',
   },
-} satisfies Meta<typeof AlertDialog>;
+} satisfies Meta<typeof AlertDialog>
 
-export default meta;
+export default meta
 
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof meta>
 
 /**
  * The default form of the alert dialog.
  */
-export const Default: Story = {};
+export const Default: Story = {}

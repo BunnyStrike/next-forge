@@ -1,15 +1,15 @@
-import { createRequire } from 'node:module';
-import { dirname, join } from 'node:path';
-import type { StorybookConfig } from '@storybook/nextjs';
+import { createRequire } from 'node:module'
+import { dirname, join } from 'node:path'
+import type { StorybookConfig } from '@storybook/nextjs'
 
-const require = createRequire(import.meta.url);
+const require = createRequire(import.meta.url)
 
 /**
  * This function is used to resolve the absolute path of a package.
  * It is needed in projects that use Yarn PnP or are set up within a monorepo.
  */
 const getAbsolutePath = (value: string) =>
-  dirname(require.resolve(join(value, 'package.json')));
+  dirname(require.resolve(join(value, 'package.json')))
 
 const config: StorybookConfig = {
   stories: [
@@ -28,6 +28,6 @@ const config: StorybookConfig = {
     options: {},
   },
   staticDirs: ['../public'],
-};
+}
 
-export default config;
+export default config
