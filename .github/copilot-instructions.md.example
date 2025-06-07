@@ -14,6 +14,8 @@ Structure of how project files are setup. Making changes to files should be in t
 | storybook | The storybook, which contains the storybook for the app.                   |
 | studio    | Prisma Studio, which is a graphical editor for the database.              |
 | web       | The website, featuring a twblocks template.                                |
+| desktop   | 
+| mobile    |
 ```
 
 ## Nesting

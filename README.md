@@ -22,14 +22,6 @@ npx next-forge@latest init
 
 Then read the [docs](https://www.next-forge.com/docs) for more information.
 
-## Contributors
-
-<a href="https://github.com/vercel/next-forge/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=vercel/next-forge" />
-</a>
-
-Made with [contrib.rocks](https://contrib.rocks).
-
 
 <!-- 🚀 Essential Missing Packages
 1. File Upload Package (@repo/uploads)
