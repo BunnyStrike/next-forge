@@ -1,4 +1,5 @@
 import withBundleAnalyzer from '@next/bundle-analyzer'
+import { keys } from './keys'
 
 // @ts-expect-error No declaration file
 import { PrismaPlugin } from '@prisma/nextjs-monorepo-workaround-plugin'
@@ -6,13 +7,20 @@ import type { NextConfig } from 'next'
 
 const otelRegex = /@opentelemetry\/instrumentation/
 
+const env = keys()
+
 export const config: NextConfig = {
   images: {
     formats: ['image/avif', 'image/webp'],
+    dangerouslyAllowSVG: true,
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'img.clerk.com',
+        hostname: 'api.dicebear.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'avatar.vercel.sh',
       },
     ],
   },
@@ -52,3 +60,11 @@ export const config: NextConfig = {
 
 export const withAnalyzer = (sourceConfig: NextConfig): NextConfig =>
   withBundleAnalyzer()(sourceConfig)
+
+export const withConfig = (config: import('next').NextConfig) => ({
+  ...config,
+  images: {
+    ...config.images,
+    ...config.images,
+  },
+})

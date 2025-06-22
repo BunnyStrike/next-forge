@@ -10,6 +10,7 @@ This is a monorepo containing multiple applications and shared packages built wi
 
 - **Framework**: Next.js 15 with React 19
 - **Styling**: Tailwind CSS 4
+- **Authentication**: Better Auth (migrated from Clerk)
 - **Features**: Server-side rendering, authentication, database integration
 - **Port**: 3000
 
@@ -52,6 +53,19 @@ This is a monorepo containing multiple applications and shared packages built wi
   - Tailwind CSS styling
   - TypeScript support
 
+### Authentication (`packages/auth`)
+
+- **Purpose**: Better Auth implementation
+- **Features**:
+  - Email/password authentication
+  - Social providers (Google, GitHub)
+  - Session management
+  - Role-based access control
+  - Type-safe with full TypeScript support
+  - Edge-compatible middleware
+  - Unified user model
+  - Cost-effective ($0 vs Clerk pricing)
+
 ### Admin (`packages/admin`)
 
 - **Purpose**: Content and collection management system
@@ -83,14 +97,77 @@ This is a monorepo containing multiple applications and shared packages built wi
 
 The project uses Prisma with the following main entities:
 
-### User
+### User (Better Auth Unified Model)
+
+- `id`: String (primary key, UUID)
+- `email`: String (unique, required)
+- `name`: String (default: "")
+- `image`: String (nullable)
+- `emailVerified`: Boolean (default: false)
+- `twoFactorEnabled`: Boolean (default: false)
+- `createdAt`: DateTime (auto-generated)
+- `updatedAt`: DateTime (auto-updated)
+- `tenantId`: String (nullable, foreign key)
+
+**Relations:**
+- `accounts`: Account[] (Better Auth accounts)
+- `sessions`: Session[] (Better Auth sessions)
+- `tenant`: Tenant (optional)
+- `tenants`: Tenant[] (many-to-many)
+- `roles`: UserRole[]
+- `customers`: Customer[]
+- `profile`: Profile (one-to-one)
+- `notifications`: Notification[]
+- `notificationPreferences`: NotificationPreferences
+- `notificationDeliveries`: NotificationDelivery[]
+
+### Session (Better Auth)
 
 - `id`: String (primary key)
-- `name`: String (nullable)
-- `email`: String (unique)
-- `image`: String (nullable)
-- `createdAt`: DateTime
-- `updatedAt`: DateTime
+- `expiresAt`: DateTime (required)
+- `token`: String (unique, required)
+- `createdAt`: DateTime (auto-generated)
+- `updatedAt`: DateTime (auto-updated)
+- `ipAddress`: String (nullable)
+- `userAgent`: String (nullable)
+- `userId`: String (foreign key, required)
+
+**Relations:**
+- `user`: User (belongs to)
+
+### Account (Better Auth)
+
+- `id`: String (primary key, CUID)
+- `accountId`: String (required)
+- `providerId`: String (required)
+- `userId`: String (foreign key, required)
+- `accessToken`: String (nullable)
+- `refreshToken`: String (nullable)
+- `idToken`: String (nullable)
+- `accessTokenExpiresAt`: DateTime (nullable)
+- `refreshTokenExpiresAt`: DateTime (nullable)
+- `scope`: String (nullable)
+- `password`: String (nullable, for email/password auth)
+- `createdAt`: DateTime (auto-generated)
+- `updatedAt`: DateTime (auto-updated)
+
+**Relations:**
+- `user`: User (belongs to)
+
+**Constraints:**
+- Unique combination of `providerId` and `accountId`
+
+### Verification (Better Auth)
+
+- `id`: String (primary key, CUID)
+- `identifier`: String (required)
+- `value`: String (required)
+- `expiresAt`: DateTime (required)
+- `createdAt`: DateTime (auto-generated)
+- `updatedAt`: DateTime (auto-updated)
+
+**Constraints:**
+- Unique combination of `identifier` and `value`
 
 ### Organization
 
@@ -116,12 +193,63 @@ The project uses Prisma with the following main entities:
 - `createdAt`: DateTime
 - `updatedAt`: DateTime
 
+## Authentication System
+
+### Better Auth Configuration
+
+The authentication system uses Better Auth with the following features:
+
+- **Email/Password Authentication**: Built-in support with optional email verification
+- **Social Providers**: Google and GitHub OAuth integration
+- **Session Management**: Cookie-based sessions with 7-day expiration
+- **Role-Based Access**: Admin plugin with configurable roles
+- **Database Integration**: Prisma adapter with PostgreSQL
+- **Edge Compatibility**: Middleware works with Vercel Edge Runtime
+- **TypeScript Support**: Full type safety throughout
+
+### Environment Variables
+
+Required environment variables for Better Auth:
+
+```bash
+# Better Auth Core
+BETTER_AUTH_SECRET="your-32-character-secret-key"
+BETTER_AUTH_URL="http://localhost:3000" # or your domain
+NEXT_PUBLIC_BETTER_AUTH_URL="http://localhost:3000"
+
+# Database
+DATABASE_URL="postgresql://user:password@localhost:5432/database"
+
+# Social Providers (Optional)
+GOOGLE_CLIENT_ID="your-google-client-id"
+GOOGLE_CLIENT_SECRET="your-google-client-secret"
+GITHUB_CLIENT_ID="your-github-client-id"  
+GITHUB_CLIENT_SECRET="your-github-client-secret"
+```
+
+### API Routes
+
+- `GET/POST /api/auth/[...all]` - Better Auth API handler
+- All authentication flows handled by Better Auth
+
+### Migration from Clerk
+
+The project has been successfully migrated from Clerk to Better Auth with the following benefits:
+
+- **Cost Reduction**: $0 vs Clerk's pricing
+- **Full Control**: Own authentication logic and user data
+- **Performance**: No external API calls
+- **Privacy**: User data stays in your database
+- **Customization**: Unlimited customization options
+- **Edge Compatibility**: Works with edge runtimes
+
 ## Development
 
 ### Prerequisites
 
 - Node.js 18+
 - pnpm (package manager)
+- PostgreSQL database
 - Expo CLI (for mobile development)
 - Electron (for desktop development)
 
@@ -139,13 +267,21 @@ The project uses Prisma with the following main entities:
    cp .env.example .env.local
    ```
 
-3. Run database migrations:
+3. Configure database and authentication:
+
+   ```bash
+   # Add to .env.local files
+   BETTER_AUTH_SECRET="your-32-character-secret"
+   DATABASE_URL="your-database-url"
+   ```
+
+4. Run database migrations:
 
    ```bash
    pnpm migrate
    ```
 
-4. Start development servers:
+5. Start development servers:
 
    ```bash
    # All apps
@@ -194,6 +330,14 @@ pnpm build:electron
 
 ## API Endpoints
 
+### Authentication Routes
+
+- `POST /api/auth/sign-in` - Email/password sign in
+- `POST /api/auth/sign-up` - User registration
+- `POST /api/auth/sign-out` - Sign out
+- `GET /api/auth/session` - Get current session
+- `GET /api/auth/social/*` - Social provider authentication
+
 ### Mobile API Routes (`/api/mobile/`)
 
 - `GET /api/mobile/pages` - Get all pages
@@ -227,8 +371,8 @@ The design system package provides components that work across all platforms:
 
 - **Next.js API Routes**: Serverless API endpoints
 - **Prisma**: Database ORM
-- **Neon**: PostgreSQL database
-- **Better Auth**: Authentication system
+- **PostgreSQL**: Database (via Neon or other providers)
+- **Better Auth**: Self-hosted authentication system
 
 ### Development Tools
 
@@ -243,6 +387,7 @@ The design system package provides components that work across all platforms:
 ### Web App
 
 - Deploy to Vercel, Netlify, or any Node.js hosting platform
+- Ensure `runtime = "nodejs"` for Better Auth compatibility
 
 ### Mobile App
 
@@ -260,6 +405,16 @@ The design system package provides components that work across all platforms:
 - Deploy alongside web app or as separate service
 
 ## Recent Updates
+
+### Migrated from Clerk to Better Auth
+
+- Complete authentication system migration
+- New database schema with Better Auth models
+- Updated middleware for Better Auth compatibility
+- Created new sign-in/sign-up pages
+- Environment variable updates
+- Cost reduction to $0
+- Full control over authentication logic
 
 ### Added Mobile App (Expo SDK 52)
 

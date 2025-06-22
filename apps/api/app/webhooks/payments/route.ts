@@ -1,22 +1,26 @@
 import { env } from '@/env'
 import { analytics } from '@repo/analytics/posthog/server'
-import { clerkClient } from '@repo/auth/server'
+import { database } from '@repo/database'
 import { parseError } from '@repo/observability/error'
 import { log } from '@repo/observability/log'
 import { stripe } from '@repo/payments'
 import type { Stripe } from '@repo/payments'
 import { headers } from 'next/headers'
 import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
 
 const getUserFromCustomerId = async (customerId: string) => {
-  const clerk = await clerkClient()
-  const users = await clerk.users.getUserList()
+  // Find user by stripe customer ID in the database
+  const customer = await database.customer.findUnique({
+    where: { 
+      id: customerId 
+    },
+    include: {
+      user: true
+    }
+  })
 
-  const user = users.data.find(
-    user => user.privateMetadata.stripeCustomerId === customerId
-  )
-
-  return user
+  return customer?.user || null
 }
 
 const handleCheckoutSessionCompleted = async (
@@ -61,13 +65,26 @@ const handleSubscriptionScheduleCanceled = async (
   })
 }
 
-export const POST = async (request: Request): Promise<Response> => {
+export const POST = async (request: NextRequest) => {
   if (!env.STRIPE_WEBHOOK_SECRET) {
     return NextResponse.json({ message: 'Not configured', ok: false })
   }
 
   try {
-    const body = await request.text()
+    const body = await request.json()
+    
+    const users = await database.user.findMany({
+      select: {
+        id: true,
+        email: true,
+        name: true,
+      },
+      take: 10,
+    })
+
+    console.log('Payment webhook received:', body)
+    console.log('Available users:', users.length)
+
     const headerPayload = await headers()
     const signature = headerPayload.get('stripe-signature')
 

@@ -1,58 +1,39 @@
-'use client'
+"use client"
+import { createContext, useContext, type ComponentProps, type ReactNode } from 'react'
+import { useSession } from './client'
 
-import { ClerkProvider } from '@clerk/nextjs'
-import { dark } from '@clerk/themes'
-import type { Theme } from '@clerk/types'
-import { useTheme } from 'next-themes'
-import type { ComponentProps } from 'react'
-
-type AuthProviderProperties = ComponentProps<typeof ClerkProvider> & {
-  privacyUrl?: string
-  termsUrl?: string
-  helpUrl?: string
+interface AuthContextValue {
+  user: any | null
+  isLoaded: boolean
+  isSignedIn: boolean
 }
 
-export const AuthProvider = ({
-  privacyUrl,
-  termsUrl,
-  helpUrl,
-  ...properties
-}: AuthProviderProperties) => {
-  const { resolvedTheme } = useTheme()
-  const isDark = resolvedTheme === 'dark'
-  const baseTheme = isDark ? dark : undefined
+const AuthContext = createContext<AuthContextValue | null>(null)
 
-  const variables: Theme['variables'] = {
-    fontFamily: 'var(--font-sans)',
-    fontFamilyButtons: 'var(--font-sans)',
-    fontWeight: {
-      bold: 'var(--font-weight-bold)',
-      normal: 'var(--font-weight-normal)',
-      medium: 'var(--font-weight-medium)',
-    },
-  }
+interface AuthProviderProperties {
+  children: ReactNode
+}
 
-  const elements: Theme['elements'] = {
-    dividerLine: 'bg-border',
-    socialButtonsIconButton: 'bg-card',
-    navbarButton: 'text-foreground',
-    organizationSwitcherTrigger__open: 'bg-background',
-    organizationPreviewMainIdentifier: 'text-foreground',
-    organizationSwitcherTriggerIcon: 'text-muted-foreground',
-    organizationPreview__organizationSwitcherTrigger: 'gap-2',
-    organizationPreviewAvatarContainer: 'shrink-0',
-  }
-
-  const layout: Theme['layout'] = {
-    privacyPageUrl: privacyUrl,
-    termsPageUrl: termsUrl,
-    helpPageUrl: helpUrl,
+export function AuthProvider({ children }: AuthProviderProperties) {
+  const { data: session, isPending } = useSession()
+  
+  const value: AuthContextValue = {
+    user: session?.user || null,
+    isLoaded: !isPending,
+    isSignedIn: !!session?.user,
   }
 
   return (
-    <ClerkProvider
-      {...properties}
-      appearance={{ layout, baseTheme, elements, variables }}
-    />
+    <AuthContext.Provider value={value}>
+      {children}
+    </AuthContext.Provider>
   )
+}
+
+export function useAuth() {
+  const context = useContext(AuthContext)
+  if (!context) {
+    throw new Error('useAuth must be used within AuthProvider')
+  }
+  return context
 }

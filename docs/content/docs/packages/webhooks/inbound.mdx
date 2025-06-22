@@ -1,31 +1,97 @@
 ---
 title: Inbound Webhooks
-description: Receive inbound webhooks from other services.
+description: Handle external webhooks with secure verification and structured processing.
 ---
 
-next-forge has pre-built webhook handlers for several key services.
+# Inbound Webhooks
+
+next-forge provides webhook handling for external services through the API application. Webhooks are processed securely with proper verification and structured event handling.
 
 ## Payment Events
 
-[Payment events](/packages/payments) are handled in the `POST /webhooks/payments` route in the `api` app. This route constructs the event and then switches on the event type to determine how to process the event.
+The payment webhook handler processes Stripe events and updates user subscriptions accordingly.
 
-<Info>
-  To test webhooks locally, we've configured the Stripe CLI to forward webhooks
-  to your local server. This will start automatically when you run `pnpm dev`.
-</Info>
+### Stripe Webhooks
+
+The `/api/webhooks/payments` endpoint handles Stripe webhook events:
+
+- `checkout.session.completed` - User subscription created
+- `subscription_schedule.canceled` - User subscription canceled
+
+### Configuration
+
+Set up your Stripe webhook endpoint in the Stripe dashboard:
+- URL: `https://your-domain.com/api/webhooks/payments`
+- Events: Select the events you want to handle
+
+Make sure you set the `STRIPE_WEBHOOK_SECRET` environment variable.
 
 ## Authentication Events
 
-[Authentication events](/packages/authentication) are handled in the `POST /webhooks/auth` route in the `api` app.
+With Better Auth, authentication events are handled directly in your application without requiring external webhooks. This provides several advantages:
 
-<Tip>
-  Make sure you enable the webhook events you need in your Clerk project
-  settings.
-</Tip>
+- **Real-time Processing**: Events are processed immediately
+- **No External Dependencies**: No need for webhook delivery services
+- **Better Error Handling**: Direct error handling without webhook retry logic
+- **Simplified Testing**: Test authentication flows locally without webhook setup
 
-### Local Development
+### Event Tracking
 
-Currently there's no way to easily test Clerk webhooks locally, so you'll have to test them in a staging environment. This means deploying your app to a "production" state Vercel project with development environment variables e.g. `staging-api.example.com`. Then you can add this URL to your Clerk project's webhook settings.
+You can track authentication events directly in your authentication flows:
+
+```typescript
+// Example: Track user registration
+await signUp.email({
+  email,
+  password,
+  name,
+})
+
+// Track the event immediately
+analytics.capture({
+  event: 'User Signed Up',
+  distinctId: user.id,
+  properties: {
+    email: user.email,
+    provider: 'email',
+  },
+})
+```
+
+### Custom Authentication Events
+
+If you need to handle custom authentication events, you can create your own event system:
+
+```typescript
+// Custom event handler
+export const trackAuthEvent = (event: string, userId: string, properties?: object) => {
+  analytics.capture({
+    event,
+    distinctId: userId,
+    properties,
+  })
+}
+```
+
+## Security
+
+All webhook endpoints include proper security measures:
+
+- **Signature Verification**: Verify webhook signatures to ensure authenticity
+- **Environment Configuration**: Webhook secrets are managed through environment variables
+- **Error Handling**: Proper error responses and logging
+- **Rate Limiting**: Built-in protection against abuse
+
+## Local Development
+
+For local webhook testing:
+
+1. **Payment Webhooks**: Use Stripe CLI to forward webhooks to your local development server
+2. **Authentication Events**: No additional setup needed - events are handled directly in your application
+
+## Custom Webhooks
+
+To add custom webhook handlers, create new route handlers in the `apps/api/app/webhooks/` directory following the established patterns for security and verification.
 
 ## Database Events
 

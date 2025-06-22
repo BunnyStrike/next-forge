@@ -1,65 +1,56 @@
 'use server'
 
-import {
-  type OrganizationMembership,
-  auth,
-  clerkClient,
-} from '@repo/auth/server'
-import Fuse from 'fuse.js'
+import { database } from '@repo/database'
+import { getCurrentUser } from '@repo/auth'
 
-const getName = (user: OrganizationMembership): string | undefined => {
-  let name = user.publicUserData?.firstName
-
-  if (name && user.publicUserData?.lastName) {
-    name = `${name} ${user.publicUserData.lastName}`
-  } else if (!name) {
-    name = user.publicUserData?.identifier
-  }
-
-  return name
+type SearchUsersInput = {
+  query: string
+  organizationId?: string
 }
 
-export const searchUsers = async (
-  query: string
-): Promise<
-  | {
-      data: string[]
-    }
-  | {
-      error: unknown
-    }
-> => {
+export const searchUsers = async (input: SearchUsersInput) => {
   try {
-    const { orgId } = await auth()
+    const user = await getCurrentUser()
 
-    if (!orgId) {
-      throw new Error('Not logged in')
+    if (!user) {
+      return {
+        error: 'Unauthorized',
+      }
     }
 
-    const clerk = await clerkClient()
-
-    const members = await clerk.organizations.getOrganizationMembershipList({
-      organizationId: orgId,
-      limit: 100,
+    // Search for users by email or name
+    const users = await database.user.findMany({
+      where: {
+        OR: [
+          {
+            email: {
+              contains: input.query,
+              mode: 'insensitive',
+            },
+          },
+          {
+            name: {
+              contains: input.query,
+              mode: 'insensitive',
+            },
+          },
+        ],
+      },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        image: true,
+      },
+      take: 10,
     })
 
-    const users = members.data.map(user => ({
-      id: user.id,
-      name: getName(user) ?? user.publicUserData?.identifier,
-      imageUrl: user.publicUserData?.imageUrl,
-    }))
-
-    const fuse = new Fuse(users, {
-      keys: ['name'],
-      minMatchCharLength: 1,
-      threshold: 0.3,
-    })
-
-    const results = fuse.search(query)
-    const data = results.map(result => result.item.id)
-
-    return { data }
+    return {
+      data: users,
+    }
   } catch (error) {
-    return { error }
+    return {
+      error: error instanceof Error ? error.message : 'Failed to search users',
+    }
   }
 }

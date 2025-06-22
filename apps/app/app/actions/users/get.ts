@@ -1,81 +1,40 @@
 'use server'
 
-import {
-  type OrganizationMembership,
-  auth,
-  clerkClient,
-} from '@repo/auth/server'
+import { database } from '@repo/database'
+import { getCurrentUser } from '@repo/auth'
 
-const getName = (user: OrganizationMembership): string | undefined => {
-  let name = user.publicUserData?.firstName
-
-  if (name && user.publicUserData?.lastName) {
-    name = `${name} ${user.publicUserData.lastName}`
-  } else if (!name) {
-    name = user.publicUserData?.identifier
-  }
-
-  return name
-}
-
-const colors = [
-  'var(--color-red-500)',
-  'var(--color-orange-500)',
-  'var(--color-amber-500)',
-  'var(--color-yellow-500)',
-  'var(--color-lime-500)',
-  'var(--color-green-500)',
-  'var(--color-emerald-500)',
-  'var(--color-teal-500)',
-  'var(--color-cyan-500)',
-  'var(--color-sky-500)',
-  'var(--color-blue-500)',
-  'var(--color-indigo-500)',
-  'var(--color-violet-500)',
-  'var(--color-purple-500)',
-  'var(--color-fuchsia-500)',
-  'var(--color-pink-500)',
-  'var(--color-rose-500)',
-]
-
-export const getUsers = async (
-  userIds: string[]
-): Promise<
-  | {
-      data: Liveblocks['UserMeta']['info'][]
-    }
-  | {
-      error: unknown
-    }
-> => {
+export const getUsers = async () => {
   try {
-    const { orgId } = await auth()
+    const user = await getCurrentUser()
 
-    if (!orgId) {
-      throw new Error('Not logged in')
+    if (!user) {
+      return {
+        error: 'Unauthorized',
+      }
     }
 
-    const clerk = await clerkClient()
-
-    const members = await clerk.organizations.getOrganizationMembershipList({
-      organizationId: orgId,
-      limit: 100,
+    // Get all users (you may want to add pagination and filtering)
+    const users = await database.user.findMany({
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        image: true,
+        emailVerified: true,
+        createdAt: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      take: 50, // Limit results
     })
 
-    const data: Liveblocks['UserMeta']['info'][] = members.data
-      .filter(
-        user =>
-          user.publicUserData?.userId &&
-          userIds.includes(user.publicUserData.userId)
-      )
-      .map(user => ({
-        name: getName(user) ?? 'Unknown user',
-        picture: user.publicUserData?.imageUrl ?? '',
-        color: colors[Math.floor(Math.random() * colors.length)],
-      }))
-
-    return { data }
+    return {
+      data: users,
+    }
   } catch (error) {
-    return { error }
+    return {
+      error: error instanceof Error ? error.message : 'Failed to get users',
+    }
   }
 }

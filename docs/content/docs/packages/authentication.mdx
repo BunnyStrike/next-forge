@@ -1,28 +1,67 @@
 ---
 title: Authentication
-description: We use Clerk to handle authentication, user and organization management.
+description: We use Better Auth to handle authentication, user and session management.
 ---
 
-![/images/authentication.png](/images/authentication.png)
+# Authentication
 
-next-forge manages authentication through the use of a `auth` package. By default, this package is a wrapper around [Clerk](https://clerk.com/) which provides a complete authentication and user management solution that integrates seamlessly with Next.js applications.
+next-forge manages authentication through the use of an `auth` package. This package is built around [Better Auth](https://www.better-auth.com/) which provides a complete authentication solution that integrates seamlessly with Next.js applications and gives you full control over your authentication logic.
 
-## In-App
+## Features
 
-The `@repo/auth` package exposes an `AuthProvider`, however you don't need to use this directly. The [`DesignSystemProvider`](/packages/design-system/provider) includes all relevant providers and higher-order components.
+Better Auth provides a comprehensive authentication system with the following features:
 
-From here, you can use all the pre-built components and hooks provided by Clerk. To demonstrate this, we've added the `<OrganizationSwitcher>` and `<UserButton>` components to the sidebar, as well as built out the Sign In and Sign Up pages.
+- **Email/Password Authentication**: Built-in support with optional email verification
+- **Social Providers**: Google and GitHub OAuth integration
+- **Session Management**: Cookie-based sessions with configurable expiration
+- **Role-Based Access Control**: Admin plugin with configurable roles
+- **Database Integration**: Direct Prisma integration with your existing database
+- **Edge Compatibility**: Works with Vercel Edge Runtime
+- **TypeScript Support**: Full type safety throughout
+- **Self-Hosted**: Complete control over your authentication logic and user data
+- **Cost-Effective**: $0 cost compared to third-party services
 
-![/images/sign-in.png](/images/sign-in.png)
+From here, you can use all the pre-built components and hooks provided by the auth package. To demonstrate this, we've added authentication pages for sign-in and sign-up, as well as session management throughout the application.
 
-## Webhooks
+## Authentication Events
 
-Clerk uses webhooks to handle authentication events and you can send these to your application. Read more about [inbound authentication webhooks](/packages/webhooks/inbound#authentication-events).
+Better Auth handles authentication events directly in your application without requiring external webhooks. You can customize authentication flows and track events using your preferred analytics service.
 
-## Email Templates
+## Email Configuration
 
-Clerk handles authentication and authorization emails automatically. You can configure the theming of Clerk-sent emails in their dashboard.
+Better Auth supports custom email providers for authentication emails. You can configure email verification, password reset, and other authentication-related emails through your preferred email service.
 
-### Local Development
+## Environment Variables
 
-Currently there's no way to easily test Clerk webhooks locally, so you'll have to test them in a staging environment. This means deploying your app to a "production" state Vercel project with development environment variables e.g. `staging-api.example.com`. Then you can add this URL to your Clerk project's webhook settings.
+Make sure to set up the following environment variables in your `.env.local` files:
+
+```bash
+# Better Auth Core
+BETTER_AUTH_SECRET="your-32-character-secret-key"
+BETTER_AUTH_URL="http://localhost:3000" # or your domain
+NEXT_PUBLIC_BETTER_AUTH_URL="http://localhost:3000"
+
+# Database
+DATABASE_URL="postgresql://user:password@localhost:5432/database"
+
+# Social Providers (Optional)
+GOOGLE_CLIENT_ID="your-google-client-id"
+GOOGLE_CLIENT_SECRET="your-google-client-secret"
+GITHUB_CLIENT_ID="your-github-client-id"
+GITHUB_CLIENT_SECRET="your-github-client-secret"
+```
+
+## Testing
+
+Since Better Auth runs directly in your application, you can test authentication flows locally without additional configuration. Simply start your development server and navigate to the authentication pages.
+
+## Migration Benefits
+
+The migration from Clerk to Better Auth provides several benefits:
+
+- **Cost Reduction**: $0 vs external service pricing
+- **Full Control**: Complete ownership of authentication logic and user data
+- **Performance**: No external API dependencies
+- **Privacy**: All user data stays in your database
+- **Customization**: Unlimited ability to customize authentication flows
+- **Edge Compatibility**: Works seamlessly with edge runtimes
