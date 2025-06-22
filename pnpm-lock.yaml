@@ -242,6 +242,9 @@ importers:
       '@repo/next-config':
         specifier: workspace:*
         version: link:../../packages/next-config
+      '@t3-oss/env-nextjs':
+        specifier: ^0.13.6
+        version: 0.13.6(arktype@2.1.20)(typescript@5.8.3)(zod@3.25.56)
       next:
         specifier: 15.3.3
         version: 15.3.3(@babel/core@7.27.4)(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)

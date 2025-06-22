@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getPages } from '@repo/api-actions'
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const result = await getPages()
 

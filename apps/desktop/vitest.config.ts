@@ -1,1 +1,7 @@
-export { default } from '@repo/testing'
+import { defineConfig } from 'vitest/config'
+
+export default defineConfig({
+  test: {
+    environment: 'jsdom',
+  },
+})

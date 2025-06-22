@@ -1,14 +1,11 @@
-import { env } from '@/env'
 import { analytics } from '@repo/analytics/posthog/server'
-import { database } from '@repo/database'
 import { parseError } from '@repo/observability/error'
 import { log } from '@repo/observability/log'
-import { headers } from 'next/headers'
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 
 // Better Auth doesn't use webhooks in the same way as Clerk
 // Authentication events are handled directly in the application
-export const POST = async (request: Request): Promise<Response> => {
+export const POST = async (request: NextRequest) => {
   try {
     const body = await request.json()
     
