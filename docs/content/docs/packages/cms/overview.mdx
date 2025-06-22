@@ -1,105 +1,88 @@
 ---
-title: Overview
-description: How the CMS is configured in next-forge.
+title: 'Content Management System'
+description: 'Build type-safe and dynamic content management with your own CMS.'
+icon: 'content-manager'
 ---
 
-<Authors
-  data={[
-    {
-      user: {
-        name: 'Hayden Bleasel',
-        id: 'haydenbleasel',
-      },
-      company: {
-        name: 'vercel',
-        id: 'vercel',
-      },
-    },
-    {
-      user: {
-        name: 'Julian Benegas',
-        id: 'julianbenegas8',
-      },
-      company: {
-        name: 'BaseHub',
-        id: 'basehub',
-      },
-    },
-  ]}
-/>
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '/components/ui/tabs'
 
-next-forge has a dedicated CMS package that can be used to generate type-safe data collections from your content. This approach provides a structured way to manage your content while maintaining full type safety throughout your application. By default, next-forge uses [BaseHub](https://basehub.com) as the CMS.
+<Tabs defaultValue="overview">
+  <TabsList>
+    <TabsTrigger value="overview">Overview</TabsTrigger>
+  </TabsList>
+  <TabsContent value="overview">
+    <Feature
+      name="Custom CMS"
+      id="custom-cms"
+    />
+  </TabsContent>
+</Tabs>
 
-## Setup
+next-forge provides a flexible CMS package that you can integrate with any content management system of your choice.
 
-Here's how to quickly get started with your new CMS.
+## Getting Started
 
-### 1. Fork the [`basehub/next-forge`](https://basehub.com/basehub/next-forge?fork=1) template
+The CMS package has been designed to work with any CMS solution. You can choose from:
 
-You'll be forking a BaseHub repository which contains the next-forge compatible content schema.
+- **Headless CMS**: Strapi, Sanity, Contentful, Hygraph, etc.
+- **File-based**: MDX, Markdown with frontmatter
+- **Database-driven**: Custom solution with your existing database
+- **Git-based**: Content stored directly in your repository
 
-Once you fork the repository, you'll need to get your Read Token from the "Connect to your App" page:
+### Implementation Guide
 
-```
-https://basehub.com/<team-slug>/<repo-slug>/dev/main/dev:connect
-```
+1. **Choose your CMS solution** based on your needs and preferences
+2. **Implement the standardized interfaces** provided in the package
+3. **Configure environment variables** for your chosen CMS
+4. **Customize components** to match your content structure
+5. **Test your implementation** with the provided API structure
 
-The token will look something like this:
+The package provides TypeScript interfaces for blog posts and legal pages that you can implement with any CMS backend.
 
-```
-bshb_pk_<password>
-```
+### API Structure
 
-Keep this connection string handy, you will need it in the next step.
+The CMS package exports a consistent API regardless of your chosen backend:
 
-### 2. Update your environment variables
+```typescript
+// Blog API
+export const blog = {
+  getPosts: async (): Promise<PostMeta[]> => { /* Your implementation */ },
+  getLatestPost: async (): Promise<Post | null> => { /* Your implementation */ },
+  getPost: async (slug: string): Promise<Post | null> => { /* Your implementation */ },
+}
 
-Update your [environment variables](/docs/setup/env) to use the new BaseHub token. For example:
-
-```ts apps/web/.env
-BASEHUB_TOKEN = '<token>'
-```
-
-### 3. Start the dev server
-
-When you run `pnpm dev`, the CMS package will generate the type-safe BaseHub SDK, and watch changes to your CMS's schema.
-
-<Note>
-  You might need to run `Restart TS Server` in your IDE for TypeScript to pick
-  up the new types.
-</Note>
-
-## Querying Basics
-
-The structure of the CMS should look something like this:
-
-```txt
-- Blog
-  - Posts
-  - Authors
-  - Categories
-- Legal Pages
-```
-
-So in order to get all posts, you'd write a query like this:
-
-```ts
-{
-  blog: {
-    posts: {
-      items: {
-        _title: true,
-        _slug: true,
-        authors: { _title: true }, // references the authors collection
-        // ...
-      },
-    },
-  },
+// Legal Pages API
+export const legal = {
+  getPosts: async (): Promise<LegalPost[]> => { /* Your implementation */ },
+  getLatestPost: async (): Promise<LegalPost | null> => { /* Your implementation */ },
+  getPost: async (slug: string): Promise<LegalPost | null> => { /* Your implementation */ },
 }
 ```
 
-Starter queries are provided for you in the `cms` package, within the `blog` and `legal` objects. You can read more about the BaseHub SDK in [their docs](https://docs.basehub.com/nextjs-integration/).
+### Components
 
-## Revalidation
+The package includes placeholder components that you can customize for your CMS:
 
-A key part of any good CMS integration is the ability to revalidate content when it changes. To do that, BaseHub comes with automatic [on-demand revalidation](https://docs.basehub.com/nextjs-integration/environments-and-caching#on-demand-revalidation-recommended).
+- **Body**: Rich text content rendering
+- **CodeBlock**: Syntax-highlighted code blocks
+- **Feed**: Content listing and pagination
+- **Image**: Optimized image handling
+- **TableOfContents**: Document navigation
+- **Toolbar**: CMS editing interface (if needed)
+
+## Migration Benefits
+
+By using a custom CMS implementation, you get:
+
+- **Full Control**: Complete ownership of your content and data
+- **Cost Efficiency**: No external service fees
+- **Flexibility**: Choose the exact features you need
+- **Performance**: Direct integration with your infrastructure
+- **Privacy**: Content stays within your control
+
+For detailed implementation instructions, see the [CMS Package README](https://github.com/haydenbleasel/next-forge/tree/main/packages/cms#readme).

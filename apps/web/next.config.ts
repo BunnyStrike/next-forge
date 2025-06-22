@@ -7,10 +7,12 @@ import type { NextConfig } from 'next'
 
 let nextConfig: NextConfig = withToolbar(withLogging(config))
 
-nextConfig.images?.remotePatterns?.push({
-  protocol: 'https',
-  hostname: 'assets.basehub.com',
-})
+// Add your custom CMS image hostnames here
+// Example:
+// nextConfig.images?.remotePatterns?.push({
+//   protocol: 'https',
+//   hostname: 'your-cms-domain.com',
+// })
 
 if (process.env.NODE_ENV === 'production') {
   const redirects: NextConfig['redirects'] = async () => [

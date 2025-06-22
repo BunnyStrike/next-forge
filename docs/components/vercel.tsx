@@ -29,7 +29,6 @@ export const VercelButton = () => {
       'RESEND_FROM',
       'STRIPE_SECRET_KEY',
       'STRIPE_WEBHOOK_SECRET',
-      'BASEHUB_TOKEN',
       'NEXT_PUBLIC_POSTHOG_KEY',
       'NEXT_PUBLIC_POSTHOG_HOST',
       'NEXT_PUBLIC_APP_URL',

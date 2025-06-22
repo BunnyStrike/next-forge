@@ -1,179 +1,82 @@
-import { basehub as basehubClient, fragmentOn } from 'basehub'
-import { keys } from './keys'
+// Custom CMS Implementation Placeholder
+// Replace this with your own CMS implementation
 
-const basehub = basehubClient({
-  token: keys().BASEHUB_TOKEN,
-})
-
-/* -------------------------------------------------------------------------------------------------
- * Common Fragments
- * -----------------------------------------------------------------------------------------------*/
-
-const imageFragment = fragmentOn('BlockImage', {
-  url: true,
-  width: true,
-  height: true,
-  alt: true,
-  blurDataURL: true,
-})
-
-/* -------------------------------------------------------------------------------------------------
- * Blog Fragments & Queries
- * -----------------------------------------------------------------------------------------------*/
-
-const postMetaFragment = fragmentOn('PostsItem', {
-  _slug: true,
-  _title: true,
+export interface PostMeta {
+  slug: string
+  title: string
+  description: string
+  date: string
+  image?: string
   authors: {
-    _title: true,
-    avatar: imageFragment,
-    xUrl: true,
-  },
+    name: string
+    avatar?: string
+    xUrl?: string
+  }[]
   categories: {
-    _title: true,
-  },
-  date: true,
-  description: true,
-  image: imageFragment,
-})
+    name: string
+  }[]
+}
 
-const postFragment = fragmentOn('PostsItem', {
-  ...postMetaFragment,
+export interface Post extends PostMeta {
   body: {
-    plainText: true,
-    json: {
-      content: true,
-      toc: true,
-    },
-    readingTime: true,
-  },
-})
+    plainText: string
+    html: string
+    readingTime: number
+  }
+}
 
-export type PostMeta = fragmentOn.infer<typeof postMetaFragment>
-export type Post = fragmentOn.infer<typeof postFragment>
+export interface LegalPostMeta {
+  slug: string
+  title: string
+  description: string
+}
 
+export interface LegalPost extends LegalPostMeta {
+  body: {
+    plainText: string
+    html: string
+    readingTime: number
+  }
+}
+
+// Blog API - Replace with your own CMS implementation
 export const blog = {
-  postsQuery: fragmentOn('Query', {
-    blog: {
-      posts: {
-        items: postMetaFragment,
-      },
-    },
-  }),
-
-  latestPostQuery: fragmentOn('Query', {
-    blog: {
-      posts: {
-        __args: {
-          orderBy: '_sys_createdAt__DESC',
-        },
-        item: postFragment,
-      },
-    },
-  }),
-
-  postQuery: (slug: string) => ({
-    blog: {
-      posts: {
-        __args: {
-          filter: {
-            _sys_slug: { eq: slug },
-          },
-        },
-        item: postFragment,
-      },
-    },
-  }),
-
   getPosts: async (): Promise<PostMeta[]> => {
-    const data = await basehub.query(blog.postsQuery)
-
-    return data.blog.posts.items
+    // TODO: Implement your own blog posts fetching logic
+    console.warn('blog.getPosts: Implement your own CMS blog posts fetching')
+    return []
   },
 
-  getLatestPost: async () => {
-    const data = await basehub.query(blog.latestPostQuery)
-
-    return data.blog.posts.item
+  getLatestPost: async (): Promise<Post | null> => {
+    // TODO: Implement your own latest post fetching logic
+    console.warn('blog.getLatestPost: Implement your own CMS latest post fetching')
+    return null
   },
 
-  getPost: async (slug: string) => {
-    const query = blog.postQuery(slug)
-    const data = await basehub.query(query)
-
-    return data.blog.posts.item
+  getPost: async (slug: string): Promise<Post | null> => {
+    // TODO: Implement your own single post fetching logic
+    console.warn(`blog.getPost(${slug}): Implement your own CMS single post fetching`)
+    return null
   },
 }
 
-/* -------------------------------------------------------------------------------------------------
- * Legal Fragments & Queries
- * -----------------------------------------------------------------------------------------------*/
-
-const legalPostMetaFragment = fragmentOn('LegalPagesItem', {
-  _slug: true,
-  _title: true,
-  description: true,
-})
-
-const legalPostFragment = fragmentOn('LegalPagesItem', {
-  ...legalPostMetaFragment,
-  body: {
-    plainText: true,
-    json: {
-      content: true,
-      toc: true,
-    },
-    readingTime: true,
-  },
-})
-
-export type LegalPostMeta = fragmentOn.infer<typeof legalPostMetaFragment>
-export type LegalPost = fragmentOn.infer<typeof legalPostFragment>
-
+// Legal Pages API - Replace with your own CMS implementation
 export const legal = {
-  postsQuery: fragmentOn('Query', {
-    legalPages: {
-      items: legalPostFragment,
-    },
-  }),
-
-  latestPostQuery: fragmentOn('Query', {
-    legalPages: {
-      __args: {
-        orderBy: '_sys_createdAt__DESC',
-      },
-      item: legalPostFragment,
-    },
-  }),
-
-  postQuery: (slug: string) =>
-    fragmentOn('Query', {
-      legalPages: {
-        __args: {
-          filter: {
-            _sys_slug: { eq: slug },
-          },
-        },
-        item: legalPostFragment,
-      },
-    }),
-
   getPosts: async (): Promise<LegalPost[]> => {
-    const data = await basehub.query(legal.postsQuery)
-
-    return data.legalPages.items
+    // TODO: Implement your own legal pages fetching logic
+    console.warn('legal.getPosts: Implement your own CMS legal pages fetching')
+    return []
   },
 
-  getLatestPost: async () => {
-    const data = await basehub.query(legal.latestPostQuery)
-
-    return data.legalPages.item
+  getLatestPost: async (): Promise<LegalPost | null> => {
+    // TODO: Implement your own latest legal post fetching logic
+    console.warn('legal.getLatestPost: Implement your own CMS latest legal post fetching')
+    return null
   },
 
-  getPost: async (slug: string) => {
-    const query = legal.postQuery(slug)
-    const data = await basehub.query(query)
-
-    return data.legalPages.item
+  getPost: async (slug: string): Promise<LegalPost | null> => {
+    // TODO: Implement your own single legal post fetching logic
+    console.warn(`legal.getPost(${slug}): Implement your own CMS single legal post fetching`)
+    return null
   },
 }

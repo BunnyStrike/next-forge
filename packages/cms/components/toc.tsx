@@ -1,40 +1,29 @@
-import { RichText } from 'basehub/react-rich-text'
-import type { ComponentProps } from 'react'
+import type { ReactNode } from 'react'
 
-type TableOfContentsProperties = Omit<
-  ComponentProps<typeof RichText>,
-  'children'
-> & {
-  readonly data: ComponentProps<typeof RichText>['children']
+interface TableOfContentsProps {
+  data: {
+    title: string
+    id: string
+    level: number
+  }[]
+  className?: string
 }
 
-export const TableOfContents = ({
-  data,
-  ...props
-}: TableOfContentsProperties) => (
-  <div>
-    <RichText
-      // @ts-expect-error "idk"
-      components={{
-        ol: ({ children }) => (
-          <ol className='flex list-none flex-col gap-2 text-sm'>{children}</ol>
-        ),
-        ul: ({ children }) => (
-          <ul className='flex list-none flex-col gap-2 text-sm'>{children}</ul>
-        ),
-        li: ({ children }) => <li className='pl-3'>{children}</li>,
-        a: ({ children, href }) => (
-          <a
-            className='line-clamp-3 flex rounded-sm text-foreground text-sm underline decoration-foreground/0 transition-colors hover:decoration-foreground/50'
-            href={`#${href?.split('#').at(1)}`}
-          >
-            {children}
-          </a>
-        ),
-      }}
-      {...props}
-    >
-      {data}
-    </RichText>
+export const TableOfContents = ({ data, className }: TableOfContentsProps) => (
+  <div className={className}>
+    <nav>
+      <ol className='flex list-none flex-col gap-2 text-sm'>
+        {data.map((item) => (
+          <li key={item.id} className='pl-3' style={{ paddingLeft: `${item.level * 12}px` }}>
+            <a
+              className='line-clamp-3 flex rounded-sm text-foreground text-sm underline decoration-foreground/0 transition-colors hover:decoration-foreground/50'
+              href={`#${item.id}`}
+            >
+              {item.title}
+            </a>
+          </li>
+        ))}
+      </ol>
+    </nav>
   </div>
 )

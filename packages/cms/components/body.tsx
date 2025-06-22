@@ -1,3 +1,11 @@
-import { RichText } from 'basehub/react-rich-text'
+import type { ReactNode } from 'react'
 
-export const Body = RichText
+interface BodyProps {
+  children: ReactNode
+}
+
+export const Body = ({ children }: BodyProps) => (
+  <div className="prose prose-neutral dark:prose-invert max-w-none">
+    {children}
+  </div>
+)
