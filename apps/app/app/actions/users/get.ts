@@ -1,17 +1,12 @@
 'use server'
 
 import { database } from '@repo/database'
-import { getCurrentUser } from '@repo/auth'
+import { auth } from '@repo/auth/server'
+import { headers } from 'next/headers'
 
 export const getUsers = async () => {
   try {
-    const user = await getCurrentUser()
-
-    if (!user) {
-      return {
-        error: 'Unauthorized',
-      }
-    }
+    const user = await getUser()
 
     // Get all users (you may want to add pagination and filtering)
     const users = await database.user.findMany({
@@ -37,4 +32,17 @@ export const getUsers = async () => {
       error: error instanceof Error ? error.message : 'Failed to get users',
     }
   }
+}
+
+export const getUser = async () => {
+  const headersList = await headers()
+  const session = await auth.api.getSession({
+    headers: headersList,
+  })
+
+  if (!session?.user) {
+    throw new Error('Unauthorized')
+  }
+
+  return session.user
 }

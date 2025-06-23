@@ -1,5 +1,6 @@
-import { auth, currentUser } from '@repo/auth/server'
-import { authenticate } from '@repo/collaboration/auth'
+import { auth } from '@repo/auth/server'
+import { env } from '@/env'
+import { headers } from 'next/headers'
 
 const COLORS = [
   'var(--color-red-500)',
@@ -21,22 +22,35 @@ const COLORS = [
   'var(--color-rose-500)',
 ]
 
-export const POST = async () => {
-  const user = await currentUser()
-  const { orgId } = await auth()
+export async function POST() {
+  if (!env.LIVEBLOCKS_SECRET) {
+    return new Response('Liveblocks secret key not configured', {
+      status: 500,
+    })
+  }
 
-  if (!user || !orgId) {
+  const headersList = await headers()
+  const session = await auth.api.getSession({
+    headers: headersList,
+  })
+
+  if (!session?.user) {
     return new Response('Unauthorized', { status: 401 })
   }
 
-  return authenticate({
-    userId: user.id,
-    orgId,
-    userInfo: {
-      name:
-        user.fullName ?? user.emailAddresses.at(0)?.emailAddress ?? undefined,
-      avatar: user.imageUrl ?? undefined,
-      color: COLORS[Math.floor(Math.random() * COLORS.length)],
+  const response = await fetch('https://liveblocks.io/api/v1/authorize', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${env.LIVEBLOCKS_SECRET}`,
+      'Content-Type': 'application/json',
     },
+    body: JSON.stringify({
+      userId: session.user.id,
+      groupIds: [], // Add appropriate group IDs if needed
+    }),
+  })
+
+  return new Response(await response.text(), {
+    status: response.status,
   })
 }

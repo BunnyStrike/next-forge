@@ -52,7 +52,7 @@ export const Cursors = () => {
    * You don't need to pass the full presence object to update it.
    * See https://liveblocks.io/docs/api-reference/liveblocks-react#useMyPresence for more information
    */
-  const [_cursor, updateMyPresence] = useMyPresence()
+  const [, updateMyPresence] = useMyPresence()
 
   /**
    * Return all the other users in the room and their presence (a cursor position in this case)
@@ -60,7 +60,7 @@ export const Cursors = () => {
   const others = useOthers()
 
   useEffect(() => {
-    const onPointerMove = (event: PointerEvent) => {
+    const onPointerMove = (event: globalThis.PointerEvent) => {
       // Update the user cursor position on every pointer move
       updateMyPresence({
         cursor: {

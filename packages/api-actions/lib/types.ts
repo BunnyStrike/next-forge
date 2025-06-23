@@ -14,10 +14,8 @@ export type UserInfo = {
 }
 
 export type PageInfo = {
-  id: string
+  id: number
   name: string
-  createdAt: Date
-  updatedAt: Date
 }
 
 export type OrganizationInfo = {

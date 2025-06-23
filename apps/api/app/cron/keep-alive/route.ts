@@ -1,5 +1,6 @@
 import { log } from '@repo/observability/log'
 import { database } from '@repo/database'
+import { NextResponse } from 'next/server'
 
 export const runtime = 'edge'
 
@@ -26,5 +27,5 @@ export const GET = async () => {
     },
   })
 
-  return new Response('OK', { status: 200 })
+  return NextResponse.json({ status: 'OK' }, { status: 200 })
 }

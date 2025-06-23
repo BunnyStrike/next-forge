@@ -1,3 +1,5 @@
+import { NextResponse } from 'next/server'
+
 export const runtime = 'edge'
 
-export const GET = () => new Response('OK', { status: 200 })
+export const GET = () => NextResponse.json({ status: 'OK' }, { status: 200 })

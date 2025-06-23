@@ -1,45 +1,33 @@
-import { env } from '@/env'
-import { auth, currentUser } from '@repo/auth/server'
-import { SidebarProvider } from '@repo/design-system/components/ui/sidebar'
-import { showBetaFeature } from '@repo/feature-flags'
-import { NotificationsProvider } from '@repo/notifications/components/provider'
-import { secure } from '@repo/security'
+import { auth } from '@repo/auth/server'
+import { DesignSystemProvider } from '@repo/design-system'
+import { redirect } from 'next/navigation'
+import { headers } from 'next/headers'
 import type { ReactNode } from 'react'
-import { PostHogIdentifier } from './components/posthog-identifier'
 import { GlobalSidebar } from './components/sidebar'
+import { PostHogIdentifier } from './components/posthog-identifier'
 
-type AppLayoutProperties = {
-  readonly children: ReactNode
+interface AuthenticatedLayoutProperties {
+  children: ReactNode
 }
 
-const AppLayout = async ({ children }: AppLayoutProperties) => {
-  if (env.ARCJET_KEY) {
-    await secure(['CATEGORY:PREVIEW'])
-  }
+export default async function AuthenticatedLayout({
+  children,
+}: AuthenticatedLayoutProperties) {
+  const headersList = await headers()
+  const session = await auth.api.getSession({
+    headers: headersList,
+  })
 
-  const user = await currentUser()
-  const { redirectToSignIn } = await auth()
-  const betaFeature = await showBetaFeature()
-
-  if (!user) {
-    return redirectToSignIn()
+  if (!session?.user) {
+    redirect('/sign-in')
   }
 
   return (
-    <NotificationsProvider userId={user.id}>
-      <SidebarProvider>
-        <GlobalSidebar>
-          {betaFeature && (
-            <div className='m-4 rounded-full bg-blue-500 p-1.5 text-center text-sm text-white'>
-              Beta feature now available
-            </div>
-          )}
-          {children}
-        </GlobalSidebar>
-        <PostHogIdentifier />
-      </SidebarProvider>
-    </NotificationsProvider>
+    <DesignSystemProvider>
+      <GlobalSidebar>
+        {children}
+      </GlobalSidebar>
+      <PostHogIdentifier />
+    </DesignSystemProvider>
   )
 }
-
-export default AppLayout

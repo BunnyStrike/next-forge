@@ -1,56 +1,51 @@
 'use server'
 
+import { auth } from '@repo/auth/server'
 import { database } from '@repo/database'
-import { getCurrentUser } from '@repo/auth'
+import { headers } from 'next/headers'
 
-type SearchUsersInput = {
-  query: string
-  organizationId?: string
-}
+export const searchUsers = async (query: string) => {
+  const headersList = await headers()
+  const session = await auth.api.getSession({
+    headers: headersList,
+  })
 
-export const searchUsers = async (input: SearchUsersInput) => {
-  try {
-    const user = await getCurrentUser()
-
-    if (!user) {
-      return {
-        error: 'Unauthorized',
-      }
-    }
-
-    // Search for users by email or name
-    const users = await database.user.findMany({
-      where: {
-        OR: [
-          {
-            email: {
-              contains: input.query,
-              mode: 'insensitive',
-            },
-          },
-          {
-            name: {
-              contains: input.query,
-              mode: 'insensitive',
-            },
-          },
-        ],
-      },
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        image: true,
-      },
-      take: 10,
-    })
-
-    return {
-      data: users,
-    }
-  } catch (error) {
-    return {
-      error: error instanceof Error ? error.message : 'Failed to search users',
-    }
+  if (!session?.user) {
+    throw new Error('Unauthorized')
   }
+
+  if (!query || query.length < 2) {
+    return []
+  }
+
+  const users = await database.user.findMany({
+    where: {
+      OR: [
+        {
+          name: {
+            contains: query,
+            mode: 'insensitive',
+          },
+        },
+        {
+          email: {
+            contains: query,
+            mode: 'insensitive',
+          },
+        },
+      ],
+      NOT: {
+        id: session.user.id,
+      },
+    },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      image: true,
+    },
+    take: 10,
+  })
+
+  return users
 }

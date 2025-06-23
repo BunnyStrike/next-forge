@@ -28,3 +28,27 @@ export function useClerk() {
     user: useUser().user,
   }
 }
+
+// Placeholder components for migration from Clerk
+export function OrganizationSwitcher() {
+  return (
+    <div className="text-sm text-muted-foreground">
+      Organization switcher - implement with Better Auth
+    </div>
+  )
+}
+
+export function UserButton() {
+  const { user } = useUser()
+  
+  if (!user) return null
+  
+  return (
+    <div className="flex items-center gap-2 text-sm">
+      <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+        {user.name?.[0]?.toUpperCase() || user.email?.[0]?.toUpperCase() || '?'}
+      </div>
+      <span>{user.name || user.email}</span>
+    </div>
+  )
+}
