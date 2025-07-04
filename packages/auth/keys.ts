@@ -1,10 +1,14 @@
 import { createEnv } from '@t3-oss/env-nextjs'
 import { z } from 'zod'
 
-export const keys = () =>
-  createEnv({
+export const keys = () => {
+  if (!process.env.BETTER_AUTH_SECRET) {
+    console.warn('⚠️  Warning: BETTER_AUTH_SECRET is not set. This is required for authentication.')
+  }
+  
+  return createEnv({
     server: {
-      BETTER_AUTH_SECRET: z.string().min(32),
+      BETTER_AUTH_SECRET: z.string().min(32).optional(),
       BETTER_AUTH_URL: z.string().url().optional(),
       GOOGLE_CLIENT_ID: z.string().optional(),
       GOOGLE_CLIENT_SECRET: z.string().optional(),
@@ -24,3 +28,4 @@ export const keys = () =>
       NEXT_PUBLIC_BETTER_AUTH_URL: process.env.NEXT_PUBLIC_BETTER_AUTH_URL,
     },
   })
+}

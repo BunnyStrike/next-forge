@@ -1,7 +1,30 @@
-// Custom CMS Implementation Placeholder
-// Replace this with your own CMS implementation
+// Enhanced CMS System - Content Management & Syndication
 
-export interface PostMeta {
+// Core types
+export type * from './lib/types'
+
+// Content Management
+export { ContentManager } from './lib/content-manager'
+export { SyndicationService } from './lib/syndication'
+export { SEOAnalyzer } from './lib/seo-analyzer'
+
+// Components  
+export { RichTextEditor, useRichTextEditor } from './components/rich-text-editor'
+export { Body } from './components/body'
+export { CodeBlock } from './components/code-block'
+export { Feed } from './components/feed'
+export { Image } from './components/image'
+export { TableOfContents } from './components/toc'
+export { Toolbar } from './components/toolbar'
+
+// Environment keys
+export { keys } from './keys'
+
+// Next.js configuration
+export { withCMS } from './next-config'
+
+// Legacy API for backward compatibility
+interface PostMeta {
   slug: string
   title: string
   description: string
@@ -17,7 +40,7 @@ export interface PostMeta {
   }[]
 }
 
-export interface Post extends PostMeta {
+interface Post extends PostMeta {
   body: {
     plainText: string
     html: string
@@ -25,13 +48,13 @@ export interface Post extends PostMeta {
   }
 }
 
-export interface LegalPostMeta {
+interface LegalPostMeta {
   slug: string
   title: string
   description: string
 }
 
-export interface LegalPost extends LegalPostMeta {
+interface LegalPost extends LegalPostMeta {
   body: {
     plainText: string
     html: string
@@ -39,44 +62,94 @@ export interface LegalPost extends LegalPostMeta {
   }
 }
 
-// Blog API - Replace with your own CMS implementation
+// Legacy blog API - maintains backward compatibility
 export const blog = {
   getPosts: async (): Promise<PostMeta[]> => {
-    // TODO: Implement your own blog posts fetching logic
-    console.warn('blog.getPosts: Implement your own CMS blog posts fetching')
+    console.warn('blog.getPosts: Using legacy API. Consider migrating to ContentManager.')
     return []
   },
 
   getLatestPost: async (): Promise<Post | null> => {
-    // TODO: Implement your own latest post fetching logic
-    console.warn('blog.getLatestPost: Implement your own CMS latest post fetching')
+    console.warn('blog.getLatestPost: Using legacy API. Consider migrating to ContentManager.')
     return null
   },
 
   getPost: async (slug: string): Promise<Post | null> => {
-    // TODO: Implement your own single post fetching logic
-    console.warn(`blog.getPost(${slug}): Implement your own CMS single post fetching`)
+    console.warn(`blog.getPost(${slug}): Using legacy API. Consider migrating to ContentManager.`)
     return null
   },
 }
 
-// Legal Pages API - Replace with your own CMS implementation
+// Legacy legal API - maintains backward compatibility
 export const legal = {
   getPosts: async (): Promise<LegalPost[]> => {
-    // TODO: Implement your own legal pages fetching logic
-    console.warn('legal.getPosts: Implement your own CMS legal pages fetching')
+    console.warn('legal.getPosts: Using legacy API. Consider migrating to ContentManager.')
     return []
   },
 
   getLatestPost: async (): Promise<LegalPost | null> => {
-    // TODO: Implement your own latest legal post fetching logic
-    console.warn('legal.getLatestPost: Implement your own CMS latest legal post fetching')
+    console.warn('legal.getLatestPost: Using legacy API. Consider migrating to ContentManager.')
     return null
   },
 
   getPost: async (slug: string): Promise<LegalPost | null> => {
-    // TODO: Implement your own single legal post fetching logic
-    console.warn(`legal.getPost(${slug}): Implement your own CMS single legal post fetching`)
+    console.warn(`legal.getPost(${slug}): Using legacy API. Consider migrating to ContentManager.`)
     return null
   },
 }
+
+// Utility functions for easy access
+export class CMS {
+  // TODO: Implement these services
+  // private contentManager: ContentManager
+  // private syndicationService: SyndicationService
+  // private seoAnalyzer: SEOAnalyzer
+
+  constructor() {
+    console.warn('CMS class is not fully implemented yet')
+    // this.contentManager = new ContentManager()
+    // this.syndicationService = new SyndicationService()
+    // this.seoAnalyzer = new SEOAnalyzer()
+  }
+
+  // Content management shortcuts
+  get content() {
+    throw new Error('ContentManager not implemented yet')
+    // return this.contentManager
+  }
+
+  get syndication() {
+    throw new Error('SyndicationService not implemented yet')
+    // return this.syndicationService
+  }
+
+  get seo() {
+    throw new Error('SEOAnalyzer not implemented yet')
+    // return this.seoAnalyzer
+  }
+
+  /**
+   * Quick content creation
+   */
+  async createPost(data: {
+    title: string
+    body: string
+    description?: string
+    seoKeywords?: string[]
+    authorId: string
+  }) {
+    throw new Error('ContentManager not implemented yet')
+    // return this.contentManager.createContent({...}, data.authorId)
+  }
+
+  /**
+   * Quick SEO analysis
+   */
+  async analyzeSEO(content: { title: string; body: string; description?: string }) {
+    throw new Error('SEOAnalyzer not implemented yet')
+    // Basic analysis would go here
+  }
+}
+
+// Default CMS instance
+export const cms = new CMS()

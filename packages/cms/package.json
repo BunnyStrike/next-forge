@@ -3,23 +3,55 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "echo 'Custom CMS development server - implement your own'",
-    "build": "echo 'Custom CMS build - implement your own'",
-    "analyze": "echo 'Custom CMS analyze - implement your own'",
+    "dev": "tsup --watch",
+    "build": "tsup",
+    "analyze": "echo 'Content analysis tools available'",
     "clean": "git clean -xdf .cache .turbo dist node_modules",
-    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false",
+    "test": "vitest run",
+    "test:watch": "vitest watch"
   },
+  "main": "./index.ts",
+  "types": "./index.ts",
   "dependencies": {
+    "@repo/ai": "workspace:*",
+    "@repo/database": "workspace:*",
+    "@repo/uploads": "workspace:*",
     "@t3-oss/env-nextjs": "^0.13.6",
     "react": "^19.1.0",
-    "zod": "^3.25.55"
+    "react-dom": "^19.1.0",
+    "zod": "^3.25.55",
+    "rss-parser": "^3.13.0",
+    "cheerio": "^1.0.0",
+    "turndown": "^7.2.0",
+    "reading-time": "^1.5.0",
+    "slug": "^9.0.0",
+    "date-fns": "^4.1.0",
+    "sanitize-html": "^2.14.0",
+    "metascraper": "^5.45.24",
+    "metascraper-description": "^5.45.24",
+    "metascraper-image": "^5.45.24",
+    "metascraper-title": "^5.45.24",
+    "metascraper-url": "^5.45.24",
+    "@tiptap/react": "^2.8.0",
+    "@tiptap/starter-kit": "^2.8.0",
+    "@tiptap/extension-placeholder": "^2.8.0",
+    "@tiptap/extension-link": "^2.8.0",
+    "@tiptap/extension-image": "^2.8.0",
+    "lucide-react": "^0.513.0"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
+    "@repo/testing": "workspace:*",
     "@types/node": "22.15.30",
     "@types/react": "19.1.6",
     "@types/react-dom": "^19.1.6",
+    "@types/turndown": "^5.0.0",
+    "@types/slug": "^5.0.0",
+    "@types/sanitize-html": "^2.0.0",
     "next": "15.3.3",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.2",
+    "tsup": "^8.3.5"
   }
 }

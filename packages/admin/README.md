@@ -1,232 +1,343 @@
 # @repo/admin
 
-A comprehensive admin package that provides content and collection management capabilities via a sliding sidebar interface. Can be easily integrated into any Next.js application within the monorepo.
+A comprehensive admin package for Next.js applications with TypeScript support. This package provides a complete admin interface with components, hooks, and utilities for managing users, content, analytics, and system settings.
 
 ## Features
 
-- **Sliding Sidebar Interface** - Right-side sliding admin panel
-- **Content Management** - Edit page content inline
-- **Collection Management** - Manage data collections and items
-- **Type-Safe** - Full TypeScript support
-- **Design System Integration** - Uses the shared design system
-- **Authentication Ready** - Integrates with the auth package
-- **Responsive** - Works on all screen sizes
+- 🎨 **Modern UI Components** - Built with Radix UI and Tailwind CSS
+- 🔐 **Permission-based Access Control** - Granular permissions and role management
+- 📊 **Analytics Dashboard** - Real-time metrics and charts
+- 🔔 **Notification System** - Toast notifications and activity feeds
+- 📱 **Responsive Design** - Works on desktop, tablet, and mobile
+- 🎯 **Type Safety** - Full TypeScript support with comprehensive types
+- 🧪 **Well Tested** - Comprehensive test coverage
+- 📋 **Data Tables** - Advanced table components with sorting, filtering, and pagination
+- 🎭 **Theming Support** - Light/dark mode with customizable themes
 
 ## Installation
 
-The package is already included in the monorepo. Import it in your app:
-
-```tsx
-import { AdminProvider, AdminSidebar, AdminTrigger } from '@repo/admin'
+```bash
+npm install @repo/admin
 ```
 
-## Basic Setup
+## Quick Start
 
 ### 1. Wrap your app with AdminProvider
 
 ```tsx
 import { AdminProvider } from '@repo/admin'
+import type { AdminUser } from '@repo/admin'
 
-export default function RootLayout({ children }) {
+const adminUser: AdminUser = {
+  id: '1',
+  name: 'John Doe',
+  email: 'john@example.com',
+  roles: [{ 
+    id: 'admin', 
+    name: 'Admin', 
+    description: 'Administrator',
+    permissions: ['admin.read', 'admin.write', 'users.read', 'users.write']
+  }],
+  permissions: ['admin.read', 'admin.write', 'users.read', 'users.write'],
+  isActive: true,
+  createdAt: new Date(),
+  updatedAt: new Date()
+}
+
+function App() {
   return (
-    <html>
-      <body>
-        <AdminProvider>{children}</AdminProvider>
-      </body>
-    </html>
+    <AdminProvider defaultUser={adminUser}>
+      <YourApp />
+    </AdminProvider>
   )
 }
 ```
 
-### 2. Add the AdminSidebar and AdminTrigger
+### 2. Use Admin Components
 
 ```tsx
-import { AdminSidebar, AdminTrigger } from '@repo/admin'
+import { AdminLayout, AdminTrigger } from '@repo/admin'
 
-export default function Layout({ children }) {
+function Dashboard() {
   return (
-    <>
-      {children}
-
-      {/* Floating admin trigger button */}
-      <div className='fixed bottom-4 right-4 z-30'>
-        <AdminTrigger />
+    <AdminLayout 
+      title="Dashboard" 
+      description="Welcome to your admin dashboard"
+    >
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Your dashboard content */}
       </div>
+      
+      {/* Admin trigger button */}
+      <AdminTrigger />
+    </AdminLayout>
+  )
+}
+```
 
-      {/* Admin sidebar */}
-      <AdminSidebar />
-    </>
+### 3. Use Admin Hooks
+
+```tsx
+import { useAdmin, useAdminPermissions, useAdminNotifications } from '@repo/admin'
+
+function UserManagement() {
+  const { currentUser } = useAdmin()
+  const { canWrite } = useAdminPermissions()
+  const { notifySuccess } = useAdminNotifications()
+
+  const handleCreateUser = async () => {
+    if (!canWrite('users')) {
+      notifyError('Permission Denied', 'You cannot create users')
+      return
+    }
+
+    try {
+      // Create user logic
+      notifySuccess('Success', 'User created successfully')
+    } catch (error) {
+      notifyError('Error', 'Failed to create user')
+    }
+  }
+
+  return (
+    <div>
+      <h1>User Management</h1>
+      {canWrite('users') && (
+        <button onClick={handleCreateUser}>Create User</button>
+      )}
+    </div>
   )
 }
 ```
 
 ## Components
 
-### AdminProvider
+### AdminLayout
 
-Provides admin context to child components.
-
-```tsx
-<AdminProvider>{/* Your app */}</AdminProvider>
-```
-
-### AdminTrigger
-
-Button to open the admin panel.
+A comprehensive layout component for admin pages.
 
 ```tsx
-<AdminTrigger variant='outline' size='icon' className='custom-class' />
+import { AdminLayout } from '@repo/admin'
+
+<AdminLayout 
+  title="Page Title"
+  description="Page description"
+  actions={<button>Action Button</button>}
+>
+  <YourContent />
+</AdminLayout>
 ```
 
-### AdminSidebar
+### AdminTable
 
-The main admin interface that slides from the right.
+Advanced data table with sorting, filtering, and pagination.
 
 ```tsx
-<AdminSidebar />
+import { AdminTable, createSortableHeader, createActionMenu } from '@repo/admin'
+import { Edit, Trash } from 'lucide-react'
+
+const columns = [
+  {
+    accessorKey: 'name',
+    header: createSortableHeader('Name'),
+  },
+  {
+    accessorKey: 'email',
+    header: createSortableHeader('Email'),
+  },
+  {
+    id: 'actions',
+    cell: createActionMenu([
+      {
+        label: 'Edit',
+        icon: Edit,
+        onClick: (row) => console.log('Edit', row),
+      },
+      {
+        label: 'Delete',
+        icon: Trash,
+        onClick: (row) => console.log('Delete', row),
+      },
+    ]),
+  },
+]
+
+<AdminTable
+  columns={columns}
+  data={users}
+  searchable
+  exportable
+  selectable
+  onSelectionChange={(selected) => console.log(selected)}
+/>
 ```
 
-### ContentManager
+### AdminNavigation
 
-Interface for managing page content (available within AdminSidebar).
-
-### CollectionManager
-
-Interface for managing data collections (available within AdminSidebar).
-
-## Usage with Auth
-
-The admin package is designed to work with the auth package. Wrap the admin components with authentication checks:
+Sidebar navigation with permission-based visibility.
 
 ```tsx
-import { useUser } from '@repo/auth'
-import { AdminTrigger, AdminSidebar } from '@repo/admin'
+import { AdminNavigation } from '@repo/admin'
 
-export default function AdminComponents() {
-  const { user } = useUser()
+const customNavItems = [
+  {
+    id: 'dashboard',
+    label: 'Dashboard',
+    icon: LayoutDashboard,
+    href: '/admin',
+    permissions: ['admin.read'],
+  },
+  {
+    id: 'users',
+    label: 'Users',
+    icon: Users,
+    href: '/admin/users',
+    permissions: ['users.read'],
+    badge: '125',
+  },
+]
 
-  // Only show admin to authenticated users with admin permissions
-  if (!user || !user.permissions?.includes('admin')) {
-    return null
-  }
-
-  return (
-    <>
-      <AdminTrigger />
-      <AdminSidebar />
-    </>
-  )
-}
+<AdminNavigation navItems={customNavItems} />
 ```
 
-## Customization
+## Hooks
 
-### Custom Content Types
+### useAdmin
 
-Extend the AdminContent type to add your own content types:
+Main hook for admin state management.
 
 ```tsx
-import type { AdminContent } from '@repo/admin'
-
-type CustomContent = AdminContent & {
-  type: 'text' | 'image' | 'rich-text' | 'video' | 'gallery'
-}
+const {
+  isOpen,
+  currentUser,
+  notifications,
+  openAdmin,
+  closeAdmin,
+  addNotification,
+  hasPermission,
+} = useAdmin()
 ```
 
-### Custom Collections
+### useAdminPermissions
 
-Define your own collection schemas:
+Hook for permission checking.
 
 ```tsx
-import type { AdminCollection } from '@repo/admin'
-
-const blogCollection: AdminCollection = {
-  id: 'blog',
-  name: 'Blog Posts',
-  slug: 'blog-posts',
-  fields: [
-    { id: '1', name: 'title', type: 'text', required: true },
-    { id: '2', name: 'content', type: 'rich-text', required: true },
-    { id: '3', name: 'published', type: 'boolean', required: false },
-    {
-      id: '4',
-      name: 'category',
-      type: 'select',
-      options: ['Tech', 'Design', 'Business'],
-    },
-  ],
-  items: [],
-}
+const {
+  canRead,
+  canWrite,
+  canDelete,
+  isAdmin,
+  isSuperAdmin,
+  hasPermission,
+  hasAnyPermission,
+  hasAllPermissions,
+} = useAdminPermissions()
 ```
 
-## API Integration
+### useAdminAnalytics
 
-The admin package includes placeholder functions for API integration. Replace these with your actual API calls:
+Hook for analytics data.
 
 ```tsx
-// In your AdminProvider implementation
-const updateContent = async (id: string, updates: Partial<AdminContent>) => {
-  const response = await fetch(`/api/content/${id}`, {
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(updates),
-  })
-  return response.json()
-}
+const {
+  metrics,
+  charts,
+  loading,
+  error,
+  refreshAnalytics,
+  getMetric,
+  getChart,
+} = useAdminAnalytics({ autoRefresh: true })
 ```
 
-## Styling
+### useAdminNotifications
 
-The admin package uses the design system components and follows the same theming. All components are fully styled and responsive out of the box.
-
-## Examples
-
-### Development Mode Only
-
-Show admin controls only in development:
+Hook for notification management.
 
 ```tsx
-const isDev = process.env.NODE_ENV === 'development'
-
-return (
-  <>
-    {children}
-    {isDev && (
-      <>
-        <AdminTrigger />
-        <AdminSidebar />
-      </>
-    )}
-  </>
-)
+const {
+  notifications,
+  unreadCount,
+  addNotification,
+  markAsRead,
+  clearAll,
+  notifySuccess,
+  notifyError,
+  notifyWarning,
+  notifyInfo,
+} = useAdminNotifications()
 ```
 
-### Custom Trigger
+## Types
 
-Create a custom trigger button:
-
-```tsx
-import { useAdmin } from '@repo/admin'
-
-function CustomAdminButton() {
-  const { openAdmin } = useAdmin()
-
-  return (
-    <button onClick={openAdmin} className='admin-button'>
-      Open Admin Panel
-    </button>
-  )
-}
-```
-
-## TypeScript Support
-
-The package is fully typed. Import types as needed:
+The package exports comprehensive TypeScript types:
 
 ```tsx
 import type {
-  AdminContent,
-  AdminCollection,
-  AdminContextType,
+  AdminUser,
+  AdminRole,
+  AdminPermission,
+  AdminNotification,
+  AdminMetric,
+  AdminChart,
+  AdminNavItem,
+  AdminTableColumn,
+  // ... and many more
 } from '@repo/admin'
 ```
+
+## Permissions
+
+The package uses a granular permission system:
+
+- `admin.read` - Read admin data
+- `admin.write` - Write admin data
+- `admin.delete` - Delete admin data
+- `users.read` - Read user data
+- `users.write` - Write user data
+- `users.delete` - Delete user data
+- `content.read` - Read content
+- `content.write` - Write content
+- `content.delete` - Delete content
+- `content.publish` - Publish content
+- `analytics.read` - Read analytics
+- `settings.read` - Read settings
+- `settings.write` - Write settings
+- `webhooks.read` - Read webhooks
+- `webhooks.write` - Write webhooks
+- `database.read` - Read database
+- `database.write` - Write database
+
+## Styling
+
+The package uses Tailwind CSS for styling. Make sure to include the package in your Tailwind config:
+
+```js
+module.exports = {
+  content: [
+    './node_modules/@repo/admin/**/*.{js,ts,jsx,tsx}',
+    // ... your other content
+  ],
+  // ... rest of config
+}
+```
+
+## Testing
+
+Run tests with:
+
+```bash
+npm test
+```
+
+## Contributing
+
+1. Follow the existing code style
+2. Add tests for new features
+3. Update documentation
+4. Ensure TypeScript types are correct
+
+## License
+
+MIT

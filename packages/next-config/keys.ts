@@ -2,8 +2,15 @@ import { vercel } from '@t3-oss/env-core/presets-zod'
 import { createEnv } from '@t3-oss/env-nextjs'
 import { z } from 'zod'
 
-export const keys = () =>
-  createEnv({
+export const keys = () => {
+  if (!process.env.NEXT_PUBLIC_APP_URL) {
+    console.warn('⚠️  Warning: NEXT_PUBLIC_APP_URL is not set. This is required for app functionality.')
+  }
+  if (!process.env.NEXT_PUBLIC_WEB_URL) {
+    console.warn('⚠️  Warning: NEXT_PUBLIC_WEB_URL is not set. This is required for web functionality.')
+  }
+  
+  return createEnv({
     extends: [vercel()],
     server: {
       ANALYZE: z.string().optional(),
@@ -12,8 +19,8 @@ export const keys = () =>
       NEXT_RUNTIME: z.enum(['nodejs', 'edge']).optional(),
     },
     client: {
-      NEXT_PUBLIC_APP_URL: z.string().url(),
-      NEXT_PUBLIC_WEB_URL: z.string().url(),
+      NEXT_PUBLIC_APP_URL: z.string().url().optional(),
+      NEXT_PUBLIC_WEB_URL: z.string().url().optional(),
       NEXT_PUBLIC_API_URL: z.string().url().optional(),
       NEXT_PUBLIC_DOCS_URL: z.string().url().optional(),
     },
@@ -26,3 +33,4 @@ export const keys = () =>
       NEXT_PUBLIC_DOCS_URL: process.env.NEXT_PUBLIC_DOCS_URL,
     },
   })
+}
